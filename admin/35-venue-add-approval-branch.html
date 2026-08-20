@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>新增场地 - 添加分支路径 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{background:#fff;border-radius:14px;width:520px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #e2e8f0}
+.modal-header h3{font-size:16px;font-weight:600}
+.modal-close{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#94a3b8;cursor:pointer}
+.modal-close:hover{background:#f1f5f9;color:#0f172a}
+.modal-body{padding:20px 24px}
+.m-field{margin-bottom:16px}
+.m-field label{display:block;font-size:12.5px;font-weight:500;margin-bottom:6px;color:#0f172a}
+.m-field input{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;color:#0f172a;background:#fff}
+.m-field .m-hint{font-size:11px;color:#94a3b8;margin-top:4px}
+.step-builder{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-top:8px}
+.step-node{padding:8px 14px;border-radius:6px;font-size:13px;background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
+.step-arrow{padding:0 6px;color:#94a3b8;font-size:16px}
+.step-add{padding:8px 12px;border-radius:6px;font-size:12px;background:#fff;border:1px dashed #cbd5e1;color:#64748b;cursor:pointer}
+.step-add:hover{border-color:#4f46e5;color:#4f46e5}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid #e2e8f0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item active" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main"></div>
+
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>添加审批分支路径</h3>
+      <a class="modal-close" href="08-venue-add-approval.html">✕</a>
+    </div>
+    <div class="modal-body">
+      <div class="m-field">
+        <label>路径名称</label>
+        <input type="text" placeholder="如：学生组织路径" value="路径③">
+      </div>
+      <div class="m-field">
+        <label>适用角色</label>
+        <select style="width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;color:#0f172a;background:#fff">
+          <option value="">请选择适用角色</option>
+          <option>全体在校生</option>
+          <option>学校教师</option>
+          <option>辅导员</option>
+          <option>学生工作部职工</option>
+          <option>校团委职工</option>
+          <option>班长/副班长</option>
+          <option>心理中心专兼职咨询师</option>
+          <option>学院辅导员</option>
+          <option>学生工作负责人</option>
+          <option>学生会干部</option>
+          <option>社团负责人</option>
+        </select>
+        <div class="m-hint">选择哪些角色走此审批路径</div>
+      </div>
+      <div class="m-field">
+        <label>审批节点</label>
+        <div class="step-builder">
+          <div class="step-node">申请人</div>
+          <span class="step-arrow">→</span>
+          <select style="padding:8px 12px;border:1px solid #c7d2fe;border-radius:6px;font-size:13px;background:#eef2ff;color:#4f46e5;font-weight:500;font-family:inherit">
+            <option selected>指导老师</option>
+            <option>辅导员</option>
+            <option>副书记</option>
+            <option>科室负责人</option>
+            <option>部门领导</option>
+          </select>
+          <span class="step-arrow">→</span>
+          <select style="padding:8px 12px;border:1px solid #c7d2fe;border-radius:6px;font-size:13px;background:#eef2ff;color:#4f46e5;font-weight:500;font-family:inherit">
+            <option selected>管理员</option>
+            <option>副书记</option>
+            <option>科室负责人</option>
+            <option>部门领导</option>
+          </select>
+          <span class="step-arrow">→</span>
+          <div class="step-add">＋ 添加节点</div>
+        </div>
+        <div class="m-hint" style="margin-top:8px">可按需增减审批节点，最后一步应为管理员审批</div>
+      </div>
+      <div class="m-field">
+        <label>审批流程描述</label>
+        <input type="text" value="申请人 → 指导老师 → 管理员" placeholder="描述审批流程">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-secondary" href="08-venue-add-approval.html">取消</a>
+      <a class="btn btn-primary" href="08-venue-add-approval.html">确认添加</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

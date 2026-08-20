@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>场地详情 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1e293b;max-width:375px;margin:0 auto;min-height:100vh;padding-bottom:70px}
+a{text-decoration:none;color:inherit}
+.header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:50}
+.header .back{font-size:18px;color:#64748b}
+.header h1{font-size:16px;font-weight:600;flex:1}
+.cover{width:100%;height:180px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px}
+.section{background:#fff;margin:8px 0;padding:16px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f1f5f9}
+.venue-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.venue-dept{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:4px;background:#eef2ff;color:#4f46e5;margin-bottom:10px}
+.info-row{display:flex;padding:8px 0;font-size:13.5px;border-bottom:1px solid #f8fafc}
+.info-row:last-child{border-bottom:none}
+.ir-label{color:#94a3b8;width:80px;flex-shrink:0}
+.ir-val{flex:1;font-weight:500}
+.flow-steps{display:flex;align-items:center;gap:4px;font-size:12.5px;flex-wrap:wrap;padding:4px 0}
+.fs{padding:5px 10px;border-radius:6px;background:#eef2ff;color:#4f46e5;font-weight:500}
+.fs-arrow{color:#cbd5e1}
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:375px;background:#fff;border-top:1px solid #e5e7eb;padding:10px 16px env(safe-area-inset-bottom,10px);display:flex;gap:10px;z-index:50}
+.btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-size:15px;font-weight:600}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-outline{background:#fff;color:#4f46e5;border:1px solid #4f46e5}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="01-venue-list.html">←</a>
+  <h1>场地详情</h1>
+</div>
+
+<div class="cover">🏛</div>
+
+<div class="section">
+  <div class="venue-title">206会议室</div>
+  <div class="venue-dept">综合办</div>
+  <div class="info-row"><span class="ir-label">地址</span><span class="ir-val">潇湘校区毓秀楼206室</span></div>
+  <div class="info-row"><span class="ir-label">容纳人数</span><span class="ir-val">45人</span></div>
+  <div class="info-row"><span class="ir-label">开放日</span><span class="ir-val">周一到周日（全周）</span></div>
+  <div class="info-row"><span class="ir-label">开放时段</span><span class="ir-val">8:00 - 21:00</span></div>
+  <div class="info-row"><span class="ir-label">提前预约</span><span class="ir-val">30天（一个月）</span></div>
+  <div class="info-row"><span class="ir-label">时段方式</span><span class="ir-val">1小时整点制</span></div>
+  <div class="info-row"><span class="ir-label">状态</span><span class="ir-val" style="color:#059669">正常使用</span></div>
+</div>
+
+<div class="section">
+  <h3>使用须知</h3>
+  <div style="font-size:13px;color:#64748b;line-height:1.8">
+    1. 请提前至少1天预约，最多提前30天<br>
+    2. 使用完毕后请恢复场地原貌，关好门窗<br>
+    3. 不得私自移动或外借场地设备<br>
+    4. 取消预约请提前24小时操作
+  </div>
+</div>
+
+<div class="section">
+  <h3>审批流程</h3>
+  <div style="font-size:11.5px;color:#94a3b8;margin-bottom:6px">主流程：</div>
+  <div class="flow-steps">
+    <span class="fs">提交申请</span>
+    <span class="fs-arrow">→</span>
+    <span class="fs">孙瀚（管理员）审批</span>
+    <span class="fs-arrow">→</span>
+    <span class="fs">完成</span>
+  </div>
+  <div style="border:1px solid #f1f5f9;border-radius:8px;padding:10px;margin-top:10px">
+    <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">分支路径：</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:11px;margin-bottom:4px">
+      <span style="color:#94a3b8;min-width:38px">路径①</span>
+      <span class="fs" style="padding:3px 8px;font-size:11px">职工</span>
+      <span class="fs-arrow">→</span>
+      <span class="fs" style="padding:3px 8px;font-size:11px">管理员</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:11px">
+      <span style="color:#94a3b8;min-width:38px">路径②</span>
+      <span class="fs" style="padding:3px 8px;font-size:11px">辅导员</span>
+      <span class="fs-arrow">→</span>
+      <span class="fs" style="padding:3px 8px;font-size:11px">副书记</span>
+      <span class="fs-arrow">→</span>
+      <span class="fs" style="padding:3px 8px;font-size:11px">管理员</span>
+    </div>
+  </div>
+  <div style="font-size:11.5px;color:#94a3b8;margin-top:8px">发起权限：<span style="padding:2px 6px;border-radius:4px;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:500">学生工作部职工</span></div>
+</div>
+
+<div class="bottom-bar">
+  <a class="btn btn-primary" href="03-book-select-venue.html">立即预约</a>
+</div>
+
+</body>
+</html>

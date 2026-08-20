@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>预约须知 - 发起预约 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#eef2ff;color:#4f46e5}
+.topnav-user{font-size:13px;color:#64748b}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center}
+.modal{background:#fff;border-radius:14px;width:580px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-header h2{font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px}
+.modal-close{font-size:20px;color:#94a3b8;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.modal-close:hover{background:#f1f5f9;color:#0f172a}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;max-height:380px;font-size:14px;line-height:1.85;color:#334155}
+.modal-body h4{font-size:15px;font-weight:600;color:#0f172a;margin-bottom:12px}
+.modal-body p{margin-bottom:12px}
+.scroll-hint{padding:10px 24px;background:#fffbeb;border-top:1px solid #fde68a;font-size:12.5px;color:#92400e;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0}
+.modal-footer{padding:16px 24px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;gap:10px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.btn-disabled{background:#e2e8f0;color:#94a3b8;cursor:not-allowed}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">学</div>智慧学工 · 场地预约</div>
+  <div class="topnav-links"><a class="active" href="01-venue-list.html">场地预约</a><a href="11-my-bookings.html">我的预约</a></div>
+  <span class="topnav-user">张三 · 学生工作部</span>
+</nav>
+
+<div class="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>📋 场地预约须知</h2>
+      <a class="modal-close" href="09-book-step4-confirm.html">✕</a>
+    </div>
+    <div class="modal-body">
+      <h4>中南大学学生活动中心场地申请安全责任状</h4>
+      <p>为保证活动安全顺利进行，在申请学生活动中心场地及使用场地期间过程中，请活动主办方严格遵循以下消防安全事宜：</p>
+      <p><strong>一、</strong>在场地内开展活动须由申请单位领导签字批准，并按照流程进行审批。</p>
+      <p><strong>二、</strong>由活动主办方或承办方作为活动安全责任人，并安排至少1名消防安全协管员。重要嘉宾出席由活动申请单位自行负责安保工作。</p>
+      <p><strong>三、</strong>活动申请单位应履行好以下职责：申请学生活动中心场地前核实活动详情，并签署安全责任状；督促负责老师及外接设备商在活动期间严格遵守礼堂有关管理规定；在活动期间因不遵守管理规定，导致引发各类安全事故而造成的后果和损失，一概由活动主办方承担。</p>
+      <p><strong>四、</strong>活动举办过程中在工作人员的指导下使用有关设备；保持良好沟通，共同保证活动举办过程中的安全。外租设备入场需签订相关协议并提交设备清单，设备安全责任由活动主办方承担。</p>
+      <p><strong>五、</strong>活动期间严格遵守安全管理规定和消防安全责任制，禁止吸烟和使用明火，禁止携带易燃、易爆等危险物品进入活动场所。</p>
+      <p><strong>六、</strong>严禁私拉乱接，以及在室内外的电线、灯头、开关和插座等电器设备上堆放杂物和悬挂彩带、气球等装饰物品。严禁使用易留痕迹的双面胶粘贴。</p>
+      <p><strong>七、</strong>使用场地期间需遵循工作人员的安排，未经允许严禁出入机房、仓库和舞台幕后等消防安全重点防范区域，或参与操控仪器设备。如需借用话筒等设备，须由活动负责老师和工作人员联系，并在活动后亲自交还。</p>
+      <p><strong>八、</strong>在活动期间因不遵守该协议，导致引发各类安全事故而造成的后果和损失，一概由活动主办方负责，将会扣除积分，并影响后续使用。</p>
+      <p style="margin-top:16px;font-weight:500;color:#0f172a">本人承诺，上述相关规定及要求已清楚知悉，对活动场地安全使用负责。</p>
+    </div>
+    <div class="scroll-hint">
+      <span>⬇</span> 请阅读至底部后方可确认
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-secondary" href="09-book-step4-confirm.html">取消</a>
+      <a class="btn btn-disabled" href="09-book-confirm-agreement-done.html">我已阅读并同意</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

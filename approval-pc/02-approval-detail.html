@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>审批详情 - 表单信息 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#fffbeb;color:#d97706}
+.topnav-user{font-size:13px;color:#64748b}
+
+/* 固定顶部区域：tabs + 流程标题 + 操作按钮 */
+.detail-header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:56px;z-index:40}
+.detail-header-inner{max-width:960px;margin:0 auto;padding:0 32px}
+.tab-row{display:flex;align-items:center;gap:0;border-bottom:1px solid #f1f5f9;padding-top:8px}
+.tab-item{padding:10px 20px;font-size:13.5px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;font-weight:500;position:relative;top:1px}
+.tab-item.active{color:#d97706;border-bottom-color:#d97706;font-weight:600}
+.tab-item:hover{color:#d97706}
+.close-btn{margin-left:auto;width:28px;height:28px;border-radius:50%;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:16px;color:#94a3b8;cursor:pointer;background:#fff;align-self:center}
+.close-btn:hover{background:#f8fafc;color:#0f172a}
+.title-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0 14px}
+.title-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.title-name{font-size:16px;font-weight:700}
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:11.5px;font-weight:500}
+.tag-node{background:#e0f2fe;color:#0369a1}
+.tag-user{background:#fef3c7;color:#92400e}
+.tag-status{font-size:12px;color:#d97706;font-weight:500;margin-left:4px}
+.action-btns{display:flex;gap:8px}
+.btn{padding:8px 24px;border-radius:6px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:inherit;color:#fff}
+.btn-pass{background:#059669}
+.btn-pass:hover{background:#047857}
+.btn-fail{background:#dc2626}
+.btn-fail:hover{background:#b91c1c}
+.btn-return{background:#f59e0b}
+.btn-return:hover{background:#d97706}
+
+/* 内容区 */
+.container{max-width:960px;margin:0 auto;padding:20px 32px 48px}
+.section{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px 24px;margin-bottom:16px}
+.section-title{font-size:14px;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #f1f5f9;color:#0f172a}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.form-item{padding:10px 0;border-bottom:1px solid #f8fafc;display:flex;flex-direction:column;gap:3px}
+.form-label{font-size:12px;color:#94a3b8}
+.form-value{font-size:13.5px;font-weight:500;color:#0f172a}
+.form-item.full{grid-column:1/-1}
+.form-item.half{grid-column:span 2}
+.img-preview{width:100px;height:75px;border-radius:6px;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;margin-top:4px;overflow:hidden;position:relative}
+.img-preview::after{content:"证明文件";position:absolute;font-size:10px;color:#94a3b8}
+.remark-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-top:12px}
+.remark-box textarea{width:100%;border:none;background:transparent;font-size:13px;font-family:inherit;resize:vertical;height:60px;color:#0f172a}
+.remark-box textarea:focus{outline:none}
+.remark-hint{font-size:11px;color:#94a3b8;margin-top:4px}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">审</div>智慧学工 · 审批管理</div>
+  <div class="topnav-links"><a class="active" href="01-pending-list.html">待审批</a><a href="05-history.html">已审批</a></div>
+  <span class="topnav-user">孙瀚 · 管理员</span>
+</nav>
+
+<!-- 固定顶部区 -->
+<div class="detail-header">
+  <div class="detail-header-inner">
+    <div class="tab-row">
+      <a class="tab-item active" href="02-approval-detail.html">表单信息</a>
+      <a class="tab-item" href="02-detail-cc.html">抄送设置</a>
+      <a class="tab-item" href="02-detail-flow.html">流程图</a>
+      <a class="tab-item" href="02-detail-approver.html">当前审批人</a>
+      <a class="tab-item" href="02-detail-record.html">审批记录</a>
+      <a class="close-btn" href="01-pending-list.html" title="关闭">✕</a>
+    </div>
+    <div class="title-row">
+      <div class="title-left">
+        <span class="title-name">206会议室的申请审核</span>
+        <span class="tag tag-node">当前节点：审批</span>
+        <span class="tag tag-user">发起人：张三</span>
+        <span class="tag-status">审批中</span>
+      </div>
+      <div class="action-btns">
+        <a class="btn btn-pass" href="03-approve-confirm.html">通过</a>
+        <a class="btn btn-fail" href="04-reject-confirm.html">不通过</a>
+        <a class="btn btn-return" href="04-reject-confirm.html">驳回</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 表单信息 tab 内容 -->
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">基础信息</div>
+    <div class="form-grid">
+      <div class="form-item">
+        <span class="form-label">流程发起时间</span>
+        <span class="form-value">2026-04-09 16:30:00</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">姓名</span>
+        <span class="form-value">张三</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">学号/工号</span>
+        <span class="form-value">T20180023</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">院系/单位</span>
+        <span class="form-value">学生工作部</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">科室</span>
+        <span class="form-value">综合办</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">职务</span>
+        <span class="form-value">科员</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">预约信息</div>
+    <div class="form-grid">
+      <div class="form-item">
+        <span class="form-label">预约编号</span>
+        <span class="form-value">B20260415001</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">预约场地</span>
+        <span class="form-value">206会议室</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">所属科室</span>
+        <span class="form-value">综合办</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">场地管理员</span>
+        <span class="form-value">孙瀚</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">预约日期</span>
+        <span class="form-value">2026-04-15</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">预约时段</span>
+        <span class="form-value">14:00 - 15:00</span>
+      </div>
+      <div class="form-item full">
+        <span class="form-label">活动名称</span>
+        <span class="form-value">2026年春季学工例会</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">参与人数</span>
+        <span class="form-value">30人</span>
+      </div>
+      <div class="form-item half">
+        <span class="form-label">承办单位</span>
+        <span class="form-value">学生工作部综合办</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">活动负责老师</span>
+        <span class="form-value">王老师</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">负责老师联系方式</span>
+        <span class="form-value">138****5678</span>
+      </div>
+      <div class="form-item">
+        <span class="form-label">活动学生负责人</span>
+        <span class="form-value">张三</span>
+      </div>
+      <div class="form-item full">
+        <span class="form-label">其他需求</span>
+        <span class="form-value">投屏器×1、笔记本电脑×1、茶水30杯</span>
+      </div>
+      <div class="form-item full">
+        <span class="form-label">证明文件</span>
+        <div class="img-preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">审批意见</div>
+    <div class="remark-box">
+      <textarea placeholder="请输入审批意见（可选）…"></textarea>
+      <div class="remark-hint">驳回时必须填写驳回原因</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

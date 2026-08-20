@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>表单模板 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600}
+.content{padding:24px 28px 48px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.section-head h2{font-size:17px;font-weight:600}
+.section-head p{font-size:12.5px;color:#64748b;margin-top:2px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden}
+th,td{padding:10px 14px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
+.tpl-name{font-weight:600;color:#4f46e5}
+.count-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11.5px;font-weight:500;background:#eef2ff;color:#4f46e5}
+.field-tags{display:flex;flex-wrap:wrap;gap:4px}
+.field-tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:#f1f5f9;color:#64748b}
+.action-link{color:#4f46e5;font-size:12.5px;margin-right:10px}
+.action-link:hover{text-decoration:underline}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.btn-primary{background:#4f46e5;color:#fff}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item active" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title">表单模板管理</span>
+    <span style="font-size:13px;color:#64748b">共 13 个模板</span>
+  </header>
+  <div class="content">
+
+    <div class="section-head">
+      <div>
+        <h2>全部表单模板</h2>
+        <p>管理各场地预约时的表单字段配置，相同类型的场地可共用模板</p>
+      </div>
+      <a class="btn btn-primary" href="23-form-template-add.html">＋ 新增模板</a>
+    </div>
+
+    <table>
+      <thead><tr><th>模板标识</th><th>模板名称</th><th>字段数</th><th>绑定场地</th><th>包含字段</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="tpl-name">standard</span></td>
+          <td>标准会议室</td>
+          <td>8</td>
+          <td><span class="count-badge">2个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">活动名称</span><span class="field-tag">参与人数</span><span class="field-tag">承办单位</span><span class="field-tag">+5</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">ethnic</span></td>
+          <td>民族办场地</td>
+          <td>8</td>
+          <td><span class="count-badge">2个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">用途说明</span><span class="field-tag">使用须知</span><span class="field-tag">预约人姓名</span><span class="field-tag">+5</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">sizheng</span></td>
+          <td>思政体验课堂</td>
+          <td>5</td>
+          <td><span class="count-badge">6个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">活动名称</span><span class="field-tag">参与人数</span><span class="field-tag">学生负责人</span><span class="field-tag">+2</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">zhixin</span></td>
+          <td>知新馆</td>
+          <td>8</td>
+          <td><span class="count-badge">7个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">用途</span><span class="field-tag">辅导员姓名</span><span class="field-tag">联系人</span><span class="field-tag">+5</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">safety</span></td>
+          <td>安全教育</td>
+          <td>6</td>
+          <td><span class="count-badge">1个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">学院班级</span><span class="field-tag">参观人数</span><span class="field-tag">负责人</span><span class="field-tag">+3</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">defense</span></td>
+          <td>国防教育</td>
+          <td>7</td>
+          <td><span class="count-badge">1个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">活动名称</span><span class="field-tag">参与人数</span><span class="field-tag">所在学院</span><span class="field-tag">+4</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">employCenter</span></td>
+          <td>就业指导中心</td>
+          <td>6</td>
+          <td><span class="count-badge">1个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">预约人姓名</span><span class="field-tag">联系电话</span><span class="field-tag">所在学院</span><span class="field-tag">+3</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">employNet</span></td>
+          <td>网络面试间</td>
+          <td>4</td>
+          <td><span class="count-badge">1个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">预约人姓名</span><span class="field-tag">联系电话</span><span class="field-tag">学院</span><span class="field-tag">+1</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">employHall</span></td>
+          <td>就业大厅</td>
+          <td>7</td>
+          <td><span class="count-badge">2个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">活动名称</span><span class="field-tag">参与人数</span><span class="field-tag">预约事由</span><span class="field-tag">+4</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">wenqu</span></td>
+          <td>问渠长廊</td>
+          <td>7</td>
+          <td><span class="count-badge">1个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">学院</span><span class="field-tag">活动类型</span><span class="field-tag">活动名称</span><span class="field-tag">+4</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">psyGroup</span></td>
+          <td>心理团辅</td>
+          <td>7</td>
+          <td><span class="count-badge">4个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">活动名称</span><span class="field-tag">活动人数</span><span class="field-tag">咨询师姓名</span><span class="field-tag">+4</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">psyExp</span></td>
+          <td>心理体验馆</td>
+          <td>7</td>
+          <td><span class="count-badge">1个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">学院班级</span><span class="field-tag">活动人数</span><span class="field-tag">解说员姓名</span><span class="field-tag">+4</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">suzhi</span></td>
+          <td>素质拓展基地</td>
+          <td>7</td>
+          <td><span class="count-badge">1个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">学院班级</span><span class="field-tag">活动人数</span><span class="field-tag">教练员姓名</span><span class="field-tag">+4</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+        <tr>
+          <td><span class="tpl-name">tuanwei</span></td>
+          <td>团委活动场地</td>
+          <td>12</td>
+          <td><span class="count-badge">5个场地</span></td>
+          <td><div class="field-tags"><span class="field-tag">活动名称</span><span class="field-tag">活动性质</span><span class="field-tag">拟使用设备</span><span class="field-tag">+9</span></div></td>
+          <td><a class="action-link" href="18-form-template-edit.html">编辑</a><a class="action-link" href="19-form-template-preview.html">预览</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+</body>
+</html>

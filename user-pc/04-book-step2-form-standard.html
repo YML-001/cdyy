@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>填写信息 - 206会议室 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#eef2ff;color:#4f46e5}
+.topnav-user{font-size:13px;color:#64748b}
+.container{max-width:700px;margin:0 auto;padding:24px 32px 48px}
+.page-title{font-size:20px;font-weight:700;margin-bottom:24px}
+.steps{display:flex;gap:0;margin-bottom:28px}
+.step{flex:1;text-align:center;padding:12px 0;position:relative;font-size:13px;color:#94a3b8}
+.step .snum{width:28px;height:28px;border-radius:50%;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-bottom:4px}
+.step.active{color:#4f46e5;font-weight:500}
+.step.active .snum{background:#4f46e5;color:#fff}
+.step.done{color:#059669}
+.step.done .snum{background:#ecfdf5;color:#059669}
+.step-line{position:absolute;top:24px;left:50%;right:-50%;height:2px;background:#e2e8f0;z-index:-1}
+.step:last-child .step-line{display:none}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:24px;margin-bottom:20px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12.5px;font-weight:500}
+.field label .req{color:#dc2626;margin-left:2px}
+.field input,.field textarea{width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;color:#0f172a;background:#fff}
+.field textarea{min-height:70px;resize:vertical}
+.field .hint{font-size:11.5px;color:#4f46e5;margin-top:2px}
+.btn-row{display:flex;gap:10px;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 22px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.guide-pick{display:flex;gap:12px;flex-wrap:wrap}
+.guide-card{flex:1;min-width:200px;border:2px solid #e2e8f0;border-radius:10px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:12px}
+.guide-card:hover{border-color:#c7d2fe}
+.guide-card.selected{border-color:#4f46e5;background:#f8f7ff}
+.guide-avatar{width:40px;height:40px;border-radius:50%;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0}
+.guide-info{flex:1}
+.guide-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.guide-role{font-size:12px;color:#64748b}
+.guide-note{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.guide-check{width:20px;height:20px;border-radius:50%;border:2px solid #e2e8f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent}
+.guide-card.selected .guide-check{border-color:#4f46e5;background:#4f46e5;color:#fff}
+.guide-skip{display:flex;align-items:center;gap:6px;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;color:#64748b;cursor:pointer;margin-top:10px}
+.guide-skip:hover{border-color:#c7d2fe}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">学</div>智慧学工 · 场地预约</div>
+  <div class="topnav-links"><a class="active" href="01-venue-list.html">场地预约</a><a href="11-my-bookings.html">我的预约</a></div>
+  <span class="topnav-user">张三 · 学生工作部</span>
+</nav>
+
+<div class="container">
+  <div class="page-title">发起预约</div>
+  <div class="steps">
+    <div class="step done"><div class="snum">✓</div><br>选择场地<div class="step-line"></div></div>
+    <div class="step active"><div class="snum">2</div><br>填写信息<div class="step-line"></div></div>
+    <div class="step"><div class="snum">3</div><br>选择时段<div class="step-line"></div></div>
+    <div class="step"><div class="snum">4</div><br>确认提交</div>
+  </div>
+
+  <div class="section">
+    <h3>206会议室 · 预约信息填写</h3>
+    <div class="form-grid">
+      <div class="field"><label>活动名称<span class="req">*</span></label><input type="text" value="2026年春季学工例会"></div>
+      <div class="field"><label>参与人数<span class="req">*</span></label><input type="number" value="30"><div class="hint">不超过45人</div></div>
+      <div class="field"><label>承办单位<span class="req">*</span></label><input type="text" value="学生工作部综合办"></div>
+      <div class="field"><label>活动负责老师</label><input type="text" value="王老师"></div>
+      <div class="field"><label>活动负责老师联系方式</label><input type="tel" value="138****5678"></div>
+      <div class="field"><label>活动学生负责人<span class="req">*</span></label><input type="text" value="张三"></div>
+      <div class="field"><label>学生负责人联系方式<span class="req">*</span></label><input type="tel" value="159****1234"></div>
+      <div class="field full"><label>其他需求（设备/数量）</label><textarea>投屏器×1、笔记本电脑×1、茶水30杯</textarea></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>选择解说员/教练</h3>
+    <div style="font-size:12.5px;color:#64748b;margin-bottom:12px">该场地配置了解说员/教练，请根据需要选择（可不选）</div>
+    <div class="guide-pick">
+      <div class="guide-card selected">
+        <div class="guide-avatar">王</div>
+        <div class="guide-info">
+          <div class="guide-name">王解说员</div>
+          <div class="guide-role">解说员 · 138****1234</div>
+          <div class="guide-note">主讲消防安全模块</div>
+        </div>
+        <div class="guide-check">✓</div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-avatar">赵</div>
+        <div class="guide-info">
+          <div class="guide-name">赵教练</div>
+          <div class="guide-role">教练 · 159****5678</div>
+          <div class="guide-note">主讲应急逃生模块</div>
+        </div>
+        <div class="guide-check">✓</div>
+      </div>
+    </div>
+    <div class="guide-skip">
+      <span style="width:16px;height:16px;border-radius:50%;border:2px solid #e2e8f0;display:inline-block;flex-shrink:0"></span>
+      不需要解说员/教练
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary" href="03-book-step1-select.html">← 上一步</a>
+    <a class="btn btn-primary" href="07-book-step3-slot-hour.html">下一步 →</a>
+  </div>
+</div>
+
+</body>
+</html>

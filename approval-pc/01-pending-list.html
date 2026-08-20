@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>待审批 - 审批管理 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#fffbeb;color:#d97706}
+.topnav-user{font-size:13px;color:#64748b}
+.container{max-width:1200px;margin:0 auto;padding:20px 32px 48px}
+.back-link{display:inline-block;margin-bottom:12px;font-size:13px;color:#d97706}
+.page-title{font-size:20px;font-weight:700;margin-bottom:16px}
+
+/* 筛选区 */
+.filter-bar{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.filter-item{display:flex;flex-direction:column;gap:4px}
+.filter-item label{font-size:11.5px;color:#64748b;font-weight:500}
+.filter-item input,.filter-item select{padding:7px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;color:#0f172a;min-width:150px}
+.filter-item input:focus,.filter-item select:focus{border-color:#d97706;outline:none;box-shadow:0 0 0 2px rgba(217,119,6,0.1)}
+.filter-item input{width:200px}
+.filter-btns{display:flex;gap:6px;align-self:flex-end}
+.filter-btn{padding:7px 18px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.filter-btn-primary{background:#d97706;color:#fff;border-color:#d97706}
+.filter-btn-reset{background:#fff;color:#64748b;border-color:#e2e8f0}
+
+/* 表格 */
+.table-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px 14px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
+tr:hover td{background:#fefce8}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500}
+.badge-submitted{background:#dbeafe;color:#2563eb}
+.badge-reviewing{background:#fffbeb;color:#d97706}
+.badge-passed{background:#ecfdf5;color:#059669}
+.badge-rejected{background:#fef2f2;color:#dc2626}
+.action-link{color:#d97706;font-size:12.5px;font-weight:500}
+.action-link:hover{text-decoration:underline}
+
+/* 分页 */
+.pagination{display:flex;align-items:center;justify-content:space-between;margin-top:16px;font-size:13px;color:#64748b}
+.page-btns{display:flex;gap:4px}
+.page-btn{padding:6px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:12.5px;background:#fff;cursor:pointer;color:#0f172a}
+.page-btn.active{background:#d97706;color:#fff;border-color:#d97706}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">审</div>智慧学工 · 审批管理</div>
+  <div class="topnav-links"><a class="active" href="01-pending-list.html">待审批</a><a href="05-history.html">已审批</a></div>
+  <span class="topnav-user">孙瀚 · 管理员</span>
+</nav>
+
+<div class="container">
+  <a class="back-link" href="../index.html">← 返回首页</a>
+  <div class="page-title">待审批</div>
+
+  <!-- 筛选区 -->
+  <div class="filter-bar">
+    <div class="filter-item">
+      <label>搜索关键词</label>
+      <input type="text" placeholder="搜索发起人、学号/工号">
+    </div>
+    <div class="filter-item">
+      <label>流程名称</label>
+      <select>
+        <option value="">全部</option>
+        <option>场地预约审批</option>
+        <option>请假审批</option>
+        <option>活动审批</option>
+      </select>
+    </div>
+    <div class="filter-item">
+      <label>单位/学院名称</label>
+      <select>
+        <option value="">全部</option>
+        <option>学生工作部</option>
+        <option>计算机学院</option>
+        <option>文学院</option>
+        <option>心理中心</option>
+      </select>
+    </div>
+    <div class="filter-item">
+      <label>发起时间</label>
+      <input type="date" style="width:140px">
+    </div>
+    <div class="filter-item">
+      <label>&nbsp;</label>
+      <span style="font-size:12px;color:#94a3b8;padding:8px 0">至</span>
+    </div>
+    <div class="filter-item">
+      <label>&nbsp;</label>
+      <input type="date" style="width:140px">
+    </div>
+    <div class="filter-item">
+      <label>流程状态</label>
+      <select>
+        <option value="">全部</option>
+        <option>已提交</option>
+        <option selected>审批中</option>
+      </select>
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn filter-btn-primary">查询</button>
+      <button class="filter-btn filter-btn-reset">重置</button>
+    </div>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>流程名称</th>
+          <th>当前节点</th>
+          <th>单位/学院名称</th>
+          <th>学号/工号</th>
+          <th>发起人</th>
+          <th>发起时间</th>
+          <th>流程状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>206会议室的申请审核</td>
+          <td>管理员审批</td>
+          <td>学生工作部</td>
+          <td>T20180023</td>
+          <td>张三</td>
+          <td>2026-04-09 16:30</td>
+          <td><span class="badge badge-reviewing">审批中</span></td>
+          <td><a class="action-link" href="02-approval-detail.html">去办理</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>238云麓阁报告厅的申请审核</td>
+          <td>管理员审批</td>
+          <td>校团委</td>
+          <td>T20190045</td>
+          <td>李四</td>
+          <td>2026-04-09 14:20</td>
+          <td><span class="badge badge-reviewing">审批中</span></td>
+          <td><a class="action-link" href="02-approval-detail.html">去办理</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>117民族团结进步之家的申请审核</td>
+          <td>管理员审批</td>
+          <td>文学院</td>
+          <td>S20230156</td>
+          <td>王五</td>
+          <td>2026-04-09 11:05</td>
+          <td><span class="badge badge-reviewing">审批中</span></td>
+          <td><a class="action-link" href="02-approval-detail.html">去办理</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>"爱国"体验课堂的申请审核</td>
+          <td>管理员审批</td>
+          <td>计算机学院</td>
+          <td>S20240089</td>
+          <td>赵六</td>
+          <td>2026-04-08 17:45</td>
+          <td><span class="badge badge-submitted">已提交</span></td>
+          <td><a class="action-link" href="02-approval-detail.html">去办理</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>知新馆（团辅B）的申请审核</td>
+          <td>管理员审批</td>
+          <td>心理中心</td>
+          <td>T20200012</td>
+          <td>钱七</td>
+          <td>2026-04-08 10:30</td>
+          <td><span class="badge badge-submitted">已提交</span></td>
+          <td><a class="action-link" href="02-approval-detail.html">去办理</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <span>共 5 条 · 第 1/1 页</span>
+    <div class="page-btns">
+      <span class="page-btn active">1</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智慧学工 · 场地预约系统原型</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f0f2f5;color:#1e293b;min-height:100vh;padding:40px 20px}
+.wrap{max-width:1200px;margin:0 auto}
+
+/* 头部 */
+.header{text-align:center;margin-bottom:48px}
+.header h1{font-size:32px;font-weight:700;margin-bottom:10px;letter-spacing:-.02em}
+.header .subtitle{font-size:15px;color:#64748b}
+.header .meta{display:inline-flex;gap:14px;margin-top:14px;font-size:12px;color:#94a3b8}
+.header .meta span{padding:4px 10px;background:#fff;border:1px solid #e2e8f0;border-radius:20px}
+
+/* 章节标题 */
+.section-title{font-size:18px;font-weight:700;color:#0f172a;margin:0 0 18px;padding-left:12px;border-left:4px solid #4f46e5;display:flex;align-items:center;gap:10px}
+.section-title .badge{font-size:12px;font-weight:500;color:#64748b;background:#f1f5f9;padding:2px 10px;border-radius:10px;border:none}
+
+/* 本次新增 */
+.whatsnew{background:#fff;border:1px solid #c7d2fe;border-left:4px solid #4f46e5;border-radius:12px;padding:20px 24px;margin-bottom:44px}
+.whatsnew h3{font-size:15px;font-weight:700;margin-bottom:4px}
+.whatsnew .wn-sub{font-size:12.5px;color:#64748b;margin-bottom:14px}
+.wn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.wn-item{border:1px solid #e2e8f0;border-radius:10px;padding:14px}
+.wn-item .wn-t{font-size:13.5px;font-weight:600;margin-bottom:6px}
+.wn-item .wn-d{font-size:12px;color:#475569;line-height:1.65;margin-bottom:10px}
+.wn-item a{display:inline-block;font-size:12px;color:#4f46e5;text-decoration:none;padding:4px 10px;border:1px solid #c7d2fe;border-radius:6px;background:#f8faff;margin:0 6px 6px 0}
+.wn-item a:hover{background:#eef2ff}
+
+/* 角色卡片 */
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));gap:16px;margin-bottom:44px}
+.role-card.r-owner{--rc:#7c3aed}
+.role-card.r-owner .role-icon{background:#f5f3ff;color:#7c3aed}
+.role-card{background:#fff;border-radius:12px;padding:20px;border:1px solid #e2e8f0;position:relative;overflow:hidden}
+.role-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--rc,#4f46e5)}
+.role-card.r-admin{--rc:#4f46e5}
+.role-card.r-approver{--rc:#d97706}
+.role-card.r-applicant{--rc:#059669}
+.role-card.r-cc{--rc:#0891b2}
+.role-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.role-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.role-card.r-admin .role-icon{background:#eef2ff;color:#4f46e5}
+.role-card.r-approver .role-icon{background:#fffbeb;color:#d97706}
+.role-card.r-applicant .role-icon{background:#ecfdf5;color:#059669}
+.role-card.r-cc .role-icon{background:#ecfeff;color:#0891b2}
+.role-name{font-size:15px;font-weight:600;color:#0f172a}
+.role-sub{font-size:11.5px;color:#94a3b8;margin-top:1px}
+.role-resp{font-size:12.5px;color:#475569;line-height:1.65;margin-bottom:12px;min-height:62px}
+.role-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.role-tag{font-size:11px;padding:2px 8px;border-radius:4px;background:#f1f5f9;color:#475569;font-weight:500}
+.role-portal{font-size:11.5px;color:#64748b;padding-top:10px;border-top:1px dashed #e2e8f0}
+.role-portal strong{color:#4f46e5}
+
+/* 业务流程 */
+.flow-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:44px}
+.flow-row{display:flex;align-items:stretch;gap:0;margin-bottom:18px;flex-wrap:wrap}
+.flow-row:last-child{margin-bottom:0}
+.flow-stage{flex:1;min-width:140px;padding:14px;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;text-align:center;position:relative;display:flex;flex-direction:column;justify-content:center}
+.flow-stage.s-config{border-color:#c7d2fe;background:#eef2ff}
+.flow-stage.s-apply{border-color:#a7f3d0;background:#ecfdf5}
+.flow-stage.s-approve{border-color:#fde68a;background:#fffbeb}
+.flow-stage.s-cond{border-color:#fde68a;background:#fffbeb;border-style:dashed}
+.flow-stage.s-done{border-color:#bbf7d0;background:#f0fdf4}
+.flow-stage .fs-num{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#fff;border:1.5px solid currentColor;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.flow-stage.s-config .fs-num{color:#4f46e5}
+.flow-stage.s-apply .fs-num{color:#059669}
+.flow-stage.s-approve .fs-num{color:#d97706}
+.flow-stage.s-cond .fs-num{color:#d97706}
+.flow-stage.s-done .fs-num{color:#16a34a}
+.fs-title{font-size:13.5px;font-weight:600;color:#0f172a;margin-bottom:4px}
+.fs-actor{font-size:11px;color:#64748b;margin-bottom:6px}
+.fs-detail{font-size:11.5px;color:#475569;line-height:1.5}
+.flow-arrow{display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:18px;padding:0 8px;flex-shrink:0}
+.flow-note{font-size:12px;color:#64748b;margin-top:14px;padding:10px 14px;background:#fafbfc;border:1px dashed #e2e8f0;border-radius:8px;line-height:1.6}
+.flow-note strong{color:#d97706}
+
+/* 入口卡片 */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.05);border:1px solid #e2e8f0;transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.card h2{font-size:17px;font-weight:600;margin-bottom:6px;color:#0f172a;display:flex;align-items:center;gap:8px}
+.card h2 .ch-tag{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+.card.c-admin h2 .ch-tag{background:#eef2ff;color:#4f46e5}
+.card.c-user h2 .ch-tag{background:#ecfdf5;color:#059669}
+.card.c-approval h2 .ch-tag{background:#fffbeb;color:#d97706}
+.card p{font-size:12.5px;color:#64748b;line-height:1.6;margin-bottom:16px}
+.card-links{display:flex;flex-direction:column;gap:8px}
+.card-links a{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;text-decoration:none;color:#1e293b;font-size:13px;font-weight:500;transition:all .15s}
+.card-links a:hover{background:#eef2ff;border-color:#c7d2fe;color:#4f46e5}
+.card-links a .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.card-links a .label-sub{font-size:11px;color:#94a3b8;font-weight:400;margin-top:1px}
+.tag{display:inline-block;font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:500;margin-left:6px;vertical-align:middle}
+.tag-pc{background:#dbeafe;color:#2563eb}
+.tag-mobile{background:#fce7f3;color:#db2777}
+.ic-admin{background:#eef2ff;color:#4f46e5}
+.ic-user{background:#ecfdf5;color:#059669}
+.ic-approval{background:#fffbeb;color:#d97706}
+
+.footer{margin-top:48px;text-align:center;font-size:12px;color:#94a3b8}
+
+@media (max-width:900px){
+  .roles{grid-template-columns:repeat(2,1fr)}
+  .flow-row{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg);padding:6px 0}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- 顶部 -->
+  <div class="header">
+    <h1>智慧学工 · 场地预约系统</h1>
+    <div class="subtitle">完整原型导航 — 覆盖管理后台、用户预约、审批三大端</div>
+    <div class="meta">
+      <span>📄 共 90+ 页面</span>
+      <span>👥 5 类角色</span>
+      <span>🔄 3 大流程</span>
+      <span>🏛 36 个场地数据</span>
+    </div>
+  </div>
+
+  <!-- 本次新增 -->
+  <div class="whatsnew">
+    <h3>本次新增能力（请老师重点确认）</h3>
+    <div class="wn-sub">以下 3 项为本轮补充的配置能力，建议测试时按链接逐项验证是否符合实际管理方式。</div>
+    <div class="wn-grid">
+      <div class="wn-item">
+        <div class="wn-t">① 审批人支持按「角色」设置</div>
+        <div class="wn-d">每级审批可选「指定人员」或「指定角色」（如所属科室管理员、院系领导、校保卫处）；角色下多人时可选或签/会签。审批人同时自动获得所审批场地的管理权限。</div>
+        <a href="admin/08-venue-add-approval.html">新增场地 · 审批流程</a>
+        <a href="admin/13-venue-edit-approval.html">编辑场地 · 审批流程</a>
+      </div>
+      <div class="wn-item">
+        <div class="wn-t">② 新增「场地负责人」字段</div>
+        <div class="wn-d">默认为场地创建人，可改。负责人登录后台只能查看和管理自己负责的场地；后续社团管理模块将复用该字段划分数据范围。</div>
+        <a href="admin/05-venue-add-basic.html">新增场地 · 基础信息</a>
+        <a href="admin/59-venue-list-owner.html">负责人视角列表</a>
+      </div>
+      <div class="wn-item">
+        <div class="wn-t">③ 支持「外链场地」</div>
+        <div class="wn-d">场地类型选「外部链接跳转」并填好基础信息即可保存，无需配置时段、表单、审批与权限；师生在列表点击后直接跳转外部系统。</div>
+        <a href="admin/05-venue-add-basic.html">切换「外部链接跳转」体验</a>
+        <a href="admin/04-venue-detail-external.html">外链场地详情</a>
+        <a href="user-pc/01-venue-list.html">师生端跳转效果</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 系统角色 -->
+  <h2 class="section-title">系统角色 <span class="badge">系统中共划分 5 类角色，各角色按权限进入对应端口</span></h2>
+  <div class="roles">
+
+    <div class="role-card r-admin">
+      <div class="role-head">
+        <div class="role-icon">⚙️</div>
+        <div>
+          <div class="role-name">系统管理员</div>
+          <div class="role-sub">Administrator</div>
+        </div>
+      </div>
+      <div class="role-resp">
+        负责系统的整体配置与维护，包括场地信息建模、表单字段配置、审批流程编排、权限分配等。
+      </div>
+      <div class="role-tags">
+        <span class="role-tag">场地配置</span>
+        <span class="role-tag">表单模板</span>
+        <span class="role-tag">审批配置</span>
+        <span class="role-tag">数据统计</span>
+      </div>
+      <div class="role-portal">入口：<strong>后台管理端</strong></div>
+    </div>
+
+    <div class="role-card r-owner">
+      <div class="role-head">
+        <div class="role-icon">🔑</div>
+        <div>
+          <div class="role-name">场地负责人</div>
+          <div class="role-sub">Venue Owner</div>
+        </div>
+      </div>
+      <div class="role-resp">
+        每个场地必有一名负责人（默认为创建人）。登录后台只能看到并管理自己负责的场地及其预约记录，后续社团管理按此划分数据范围。
+      </div>
+      <div class="role-tags">
+        <span class="role-tag">本人场地配置</span>
+        <span class="role-tag">本人场地预约</span>
+        <span class="role-tag">数据隔离</span>
+      </div>
+      <div class="role-portal">入口：<strong>后台管理端 · 我负责的场地</strong></div>
+    </div>
+
+    <div class="role-card r-applicant">
+      <div class="role-head">
+        <div class="role-icon">👤</div>
+        <div>
+          <div class="role-name">申请人</div>
+          <div class="role-sub">Applicant</div>
+        </div>
+      </div>
+      <div class="role-resp">
+        全校师生（学工部职工、辅导员、副书记、学生、团委等）。浏览场地、按需发起预约、查看自己的预约记录与审批进度。
+      </div>
+      <div class="role-tags">
+        <span class="role-tag">学工部职工</span>
+        <span class="role-tag">辅导员</span>
+        <span class="role-tag">副书记</span>
+        <span class="role-tag">学生</span>
+      </div>
+      <div class="role-portal">入口：<strong>用户预约端</strong>（PC / 移动）</div>
+    </div>
+
+    <div class="role-card r-approver">
+      <div class="role-head">
+        <div class="role-icon">✍️</div>
+        <div>
+          <div class="role-name">审批人</div>
+          <div class="role-sub">Approver</div>
+        </div>
+      </div>
+      <div class="role-resp">
+        根据场地审批流程配置，对申请进行审核。可按人员指定（如孙瀚），也可按角色指定（所属科室管理员、院系领导、校保卫处等），并自动获得所审场地的管理权限。
+      </div>
+      <div class="role-tags">
+        <span class="role-tag">指定人员</span>
+        <span class="role-tag">指定角色</span>
+        <span class="role-tag">或签/会签</span>
+        <span class="role-tag">可管理所审场地</span>
+      </div>
+      <div class="role-portal">入口：<strong>审批端</strong>（PC / 移动）</div>
+    </div>
+
+    <div class="role-card r-cc">
+      <div class="role-head">
+        <div class="role-icon">📨</div>
+        <div>
+          <div class="role-name">抄送人</div>
+          <div class="role-sub">CC</div>
+        </div>
+      </div>
+      <div class="role-resp">
+        预约审批通过后被抄送的相关人员，仅查看不参与审批。常见为后勤、安保、解说员/教练等。
+      </div>
+      <div class="role-tags">
+        <span class="role-tag">后勤保障</span>
+        <span class="role-tag">解说员/教练</span>
+        <span class="role-tag">协同部门</span>
+      </div>
+      <div class="role-portal">入口：<strong>审批端 · 抄送列表</strong></div>
+    </div>
+
+  </div>
+
+  <!-- 业务流程 -->
+  <h2 class="section-title">核心业务流程 <span class="badge">从场地配置到预约完成的完整闭环</span></h2>
+
+  <div class="flow-box">
+    <div class="flow-row">
+      <div class="flow-stage s-config">
+        <div class="fs-num">1</div>
+        <div class="fs-title">配置场地</div>
+        <div class="fs-actor">👤 系统管理员 / 场地负责人</div>
+        <div class="fs-detail">基础信息（含负责人、场地类型）→ 时段策略 → 表单模板 → 审批流程 → 权限范围；外链场地填完基础信息即可保存</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-apply">
+        <div class="fs-num">2</div>
+        <div class="fs-title">浏览选择</div>
+        <div class="fs-actor">👤 申请人</div>
+        <div class="fs-detail">按部门/类型筛选 → 查看场地详情、规则、须知</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-apply">
+        <div class="fs-num">3</div>
+        <div class="fs-title">填写信息</div>
+        <div class="fs-actor">👤 申请人</div>
+        <div class="fs-detail">按表单模板填写活动信息、人数、解说员等</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-apply">
+        <div class="fs-num">4</div>
+        <div class="fs-title">选择时段</div>
+        <div class="fs-actor">👤 申请人</div>
+        <div class="fs-detail">按场地时段策略选择（8 种策略之一，含自定义时段）</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-apply">
+        <div class="fs-num">5</div>
+        <div class="fs-title">确认须知</div>
+        <div class="fs-actor">👤 申请人</div>
+        <div class="fs-detail">阅读预约须知至底部 → 同意 → 提交</div>
+      </div>
+    </div>
+
+    <div class="flow-row">
+      <div class="flow-stage s-approve">
+        <div class="fs-num">6</div>
+        <div class="fs-title">审批流转</div>
+        <div class="fs-actor">👤 审批人</div>
+        <div class="fs-detail">按预设流程依次审批：申请人身份决定路径分支</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-cond">
+        <div class="fs-num">7</div>
+        <div class="fs-title">条件分支</div>
+        <div class="fs-actor">⚡ 系统自动</div>
+        <div class="fs-detail">如人数 ≥ 500 → 自动增加校保卫处审批节点</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-approve">
+        <div class="fs-num">8</div>
+        <div class="fs-title">通过/驳回</div>
+        <div class="fs-actor">👤 审批人</div>
+        <div class="fs-detail">填写意见 → 通过转下一节点 / 驳回流程终止</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-cond">
+        <div class="fs-num">9</div>
+        <div class="fs-title">抄送通知</div>
+        <div class="fs-actor">📨 抄送人</div>
+        <div class="fs-detail">通过后系统自动抄送相关协同部门</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-stage s-done">
+        <div class="fs-num">10</div>
+        <div class="fs-title">预约成功</div>
+        <div class="fs-actor">✅ 申请人</div>
+        <div class="fs-detail">收到结果通知 → 按时使用场地</div>
+      </div>
+    </div>
+
+    <div class="flow-note">
+      💡 <strong>路径分支举例：</strong>同一场地（如 206 会议室）可配置多条路径 ——
+      <strong>路径①</strong> 学工部职工 → 管理员审批（1 级）；
+      <strong>路径②</strong> 辅导员 → 副书记 → 管理员审批（2 级）。系统根据申请人身份自动选择对应路径。
+      &nbsp;&nbsp; <strong>条件审批：</strong>支持基于表单数值（如预估人数）触发额外审批节点。
+      &nbsp;&nbsp; <strong>角色审批：</strong>审批节点可直接指定角色，人员随角色变动自动同步，无需逐个场地改配置。
+    </div>
+  </div>
+
+  <!-- 端口入口 -->
+  <h2 class="section-title">端口入口 <span class="badge">点击对应入口进入演示</span></h2>
+
+  <div class="cards">
+
+    <div class="card c-admin">
+      <h2>① 后台管理端 <span class="ch-tag">系统管理员</span></h2>
+      <p>场地建模、时段策略、表单模板、审批流程、权限范围全配置；预约记录与数据看板。</p>
+      <div class="card-links">
+        <a href="admin/01-dashboard.html">
+          <span class="icon ic-admin">📊</span>
+          <span>
+            进入后台管理端<span class="tag tag-pc">PC</span>
+            <br><span class="label-sub">仪表盘 → 场地管理 → 表单模板 → 预约记录</span>
+          </span>
+        </a>
+        <a href="admin/59-venue-list-owner.html">
+          <span class="icon ic-admin">🔑</span>
+          <span>
+            场地负责人视角<span class="tag tag-pc">PC</span>
+            <br><span class="label-sub">仅显示本人负责的场地及其预约记录</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="card c-user">
+      <h2>② 用户预约端 <span class="ch-tag">申请人</span></h2>
+      <p>场地浏览、在线预约、阅读须知、选择解说员、查看预约记录与审批进度。</p>
+      <div class="card-links">
+        <a href="user-pc/01-venue-list.html">
+          <span class="icon ic-user">🖥</span>
+          <span>
+            PC 端预约<span class="tag tag-pc">PC</span>
+            <br><span class="label-sub">场地列表 → 预约流程（4 步） → 我的预约</span>
+          </span>
+        </a>
+        <a href="user-mobile/01-venue-list.html">
+          <span class="icon ic-user">📱</span>
+          <span>
+            移动端预约<span class="tag tag-mobile">移动端</span>
+            <br><span class="label-sub">场地列表 → 预约流程（4 步） → 我的预约</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="card c-approval">
+      <h2>③ 审批端 <span class="ch-tag">审批人</span></h2>
+      <p>低代码审批样式：待办列表、表单查看、流程追踪、操作通过/驳回，支持多节点流转。</p>
+      <div class="card-links">
+        <a href="approval-pc/01-pending-list.html">
+          <span class="icon ic-approval">🖥</span>
+          <span>
+            PC 端审批<span class="tag tag-pc">PC</span>
+            <br><span class="label-sub">待审批 → 审批详情 → 审批历史</span>
+          </span>
+        </a>
+        <a href="approval-mobile/01-pending-list.html">
+          <span class="icon ic-approval">📱</span>
+          <span>
+            移动端审批<span class="tag tag-mobile">移动端</span>
+            <br><span class="label-sub">待审批 → 审批详情 → 审批历史</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footer">智慧学工 · 场地预约系统原型 v1.1 · 共含 36 个场地配置（含 5 个团委活动场地、1 个外链场地） · 8 种时段策略 · 9 种表单字段类型 · 审批人支持人员/角色</p>
+
+</div>
+
+</body>
+</html>

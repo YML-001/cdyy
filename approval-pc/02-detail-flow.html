@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>审批详情 - 流程图 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#fffbeb;color:#d97706}
+.topnav-user{font-size:13px;color:#64748b}
+.detail-header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:56px;z-index:40}
+.detail-header-inner{max-width:960px;margin:0 auto;padding:0 32px}
+.tab-row{display:flex;align-items:center;gap:0;border-bottom:1px solid #f1f5f9;padding-top:8px}
+.tab-item{padding:10px 20px;font-size:13.5px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;font-weight:500;position:relative;top:1px}
+.tab-item.active{color:#d97706;border-bottom-color:#d97706;font-weight:600}
+.tab-item:hover{color:#d97706}
+.close-btn{margin-left:auto;width:28px;height:28px;border-radius:50%;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:16px;color:#94a3b8;cursor:pointer;background:#fff;align-self:center}
+.close-btn:hover{background:#f8fafc;color:#0f172a}
+.title-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0 14px}
+.title-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.title-name{font-size:16px;font-weight:700}
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:11.5px;font-weight:500}
+.tag-node{background:#e0f2fe;color:#0369a1}
+.tag-user{background:#fef3c7;color:#92400e}
+.tag-status{font-size:12px;color:#d97706;font-weight:500;margin-left:4px}
+.action-btns{display:flex;gap:8px}
+.btn{padding:8px 24px;border-radius:6px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:inherit;color:#fff}
+.btn-pass{background:#059669}.btn-pass:hover{background:#047857}
+.btn-fail{background:#dc2626}.btn-fail:hover{background:#b91c1c}
+.btn-return{background:#f59e0b}.btn-return:hover{background:#d97706}
+.container{max-width:960px;margin:0 auto;padding:20px 32px 48px}
+.section{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px 24px;margin-bottom:16px}
+.section-title{font-size:14px;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #f1f5f9;color:#0f172a}
+
+/* 流程图 */
+.flow-canvas{border:2px solid #e0f2fe;border-radius:10px;padding:40px 24px;min-height:280px;display:flex;align-items:center;justify-content:center;background:#fafcff}
+.flow-chain{display:flex;align-items:center;gap:0}
+.flow-start{width:28px;height:28px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center}
+.flow-start-inner{width:14px;height:14px;border-radius:50%;background:#fff}
+.flow-end{width:28px;height:28px;border-radius:50%;border:3px solid #64748b;display:flex;align-items:center;justify-content:center}
+.flow-end-inner{width:12px;height:12px;border-radius:50%;background:#64748b}
+.flow-connector{width:40px;height:2px;background:#94a3b8;position:relative}
+.flow-connector::after{content:"";position:absolute;right:-4px;top:-4px;border:5px solid transparent;border-left-color:#94a3b8}
+.flow-step{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+.flow-step-box{border:2px solid #c7d2fe;background:#eef2ff;border-radius:10px;padding:14px 24px;font-size:13px;font-weight:500;color:#4338ca;min-width:120px;text-align:center;display:flex;align-items:center;gap:6px;justify-content:center}
+.flow-step-box .icon{width:20px;height:20px;border-radius:4px;background:#c7d2fe;display:flex;align-items:center;justify-content:center;font-size:11px}
+.flow-step-box.current{border-color:#0ea5e9;background:#e0f2fe;color:#0369a1}
+.flow-step-label{font-size:10px;color:#94a3b8;position:absolute;top:-18px}
+.flow-branch{display:flex;flex-direction:column;align-items:center;position:relative}
+.flow-branch-line{width:2px;height:24px;background:#94a3b8}
+.flow-branch-label{font-size:10px;color:#64748b;background:#fff;padding:2px 6px;border:1px solid #e2e8f0;border-radius:4px;position:absolute;right:-48px;top:4px}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">审</div>智慧学工 · 审批管理</div>
+  <div class="topnav-links"><a class="active" href="01-pending-list.html">待审批</a><a href="05-history.html">已审批</a></div>
+  <span class="topnav-user">孙瀚 · 管理员</span>
+</nav>
+
+<div class="detail-header">
+  <div class="detail-header-inner">
+    <div class="tab-row">
+      <a class="tab-item" href="02-approval-detail.html">表单信息</a>
+      <a class="tab-item" href="02-detail-cc.html">抄送设置</a>
+      <a class="tab-item active" href="02-detail-flow.html">流程图</a>
+      <a class="tab-item" href="02-detail-approver.html">当前审批人</a>
+      <a class="tab-item" href="02-detail-record.html">审批记录</a>
+      <a class="close-btn" href="01-pending-list.html" title="关闭">✕</a>
+    </div>
+    <div class="title-row">
+      <div class="title-left">
+        <span class="title-name">206会议室的申请审核</span>
+        <span class="tag tag-node">当前节点：审批</span>
+        <span class="tag tag-user">发起人：张三</span>
+        <span class="tag-status">审批中</span>
+      </div>
+      <div class="action-btns">
+        <a class="btn btn-pass" href="03-approve-confirm.html">通过</a>
+        <a class="btn btn-fail" href="04-reject-confirm.html">不通过</a>
+        <a class="btn btn-return" href="04-reject-confirm.html">驳回</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <div class="section-title">流程图</div>
+    <div class="flow-canvas">
+      <div class="flow-chain">
+        <!-- 开始节点 -->
+        <div class="flow-start"><div class="flow-start-inner"></div></div>
+        <div class="flow-connector"></div>
+
+        <!-- 提交申请 -->
+        <div class="flow-step">
+          <div class="flow-step-box"><span class="icon">📝</span>场地预约申请</div>
+        </div>
+        <div class="flow-connector"></div>
+
+        <!-- 管理员审批（当前） -->
+        <div class="flow-step">
+          <div class="flow-step-box current"><span class="icon">👤</span>管理员审批</div>
+        </div>
+        <div class="flow-connector"></div>
+
+        <!-- 完成 -->
+        <div class="flow-step">
+          <span class="flow-step-label">审核完成</span>
+          <div class="flow-end"><div class="flow-end-inner"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

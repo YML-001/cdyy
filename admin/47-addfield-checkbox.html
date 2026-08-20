@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>添加字段（多选） - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}.sidebar-nav{flex:1;padding:12px 8px}.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}.nav-item:hover{background:#f1f5f9;color:#0f172a}.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}.nav-icon{width:20px;text-align:center;font-size:15px}.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}.breadcrumb{font-size:13px;color:#64748b}.breadcrumb a{color:#4f46e5}.content{padding:24px 28px 48px;max-width:1000px}
+.tabs{display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:24px}.tab{padding:10px 20px;font-size:13.5px;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;font-weight:500}.tab.active{color:#4f46e5;border-bottom-color:#4f46e5}.tab.done{color:#059669}.tab.disabled{color:#cbd5e1;pointer-events:none}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}.modal{background:#fff;border-radius:14px;width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #e2e8f0}.modal-header h3{font-size:16px;font-weight:600}.modal-close{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#94a3b8;cursor:pointer}.modal-close:hover{background:#f1f5f9;color:#0f172a}.modal-body{padding:20px 24px}
+.m-field{margin-bottom:16px}.m-field label{display:block;font-size:12.5px;font-weight:500;margin-bottom:6px;color:#0f172a}.m-field input,.m-field select{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;color:#0f172a;background:#fff}.m-field .m-hint{font-size:11px;color:#94a3b8;margin-top:4px}
+.type-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.type-opt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:1px solid #e2e8f0;border-radius:8px;font-size:11.5px;color:#64748b;cursor:pointer;text-align:center}.type-opt:hover{border-color:#c7d2fe;color:#4f46e5}.type-opt.selected{border-color:#4f46e5;background:#eef2ff;color:#4f46e5;font-weight:500}.type-opt .t-icon{font-size:18px}
+.toggle-group{display:flex;gap:0;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}.toggle-item{flex:1;padding:8px 12px;text-align:center;font-size:13px;cursor:pointer;background:#fff;color:#64748b}.toggle-item.active{background:#4f46e5;color:#fff;font-weight:500}
+.type-config{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-top:8px}.type-config-title{font-size:11.5px;font-weight:500;color:#64748b;margin-bottom:10px;display:flex;align-items:center;gap:6px}.type-config-title .tc-badge{background:#eef2ff;color:#4f46e5;padding:1px 6px;border-radius:4px;font-size:10px}
+.opt-list{display:flex;flex-direction:column;gap:6px}.opt-item{display:flex;gap:8px;align-items:center}.opt-item input{flex:1;padding:7px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12.5px;font-family:inherit}.opt-item .opt-del{width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#dc2626;cursor:pointer;flex-shrink:0}.opt-item .opt-del:hover{background:#fef2f2}
+.opt-add{display:flex;align-items:center;gap:4px;padding:6px 10px;border:1px dashed #cbd5e1;border-radius:6px;color:#64748b;font-size:12px;cursor:pointer;margin-top:6px}.opt-add:hover{border-color:#4f46e5;color:#4f46e5}
+.tc-row{display:flex;gap:10px;margin-top:8px}.tc-row select,.tc-row input{flex:1;padding:7px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12.5px;font-family:inherit}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid #e2e8f0}.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}.btn-primary{background:#4f46e5;color:#fff}.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+</style>
+</head>
+<body>
+<aside class="sidebar"><div class="sidebar-brand"><div class="logo">学</div>智慧学工</div><nav class="sidebar-nav"><a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a><a class="nav-item active" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a><a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a><a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a></nav><div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div></aside>
+<div class="main"><header class="topbar"><div class="breadcrumb"><a href="02-venue-list.html">场地管理</a> &gt; 新增场地</div><a class="btn btn-secondary" href="02-venue-list.html">取消</a></header><div class="content"><div class="tabs"><a class="tab done" href="05-venue-add-basic.html">✓ 基础信息</a><a class="tab done" href="06-venue-add-timeslot.html">✓ 时段配置</a><a class="tab active" href="07-venue-add-form.html">表单模板</a><a class="tab disabled">审批流程</a><a class="tab disabled">权限配置</a></div></div></div>
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header"><h3>添加表单字段</h3><a class="modal-close" href="07-venue-add-form.html">✕</a></div>
+    <div class="modal-body">
+      <div class="m-field"><label>字段名称 <span style="color:#dc2626">*</span></label><input type="text" value="需要设备" placeholder="请输入字段名称"></div>
+      <div class="m-field">
+        <label>字段类型 <span style="color:#dc2626">*</span></label>
+        <div class="type-options">
+          <a class="type-opt" href="42-addfield-text.html"><span class="t-icon">📝</span>文本</a>
+          <a class="type-opt" href="43-addfield-number.html"><span class="t-icon">🔢</span>数字</a>
+          <a class="type-opt" href="44-addfield-phone.html"><span class="t-icon">📱</span>电话</a>
+          <a class="type-opt" href="28-venue-add-form-addfield.html"><span class="t-icon">📄</span>文本域</a>
+          <a class="type-opt" href="45-addfield-date.html"><span class="t-icon">📅</span>日期</a>
+          <a class="type-opt" href="46-addfield-radio.html"><span class="t-icon">🔘</span>单选</a>
+          <div class="type-opt selected"><span class="t-icon">☑️</span>多选</div>
+          <a class="type-opt" href="48-addfield-file.html"><span class="t-icon">📎</span>文件</a>
+          <a class="type-opt" href="56-addfield-equipment.html"><span class="t-icon">🔧</span>设备选择</a>
+        </div>
+        <div class="type-config">
+          <div class="type-config-title">多选选项配置 <span class="tc-badge">CHECKBOX</span></div>
+          <div class="opt-list">
+            <div class="opt-item"><input type="text" value="投影仪"><span class="opt-del">✕</span></div>
+            <div class="opt-item"><input type="text" value="麦克风"><span class="opt-del">✕</span></div>
+            <div class="opt-item"><input type="text" value="白板"><span class="opt-del">✕</span></div>
+            <div class="opt-item"><input type="text" value="音响"><span class="opt-del">✕</span></div>
+            <div class="opt-item"><input type="text" value="翻页笔"><span class="opt-del">✕</span></div>
+            <div class="opt-item"><input type="text" value="桌椅重新摆放"><span class="opt-del">✕</span></div>
+          </div>
+          <div class="opt-add">＋ 添加选项</div>
+          <div class="tc-row">
+            <select><option selected>不限选择数量</option><option>最多选2项</option><option>最多选3项</option><option>最多选5项</option></select>
+          </div>
+          <div class="m-hint" style="font-size:11px;color:#94a3b8;margin-top:4px">用户可从以上选项中选择多个</div>
+        </div>
+      </div>
+      <div class="m-field"><label>是否必填</label><div class="toggle-group"><div class="toggle-item">必填</div><div class="toggle-item active">选填</div></div></div>
+      <div class="m-field"><label>占据宽度</label><div class="toggle-group"><div class="toggle-item">半行（50%）</div><div class="toggle-item active">整行（100%）</div></div></div>
+      <div class="m-field"><label>帮助说明</label><input type="text" value="请勾选本次活动需要使用的设备" placeholder="显示在字段下方的说明文字（可选）"><div class="m-hint">帮助用户理解该字段的用途</div></div>
+    </div>
+    <div class="modal-footer"><a class="btn btn-secondary" href="07-venue-add-form.html">取消</a><a class="btn btn-primary" href="30-venue-add-form-addfield-done.html">确认添加</a></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>状态切换确认 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1;position:relative}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600}
+.content{padding:24px 28px 48px;filter:blur(2px);opacity:.5;pointer-events:none}
+.modal-overlay{position:fixed;top:0;left:220px;right:0;bottom:0;background:rgba(15,23,42,.4);display:flex;align-items:center;justify-content:center;z-index:200}
+.modal{background:#fff;border-radius:12px;padding:32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-icon{width:48px;height:48px;border-radius:50%;background:#fffbeb;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+.modal h3{font-size:17px;font-weight:600;margin-bottom:8px}
+.modal p{font-size:13.5px;color:#64748b;line-height:1.6;margin-bottom:20px}
+.modal-info{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px;font-size:13px;margin-bottom:20px;color:#92400e}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.btn-warning{background:#d97706;color:#fff}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item active" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title">场地管理</span>
+  </header>
+  <div class="content">
+    <p style="color:#94a3b8;padding:40px;text-align:center">（场地列表背景）</p>
+  </div>
+
+  <div class="modal-overlay">
+    <div class="modal">
+      <div class="modal-icon">🔄</div>
+      <h3>切换场地状态</h3>
+      <p>将该场地从 <strong>"正常使用"</strong> 切换为 <strong>"暂时闭馆"</strong>？切换后用户将无法预约此场地，已有待审批预约不受影响。</p>
+      <div class="modal-info">
+        <strong>岳麓山校区心理中心多功能室</strong><br>
+        心理中心 · 岳麓山校区升华楼前楼二楼 · 12人<br>
+        当前状态：正常使用 → 暂时闭馆
+      </div>
+      <div class="modal-btns">
+        <a class="btn btn-secondary" href="02-venue-list.html">取消</a>
+        <a class="btn btn-warning" href="02-venue-list.html">确认切换</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

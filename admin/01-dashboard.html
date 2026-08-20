@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>数据概览 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:100}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px;transition:all .15s}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0;font-size:12px}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.sidebar-footer a:hover{color:#4f46e5}
+.main{margin-left:220px;flex:1;min-width:0}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600}
+.topbar-user{font-size:13px;color:#64748b}
+.content{padding:24px 28px 48px}
+
+/* 统计卡片 */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+.stat-card{background:#fff;border-radius:10px;padding:20px;border:1px solid #e2e8f0;position:relative;overflow:hidden}
+.stat-card .label{font-size:12.5px;color:#64748b;margin-bottom:6px}
+.stat-card .value{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.stat-card .sub{font-size:11.5px;color:#94a3b8;margin-top:4px}
+.stat-card .trend{display:inline-flex;align-items:center;gap:2px;font-size:11px;font-weight:500;padding:1px 6px;border-radius:4px;margin-left:6px}
+.trend-up{background:#ecfdf5;color:#059669}
+.trend-down{background:#fef2f2;color:#dc2626}
+.stat-card .card-icon{position:absolute;right:16px;top:16px;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.card-icon.ci-primary{background:#eef2ff}
+.card-icon.ci-success{background:#ecfdf5}
+.card-icon.ci-danger{background:#fef2f2}
+.card-icon.ci-warning{background:#fffbeb}
+.card-icon.ci-blue{background:#eff6ff}
+.card-icon.ci-purple{background:#f5f3ff}
+.card-icon.ci-teal{background:#f0fdfa}
+.card-icon.ci-orange{background:#fff7ed}
+
+/* 两列 / 三列布局 */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:20px}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:20px;margin-bottom:20px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.section h3 .more{font-size:12.5px;font-weight:400;color:#4f46e5}
+.section h3 .more:hover{text-decoration:underline}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px 12px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
+.badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:10px;font-weight:500}
+.badge-success{background:#ecfdf5;color:#059669}
+.badge-warning{background:#fffbeb;color:#d97706}
+.badge-danger{background:#fef2f2;color:#dc2626}
+.badge-gray{background:#f1f5f9;color:#64748b}
+
+/* 柱状图 */
+.chart-container{display:flex;align-items:flex-end;gap:0;height:160px;padding:0 4px}
+.chart-bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.chart-bar{width:100%;max-width:36px;border-radius:4px 4px 0 0;background:#4f46e5;transition:all .2s;min-height:2px;position:relative}
+.chart-bar:hover{opacity:.8}
+.chart-bar .bar-val{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;color:#64748b;white-space:nowrap}
+.chart-label{font-size:11px;color:#94a3b8;margin-top:2px}
+.chart-legend{display:flex;gap:16px;margin-top:12px;font-size:11.5px;color:#64748b}
+.chart-legend span{display:flex;align-items:center;gap:4px}
+.legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block}
+
+/* 热度排行 */
+.rank-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9}
+.rank-item:last-child{border-bottom:none}
+.rank-num{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.rank-1{background:#fbbf24;color:#fff}
+.rank-2{background:#9ca3af;color:#fff}
+.rank-3{background:#cd7f32;color:#fff}
+.rank-n{background:#f1f5f9;color:#94a3b8}
+.rank-info{flex:1;min-width:0}
+.rank-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-dept{font-size:11px;color:#94a3b8;margin-top:1px}
+.rank-bar-wrap{flex:1;max-width:120px}
+.rank-bar-bg{height:6px;border-radius:3px;background:#f1f5f9;overflow:hidden}
+.rank-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#4f46e5,#818cf8)}
+.rank-count{font-size:12.5px;font-weight:600;color:#4f46e5;flex-shrink:0;width:36px;text-align:right}
+
+/* 科室预约排行 */
+.dept-bar-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc}
+.dept-bar-row:last-child{border-bottom:none}
+.dept-name{font-size:12.5px;width:80px;flex-shrink:0;text-align:right;color:#64748b}
+.dept-bar-wrap{flex:1;height:20px;background:#f1f5f9;border-radius:4px;overflow:hidden;position:relative}
+.dept-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;color:#fff;font-weight:600;min-width:24px}
+.dept-bar-fill.c1{background:linear-gradient(90deg,#4f46e5,#818cf8)}
+.dept-bar-fill.c2{background:linear-gradient(90deg,#059669,#34d399)}
+.dept-bar-fill.c3{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.dept-bar-fill.c4{background:linear-gradient(90deg,#dc2626,#f87171)}
+.dept-bar-fill.c5{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.dept-bar-fill.c6{background:linear-gradient(90deg,#0891b2,#67e8f9)}
+.dept-bar-fill.c7{background:linear-gradient(90deg,#be185d,#f472b6)}
+
+/* 审批效率环 */
+.ring-wrap{display:flex;align-items:center;gap:24px;padding:8px 0}
+.ring-chart{width:100px;height:100px;border-radius:50%;background:conic-gradient(#059669 0% 68%,#d97706 68% 79%,#dc2626 79% 89.5%,#94a3b8 89.5% 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ring-inner{width:64px;height:64px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-inner .rv{font-size:18px;font-weight:700;color:#059669}
+.ring-inner .rl{font-size:10px;color:#94a3b8}
+.ring-legend{display:flex;flex-direction:column;gap:8px}
+.ring-legend-item{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.ring-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.ring-legend-val{font-weight:600;margin-left:auto;min-width:30px;text-align:right}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item active" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title">数据概览</span>
+    <span class="topbar-user">管理员：孙瀚（综合办）</span>
+  </header>
+  <div class="content">
+
+    <!-- 第一行：核心指标 -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="card-icon ci-primary">📍</div>
+        <div class="label">场地总数</div>
+        <div class="value" style="color:#4f46e5">30</div>
+        <div class="sub">启用 24 · 闭馆 6</div>
+      </div>
+      <div class="stat-card">
+        <div class="card-icon ci-warning">⏳</div>
+        <div class="label">待审批</div>
+        <div class="value" style="color:#d97706">8</div>
+        <div class="sub">最早提交 04-08 10:30</div>
+      </div>
+      <div class="stat-card">
+        <div class="card-icon ci-blue">📅</div>
+        <div class="label">本月预约</div>
+        <div class="value" style="color:#2563eb">47</div>
+        <div class="sub">较上月 <span class="trend trend-up">↑ 12%</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="card-icon ci-success">✓</div>
+        <div class="label">本月通过率</div>
+        <div class="value" style="color:#059669">85%</div>
+        <div class="sub">通过 32 · 驳回 5 · 撤销 2</div>
+      </div>
+    </div>
+
+    <!-- 第二行：运营指标 -->
+    <div class="stat-row" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="card-icon ci-purple">📆</div>
+        <div class="label">今日预约</div>
+        <div class="value" style="color:#7c3aed">6</div>
+        <div class="sub">涉及 4 个场地</div>
+      </div>
+      <div class="stat-card">
+        <div class="card-icon ci-orange">🔥</div>
+        <div class="label">本周场地使用率</div>
+        <div class="value" style="color:#ea580c">72%</div>
+        <div class="sub">较上周 <span class="trend trend-up">↑ 5%</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="card-icon ci-teal">📊</div>
+        <div class="label">场地启用率</div>
+        <div class="value" style="color:#0d9488">80%</div>
+        <div class="sub">24 / 30 个场地运行中</div>
+      </div>
+      <div class="stat-card">
+        <div class="card-icon ci-danger">⏸</div>
+        <div class="label">闭馆场地</div>
+        <div class="value" style="color:#dc2626">6</div>
+        <div class="sub">心理中心 2 · 学生事务办 4</div>
+      </div>
+    </div>
+
+    <!-- 近7天趋势 + 审批效率 + 科室预约量 -->
+    <div class="three-col">
+      <div class="section" style="margin-bottom:0">
+        <h3>近 7 天预约趋势</h3>
+        <div class="chart-container">
+          <div class="chart-bar-group">
+            <div class="chart-bar" style="height:36%"><span class="bar-val">5</span></div>
+            <span class="chart-label">4/3</span>
+          </div>
+          <div class="chart-bar-group">
+            <div class="chart-bar" style="height:50%"><span class="bar-val">7</span></div>
+            <span class="chart-label">4/4</span>
+          </div>
+          <div class="chart-bar-group">
+            <div class="chart-bar" style="height:64%"><span class="bar-val">9</span></div>
+            <span class="chart-label">4/5</span>
+          </div>
+          <div class="chart-bar-group">
+            <div class="chart-bar" style="height:43%"><span class="bar-val">6</span></div>
+            <span class="chart-label">4/6</span>
+          </div>
+          <div class="chart-bar-group">
+            <div class="chart-bar" style="height:57%"><span class="bar-val">8</span></div>
+            <span class="chart-label">4/7</span>
+          </div>
+          <div class="chart-bar-group">
+            <div class="chart-bar" style="height:78%"><span class="bar-val">11</span></div>
+            <span class="chart-label">4/8</span>
+          </div>
+          <div class="chart-bar-group">
+            <div class="chart-bar" style="height:100%;background:linear-gradient(180deg,#4f46e5,#818cf8)"><span class="bar-val" style="color:#4f46e5;font-weight:600">14</span></div>
+            <span class="chart-label" style="color:#4f46e5;font-weight:500">4/9</span>
+          </div>
+        </div>
+        <div class="chart-legend">
+          <span><span class="legend-dot" style="background:#4f46e5"></span> 每日预约数</span>
+          <span style="margin-left:auto;color:#4f46e5;font-weight:500">7 日合计：60</span>
+        </div>
+      </div>
+
+      <div class="section" style="margin-bottom:0">
+        <h3>审批效率</h3>
+        <div class="ring-wrap">
+          <div class="ring-chart">
+            <div class="ring-inner">
+              <span class="rv">85%</span>
+              <span class="rl">通过率</span>
+            </div>
+          </div>
+          <div class="ring-legend">
+            <div class="ring-legend-item"><span class="ring-legend-dot" style="background:#059669"></span><span>已通过</span><span class="ring-legend-val" style="color:#059669">32</span></div>
+            <div class="ring-legend-item"><span class="ring-legend-dot" style="background:#d97706"></span><span>待审批</span><span class="ring-legend-val" style="color:#d97706">8</span></div>
+            <div class="ring-legend-item"><span class="ring-legend-dot" style="background:#dc2626"></span><span>已驳回</span><span class="ring-legend-val" style="color:#dc2626">5</span></div>
+            <div class="ring-legend-item"><span class="ring-legend-dot" style="background:#94a3b8"></span><span>已撤销</span><span class="ring-legend-val" style="color:#94a3b8">2</span></div>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:#94a3b8;margin-top:8px;padding-top:10px;border-top:1px solid #f1f5f9">平均审批时长：<span style="color:#0f172a;font-weight:500">4.2 小时</span> · 最快：<span style="color:#059669;font-weight:500">15 分钟</span></div>
+      </div>
+
+      <div class="section" style="margin-bottom:0">
+        <h3>各科室本月预约量</h3>
+        <div class="dept-bar-row">
+          <span class="dept-name">综合办</span>
+          <div class="dept-bar-wrap"><div class="dept-bar-fill c1" style="width:85%">15</div></div>
+        </div>
+        <div class="dept-bar-row">
+          <span class="dept-name">思政办</span>
+          <div class="dept-bar-wrap"><div class="dept-bar-fill c2" style="width:62%">11</div></div>
+        </div>
+        <div class="dept-bar-row">
+          <span class="dept-name">心理中心</span>
+          <div class="dept-bar-wrap"><div class="dept-bar-fill c3" style="width:45%">8</div></div>
+        </div>
+        <div class="dept-bar-row">
+          <span class="dept-name">民族办</span>
+          <div class="dept-bar-wrap"><div class="dept-bar-fill c4" style="width:34%">6</div></div>
+        </div>
+        <div class="dept-bar-row">
+          <span class="dept-name">就业指导中心</span>
+          <div class="dept-bar-wrap"><div class="dept-bar-fill c5" style="width:22%">4</div></div>
+        </div>
+        <div class="dept-bar-row">
+          <span class="dept-name">学生事务办</span>
+          <div class="dept-bar-wrap"><div class="dept-bar-fill c6" style="width:11%">2</div></div>
+        </div>
+        <div class="dept-bar-row">
+          <span class="dept-name">武装部</span>
+          <div class="dept-bar-wrap"><div class="dept-bar-fill c7" style="width:6%">1</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 场地热度排行 + 科室场地分布表 -->
+    <div class="two-col">
+      <div class="section" style="margin-bottom:0">
+        <h3>场地热度排行 TOP 5 <a class="more" href="02-venue-list.html">全部场地 →</a></h3>
+        <div class="rank-item">
+          <span class="rank-num rank-1">1</span>
+          <div class="rank-info"><div class="rank-name">206会议室</div><div class="rank-dept">综合办</div></div>
+          <div class="rank-bar-wrap"><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:100%"></div></div></div>
+          <span class="rank-count">18</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num rank-2">2</span>
+          <div class="rank-info"><div class="rank-name">238云麓阁报告厅</div><div class="rank-dept">综合办</div></div>
+          <div class="rank-bar-wrap"><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:78%"></div></div></div>
+          <span class="rank-count">14</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num rank-3">3</span>
+          <div class="rank-info"><div class="rank-name">117民族团结进步之家</div><div class="rank-dept">民族办</div></div>
+          <div class="rank-bar-wrap"><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:61%"></div></div></div>
+          <span class="rank-count">11</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num rank-n">4</span>
+          <div class="rank-info"><div class="rank-name">"爱国"体验课堂</div><div class="rank-dept">思政办</div></div>
+          <div class="rank-bar-wrap"><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:50%"></div></div></div>
+          <span class="rank-count">9</span>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num rank-n">5</span>
+          <div class="rank-info"><div class="rank-name">知新馆（团辅A）</div><div class="rank-dept">心理中心</div></div>
+          <div class="rank-bar-wrap"><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:44%"></div></div></div>
+          <span class="rank-count">8</span>
+        </div>
+      </div>
+
+      <div class="section" style="margin-bottom:0">
+        <h3>科室场地分布 <a class="more" href="02-venue-list.html">场地管理 →</a></h3>
+        <table>
+          <thead><tr><th>科室</th><th>场地</th><th>启用</th><th>闭馆</th><th>预约</th><th>使用率</th></tr></thead>
+          <tbody>
+            <tr><td>综合办</td><td>2</td><td>2</td><td>0</td><td>15</td><td><span style="color:#059669;font-weight:500">92%</span></td></tr>
+            <tr><td>民族办</td><td>2</td><td>2</td><td>0</td><td>6</td><td><span style="color:#059669;font-weight:500">78%</span></td></tr>
+            <tr><td>思政办</td><td>6</td><td>6</td><td>0</td><td>11</td><td><span style="color:#d97706;font-weight:500">65%</span></td></tr>
+            <tr><td>就业指导中心</td><td>4</td><td>4</td><td>0</td><td>4</td><td><span style="color:#d97706;font-weight:500">58%</span></td></tr>
+            <tr><td>心理中心</td><td>6</td><td>4</td><td>2</td><td>8</td><td><span style="color:#059669;font-weight:500">82%</span></td></tr>
+            <tr><td>学生事务办</td><td>8</td><td>4</td><td>4</td><td>2</td><td><span style="color:#dc2626;font-weight:500">35%</span></td></tr>
+            <tr><td>武装部</td><td>1</td><td>1</td><td>0</td><td>1</td><td><span style="color:#d97706;font-weight:500">50%</span></td></tr>
+            <tr style="font-weight:600;background:#f8fafc"><td>合计</td><td>30</td><td>24</td><td>6</td><td>47</td><td><span style="color:#4f46e5;font-weight:600">72%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 最近预约 -->
+    <div class="section">
+      <h3>最近预约 <a class="more" href="20-booking-list.html">查看全部 →</a></h3>
+      <table>
+        <thead><tr><th>申请人</th><th>场地</th><th>科室</th><th>日期</th><th>时段</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td>张三</td><td>206会议室</td><td>综合办</td><td>2026-04-15</td><td>14:00-15:00</td><td><span class="badge badge-warning">待审批</span></td><td><a style="color:#4f46e5;font-size:12.5px" href="21-booking-detail.html">详情</a></td></tr>
+          <tr><td>李四</td><td>238云麓阁报告厅</td><td>综合办</td><td>2026-04-14</td><td>09:00-11:00</td><td><span class="badge badge-success">已通过</span></td><td><a style="color:#4f46e5;font-size:12.5px" href="21-booking-detail.html">详情</a></td></tr>
+          <tr><td>王五</td><td>知新馆（团辅A）</td><td>心理中心</td><td>2026-04-14</td><td>3-4节</td><td><span class="badge badge-warning">待审批</span></td><td><a style="color:#4f46e5;font-size:12.5px" href="21-booking-detail.html">详情</a></td></tr>
+          <tr><td>赵六</td><td>117民族团结进步之家</td><td>民族办</td><td>2026-04-13</td><td>14:00-15:30</td><td><span class="badge badge-danger">已驳回</span></td><td><a style="color:#4f46e5;font-size:12.5px" href="21-booking-detail.html">详情</a></td></tr>
+          <tr><td>刘七</td><td>立言厅</td><td>就业指导中心</td><td>2026-04-13</td><td>10:00-12:00</td><td><span class="badge badge-success">已通过</span></td><td><a style="color:#4f46e5;font-size:12.5px" href="21-booking-detail.html">详情</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

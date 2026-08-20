@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>我的预约 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#eef2ff;color:#4f46e5}
+.topnav-user{font-size:13px;color:#64748b}
+.container{max-width:900px;margin:0 auto;padding:24px 32px 48px}
+.page-head{margin-bottom:20px}
+.page-head h1{font-size:20px;font-weight:700}
+.page-head p{font-size:13px;color:#64748b;margin-top:2px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden}
+th,td{padding:12px 14px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
+.badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:10px;font-weight:500}
+.badge-warning{background:#fffbeb;color:#d97706}
+.badge-success{background:#ecfdf5;color:#059669}
+.badge-danger{background:#fef2f2;color:#dc2626}
+.action-link{color:#4f46e5;font-size:12.5px}
+.action-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">学</div>智慧学工 · 场地预约</div>
+  <div class="topnav-links"><a href="01-venue-list.html">场地预约</a><a class="active" href="11-my-bookings.html">我的预约</a></div>
+  <span class="topnav-user">张三 · 学生工作部</span>
+</nav>
+
+<div class="container">
+  <div class="page-head"><h1>我的预约</h1><p>共 3 条预约记录</p></div>
+
+  <table>
+    <thead><tr><th>预约编号</th><th>场地</th><th>日期</th><th>时段</th><th>活动</th><th>状态</th><th>操作</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>B20260415001</td>
+        <td>206会议室</td>
+        <td>2026-04-15</td>
+        <td>14:00-15:00</td>
+        <td>2026年春季学工例会</td>
+        <td><span class="badge badge-warning">待审批</span></td>
+        <td><a class="action-link" href="12-booking-detail-pending.html">详情</a></td>
+      </tr>
+      <tr>
+        <td>B20260412002</td>
+        <td>238云麓阁报告厅</td>
+        <td>2026-04-12</td>
+        <td>09:00-11:00</td>
+        <td>学生干部培训会</td>
+        <td><span class="badge badge-success">已通过</span></td>
+        <td><a class="action-link" href="13-booking-detail-approved.html">详情</a></td>
+      </tr>
+      <tr>
+        <td>B20260410003</td>
+        <td>知新馆（团辅A）</td>
+        <td>2026-04-10</td>
+        <td>3-4节</td>
+        <td>班级团体心理辅导</td>
+        <td><span class="badge badge-danger">已驳回</span></td>
+        <td><a class="action-link" href="14-booking-detail-rejected.html">详情</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

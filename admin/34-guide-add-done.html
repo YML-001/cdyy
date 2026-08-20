@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>新增场地 - 解说员已添加 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.breadcrumb{font-size:13px;color:#64748b}
+.breadcrumb a{color:#4f46e5}
+.content{padding:24px 28px 48px;max-width:900px}
+.tabs{display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:24px}
+.tab{padding:10px 20px;font-size:13.5px;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;font-weight:500}
+.tab.active{color:#4f46e5;border-bottom-color:#4f46e5}
+.tab.disabled{color:#cbd5e1;pointer-events:none}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:24px;margin-bottom:20px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12.5px;font-weight:500;color:#0f172a}
+.field label .req{color:#dc2626;margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;color:#0f172a;background:#fff}
+.field textarea{min-height:80px;resize:vertical}
+.radio-group{display:flex;gap:16px;padding:4px 0}
+.upload-area{display:flex;gap:12px;flex-wrap:wrap}
+.upload-item{width:100px;height:100px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;position:relative;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-item .cover-tag{position:absolute;top:0;left:0;background:#4f46e5;color:#fff;font-size:9px;padding:1px 6px;border-radius:0 0 6px 0;font-weight:600}
+.upload-item .del-btn{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer}
+.upload-add{width:100px;height:100px;border-radius:8px;border:2px dashed #cbd5e1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:12px;cursor:pointer;flex-shrink:0}
+.upload-add:hover{border-color:#4f46e5;color:#4f46e5}
+.upload-add .plus{font-size:24px;line-height:1}
+.upload-hint{font-size:11px;color:#94a3b8;margin-top:6px}
+.guide-section{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:20px;margin-bottom:20px}
+.guide-section h3{font-size:15px;font-weight:600;margin-bottom:4px;color:#92400e}
+.guide-section .guide-desc{font-size:12.5px;color:#a16207;margin-bottom:14px}
+.guide-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden}
+.guide-table th,.guide-table td{padding:10px 12px;text-align:left;font-size:12.5px;border-bottom:1px solid #f1f5f9}
+.guide-table th{background:#f8fafc;font-weight:500;color:#64748b;font-size:11.5px}
+.guide-table tr:last-child td{border-bottom:none}
+.guide-avatar{width:28px;height:28px;border-radius:50%;background:#4f46e5;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;vertical-align:middle;margin-right:6px}
+.guide-avatar.new{background:#d97706}
+.guide-actions a{color:#4f46e5;font-size:11.5px;margin-right:8px}
+.guide-actions a.del{color:#dc2626}
+.add-guide-row{display:flex;gap:8px;margin-top:12px}
+.add-guide-row input{flex:1;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit}
+.badge-role{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:500;background:#eef2ff;color:#4f46e5}
+.highlight-row{background:#fffbeb !important}
+.btn-row{display:flex;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.btn-sm{padding:6px 14px;font-size:12.5px}
+.btn-amber{background:#d97706;color:#fff}
+.toast{position:fixed;top:20px;right:20px;background:#059669;color:#fff;padding:12px 20px;border-radius:8px;font-size:13.5px;font-weight:500;z-index:300;box-shadow:0 4px 20px rgba(5,150,105,.3);animation:slideIn .3s ease}
+@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+</style>
+</head>
+<body>
+
+<div class="toast">✓ 解说员「李讲解员」已添加</div>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item active" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="breadcrumb"><a href="02-venue-list.html">场地管理</a> &gt; 新增场地</div>
+    <a class="btn btn-secondary" href="02-venue-list.html">取消</a>
+  </header>
+  <div class="content">
+
+    <div class="tabs">
+      <a class="tab active" href="26-venue-add-basic-guide.html">基础信息</a>
+      <a class="tab disabled">时段配置</a>
+      <a class="tab disabled">表单模板</a>
+      <a class="tab disabled">审批流程</a>
+      <a class="tab disabled">权限配置</a>
+    </div>
+
+    <div class="section">
+      <h3>基础信息</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>场地名称<span class="req">*</span></label>
+          <input type="text" value="中南大学大学生安全教育沉浸式体验课堂">
+        </div>
+        <div class="field">
+          <label>所属科室<span class="req">*</span></label>
+          <select><option selected>学生事务办</option></select>
+        </div>
+        <div class="field full">
+          <label>场地地址<span class="req">*</span></label>
+          <input type="text" value="中南大学升华公寓6栋1楼">
+        </div>
+        <div class="field">
+          <label>容纳人数<span class="req">*</span></label>
+          <input type="number" value="35">
+        </div>
+        <div class="field">
+          <label>可提前预定天数</label>
+          <select>
+            <option value="">请选择</option>
+            <option>1天</option>
+            <option>3天</option>
+            <option>7天（一周）</option>
+            <option>14天（两周）</option>
+            <option selected>30天（一个月）</option>
+            <option>60天（两个月）</option>
+            <option>90天</option>
+            <option>不限</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>启用状态</label>
+          <div class="radio-group">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #4f46e5;background:#4f46e5;display:inline-block;flex-shrink:0;box-shadow:inset 0 0 0 3px #fff"></span> 正常使用</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #cbd5e1;display:inline-block;flex-shrink:0"></span> 暂时闭馆</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>是否有解说员/教练</label>
+          <div class="radio-group">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #4f46e5;background:#4f46e5;display:inline-block;flex-shrink:0;box-shadow:inset 0 0 0 3px #fff"></span> 是</label>
+            <a href="05-venue-add-basic.html" style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #4f46e5;display:inline-block;flex-shrink:0"></span> 否</a>
+          </div>
+        </div>
+        <div class="field">
+          <label>开放日</label>
+          <select>
+            <option selected>周一到周日（全周）</option>
+            <option>周一到周五（工作日）</option>
+            <option>周一到周六</option>
+            <option>仅周末</option>
+            <option>自定义</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>每日开放时段</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select style="flex:1">
+              <option>7:00</option>
+              <option selected>8:00</option>
+              <option>8:30</option>
+              <option>9:00</option>
+              <option>9:30</option>
+              <option>10:00</option>
+            </select>
+            <span style="color:#94a3b8;font-size:13px">至</span>
+            <select style="flex:1">
+              <option>17:00</option>
+              <option>18:00</option>
+              <option>19:00</option>
+              <option>20:00</option>
+              <option selected>21:00</option>
+              <option>22:00</option>
+              <option>23:00</option>
+            </select>
+          </div>
+        </div>
+        <div class="field full">
+          <label>场地照片</label>
+          <div class="upload-area">
+            <div class="upload-item"><span class="cover-tag">封面</span><span class="del-btn">✕</span></div>
+            <div class="upload-item"><span class="del-btn">✕</span></div>
+            <div class="upload-add"><span class="plus">+</span>上传图片</div>
+          </div>
+          <div class="upload-hint">支持 JPG/PNG，每张不超过 5MB，最多 9 张，第一张将作为场地封面</div>
+        </div>
+        <div class="field full">
+          <label>使用备注</label>
+          <textarea>需提前联系解说员确认时间安排</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h3>解说员/教练管理</h3>
+      <div class="guide-desc">管理该场地的解说员或教练，用户预约时可选择解说员</div>
+
+      <table class="guide-table">
+        <thead><tr><th>姓名</th><th>联系电话</th><th>角色</th><th>备注</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="guide-avatar">王</span>王解说员</td>
+            <td>138****1234</td>
+            <td><span class="badge-role">解说员</span></td>
+            <td>主讲消防安全模块</td>
+            <td class="guide-actions"><a href="32-guide-edit.html">编辑</a><a class="del" href="33-guide-delete-confirm.html">删除</a></td>
+          </tr>
+          <tr>
+            <td><span class="guide-avatar">赵</span>赵教练</td>
+            <td>159****5678</td>
+            <td><span class="badge-role">教练</span></td>
+            <td>主讲应急逃生模块</td>
+            <td class="guide-actions"><a href="32-guide-edit.html">编辑</a><a class="del" href="33-guide-delete-confirm.html">删除</a></td>
+          </tr>
+          <tr class="highlight-row">
+            <td><span class="guide-avatar new">李</span>李讲解员</td>
+            <td>136****9012</td>
+            <td><span class="badge-role">解说员</span></td>
+            <td>主讲网络安全模块</td>
+            <td class="guide-actions"><a href="32-guide-edit.html">编辑</a><a class="del" href="33-guide-delete-confirm.html">删除</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="add-guide-row">
+        <input type="text" placeholder="姓名">
+        <input type="text" placeholder="联系电话">
+        <select style="width:120px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit">
+          <option>解说员</option>
+          <option>教练</option>
+        </select>
+        <input type="text" placeholder="备注（可选）" style="flex:0.8">
+        <a class="btn btn-sm btn-amber" href="34-guide-add-done.html">添加</a>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn-secondary" href="02-venue-list.html">取消</a>
+      <a class="btn btn-primary" href="06-venue-add-timeslot.html">下一步：时段配置 →</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

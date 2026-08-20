@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>选择时段 - 自由时段 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#eef2ff;color:#4f46e5}
+.topnav-user{font-size:13px;color:#64748b}
+.container{max-width:700px;margin:0 auto;padding:24px 32px 48px}
+.page-title{font-size:20px;font-weight:700;margin-bottom:24px}
+.steps{display:flex;gap:0;margin-bottom:28px}
+.step{flex:1;text-align:center;padding:12px 0;position:relative;font-size:13px;color:#94a3b8}
+.step .snum{width:28px;height:28px;border-radius:50%;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-bottom:4px}
+.step.active{color:#4f46e5;font-weight:500}
+.step.active .snum{background:#4f46e5;color:#fff}
+.step.done{color:#059669}
+.step.done .snum{background:#ecfdf5;color:#059669}
+.step-line{position:absolute;top:24px;left:50%;right:-50%;height:2px;background:#e2e8f0;z-index:-1}
+.step:last-child .step-line{display:none}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:24px;margin-bottom:20px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
+.field label{font-size:12.5px;font-weight:500}
+.field input,.field select{padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit}
+.slot-hint{font-size:12.5px;color:#64748b;margin-bottom:16px;line-height:1.6;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px}
+.time-picker{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.time-picker input{width:140px}
+.time-picker .sep{font-size:14px;color:#94a3b8;font-weight:500}
+.occupied-title{font-size:13px;font-weight:600;color:#334155;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.occupied-title .count{font-size:11px;padding:2px 8px;border-radius:10px;background:#fef2f2;color:#dc2626;font-weight:500}
+.occupied-list{border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}
+.occupied-item{display:flex;align-items:center;padding:10px 14px;font-size:13px;border-bottom:1px solid #f1f5f9}
+.occupied-item:last-child{border-bottom:none}
+.occupied-item .ot{color:#dc2626;font-weight:500;min-width:130px}
+.occupied-item .ou{color:#64748b;flex:1}
+.dur-info{background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4f46e5;margin-top:12px;display:flex;align-items:center;gap:6px}
+.btn-row{display:flex;gap:10px;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 22px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">学</div>智慧学工 · 场地预约</div>
+  <div class="topnav-links"><a class="active" href="01-venue-list.html">场地预约</a><a href="11-my-bookings.html">我的预约</a></div>
+  <span class="topnav-user">张三 · 学生工作部</span>
+</nav>
+
+<div class="container">
+  <div class="page-title">发起预约</div>
+  <div class="steps">
+    <div class="step done"><div class="snum">✓</div><br>选择场地<div class="step-line"></div></div>
+    <div class="step done"><div class="snum">✓</div><br>填写信息<div class="step-line"></div></div>
+    <div class="step active"><div class="snum">3</div><br>选择时段<div class="step-line"></div></div>
+    <div class="step"><div class="snum">4</div><br>确认提交</div>
+  </div>
+
+  <div class="section">
+    <h3>心理咨询室 · 填写使用时段</h3>
+    <div class="slot-hint">
+      ✏️ 自由时段模式：本场地分上午（8:00-12:00）、下午（14:00-18:00）两个开放时段，请在开放时段内选择，且不可跨午休时段。<br>
+      系统会自动检测与已有预约是否冲突，最短 30 分钟，最长 4 小时。
+    </div>
+
+    <div class="field">
+      <label>预约日期</label>
+      <input type="date" value="2026-04-15" style="width:200px">
+    </div>
+
+    <div style="font-size:12.5px;font-weight:500;margin-bottom:6px">使用时段</div>
+    <div class="time-picker">
+      <select style="width:160px">
+        <optgroup label="上午 (8:00-12:00)">
+          <option>08:00</option>
+          <option>08:30</option>
+          <option>09:00</option>
+          <option>09:30</option>
+          <option>10:00</option>
+          <option>10:30</option>
+          <option>11:00</option>
+          <option>11:30</option>
+        </optgroup>
+        <optgroup label="下午 (14:00-18:00)">
+          <option selected>14:00</option>
+          <option>14:30</option>
+          <option>15:00</option>
+          <option>15:30</option>
+          <option>16:00</option>
+          <option>16:30</option>
+          <option>17:00</option>
+          <option>17:30</option>
+        </optgroup>
+      </select>
+      <span class="sep">至</span>
+      <select style="width:160px">
+        <optgroup label="上午 (8:00-12:00)">
+          <option>08:30</option>
+          <option>09:00</option>
+          <option>09:30</option>
+          <option>10:00</option>
+          <option>10:30</option>
+          <option>11:00</option>
+          <option>11:30</option>
+          <option>12:00</option>
+        </optgroup>
+        <optgroup label="下午 (14:00-18:00)">
+          <option>14:30</option>
+          <option>15:00</option>
+          <option>15:30</option>
+          <option>16:00</option>
+          <option selected>16:30</option>
+          <option>17:00</option>
+          <option>17:30</option>
+          <option>18:00</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="dur-info">⏱ 已选时长：2 小时 30 分钟（14:00 — 16:30）</div>
+  </div>
+
+  <div class="section">
+    <h3>当日已有预约</h3>
+    <div class="occupied-title">4月15日 已预约时段 <span class="count">3 条</span></div>
+    <div class="occupied-list">
+      <div class="occupied-item"><span class="ot">09:00 — 11:00</span><span class="ou">张老师 · 团体辅导</span></div>
+      <div class="occupied-item"><span class="ot">11:00 — 12:00</span><span class="ou">李同学 · 心理咨询</span></div>
+      <div class="occupied-item"><span class="ot">16:30 — 18:00</span><span class="ou">王老师 · 培训讲座</span></div>
+    </div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:8px">如所选时段与已有预约冲突，提交时将提示并拒绝</div>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary" href="04-book-step2-form-standard.html">← 上一步</a>
+    <a class="btn btn-primary" href="09-book-step4-confirm.html">下一步 →</a>
+  </div>
+</div>
+
+</body>
+</html>

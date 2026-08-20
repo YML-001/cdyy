@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>填写信息（团委场地）- 发起预约 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1e293b;max-width:375px;margin:0 auto;min-height:100vh;padding-bottom:80px}
+a{text-decoration:none;color:inherit}
+.header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:50}
+.header .back{font-size:18px;color:#64748b}
+.header h1{font-size:16px;font-weight:600;flex:1}
+.steps{display:flex;background:#fff;padding:16px;margin-bottom:8px}
+.step{flex:1;text-align:center}
+.step .snum{width:24px;height:24px;border-radius:50%;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.step .slabel{font-size:11px;color:#94a3b8;margin-top:3px}
+.step.active .snum{background:#4f46e5;color:#fff}
+.step.active .slabel{color:#4f46e5;font-weight:500}
+.step.done .snum{background:#ecfdf5;color:#059669}
+.step.done .slabel{color:#059669}
+.section{background:#fff;padding:16px;margin-bottom:8px}
+.section h3{font-size:14px;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f1f5f9}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:500;color:#1e293b;margin-bottom:4px}
+.field label .req{color:#dc2626;margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;color:#1e293b;background:#fff}
+.field textarea{min-height:72px;resize:vertical}
+.field .hint{font-size:11px;color:#94a3b8;margin-top:3px}
+.nature-opts{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0}
+.nature-opt{padding:8px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;cursor:pointer}
+.nature-opt.checked{border-color:#4f46e5;background:#eef2ff;color:#4f46e5;font-weight:500}
+.equip-list{display:flex;flex-direction:column;gap:8px}
+.equip-card{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #e2e8f0;border-radius:10px;font-size:13.5px}
+.equip-card.checked{border-color:#4f46e5;background:#f8f7ff}
+.equip-card input[type="checkbox"]{width:18px;height:18px;accent-color:#4f46e5;flex-shrink:0}
+.equip-card .ename{flex:1}
+.equip-card .qty-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b}
+.equip-card .qty-wrap input{width:50px;padding:4px 6px;border:1px solid #c7d2fe;border-radius:6px;font-size:13px;text-align:center}
+.equip-hint{font-size:11px;color:#94a3b8;margin-top:8px}
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:375px;background:#fff;border-top:1px solid #e5e7eb;padding:10px 16px env(safe-area-inset-bottom,10px);display:flex;gap:10px;z-index:50}
+.btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-size:15px;font-weight:600}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#f1f5f9;color:#64748b}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="03-book-select-venue.html">←</a>
+  <h1>填写预约信息</h1>
+</div>
+
+<div class="steps">
+  <div class="step done"><div class="snum">✓</div><div class="slabel">选择场地</div></div>
+  <div class="step active"><div class="snum">2</div><div class="slabel">填写信息</div></div>
+  <div class="step"><div class="snum">3</div><div class="slabel">选择时段</div></div>
+  <div class="step"><div class="snum">4</div><div class="slabel">确认提交</div></div>
+</div>
+
+<div class="section">
+  <h3>活动基础信息</h3>
+  <div class="field">
+    <label>活动名称<span class="req">*</span></label>
+    <input type="text" value="2026年校园歌手大赛决赛">
+  </div>
+  <div class="field">
+    <label>活动性质<span class="req">*</span></label>
+    <div class="nature-opts">
+      <span class="nature-opt checked">文艺演出或晚会</span>
+      <span class="nature-opt">会议</span>
+      <span class="nature-opt">交流分享会</span>
+      <span class="nature-opt">竞赛</span>
+      <span class="nature-opt">其他</span>
+    </div>
+  </div>
+  <div class="field">
+    <label>主办单位<span class="req">*</span></label>
+    <input type="text" value="校团委">
+  </div>
+  <div class="field">
+    <label>承办单位<span class="req">*</span></label>
+    <input type="text" value="校学生会文艺部">
+  </div>
+  <div class="field">
+    <label>预估人数<span class="req">*</span></label>
+    <input type="number" value="600">
+  </div>
+</div>
+
+<div class="section">
+  <h3>参与人员信息</h3>
+  <div class="field">
+    <label>校外参加人员</label>
+    <textarea>特邀评委：湖南卫视音乐总监李某 1人</textarea>
+  </div>
+  <div class="field">
+    <label>拟邀请嘉宾</label>
+    <textarea>校党委副书记、各学院团委书记</textarea>
+  </div>
+</div>
+
+<div class="section">
+  <h3>拟使用设备</h3>
+  <div class="equip-list">
+    <div class="equip-card checked">
+      <input type="checkbox" checked> <span class="ename">照明灯</span>
+    </div>
+    <div class="equip-card checked">
+      <input type="checkbox" checked> <span class="ename">舞台灯</span>
+    </div>
+    <div class="equip-card checked">
+      <input type="checkbox" checked> <span class="ename">音响</span>
+    </div>
+    <div class="equip-card checked">
+      <input type="checkbox" checked> <span class="ename">话筒</span>
+      <div class="qty-wrap">数量 <input type="number" value="4" min="1"></div>
+    </div>
+    <div class="equip-card checked">
+      <input type="checkbox" checked> <span class="ename">耳麦</span>
+      <div class="qty-wrap">数量 <input type="number" value="2" min="1"></div>
+    </div>
+    <div class="equip-card checked">
+      <input type="checkbox" checked> <span class="ename">LED屏</span>
+    </div>
+    <div class="equip-card">
+      <input type="checkbox"> <span class="ename">投影仪</span>
+    </div>
+    <div class="equip-card">
+      <input type="checkbox"> <span class="ename">钢琴</span>
+    </div>
+    <div class="equip-card">
+      <input type="checkbox"> <span class="ename">外租设备</span>
+    </div>
+  </div>
+  <div class="equip-hint">勾选所需设备，部分设备需填写使用数量</div>
+</div>
+
+<div class="section">
+  <h3>负责人信息</h3>
+  <div class="field">
+    <label>活动负责老师<span class="req">*</span></label>
+    <input type="text" value="王老师">
+    <div class="hint">活动当天现场负责人</div>
+  </div>
+  <div class="field">
+    <label>负责老师联系方式<span class="req">*</span></label>
+    <input type="tel" value="138****5678">
+  </div>
+  <div class="field">
+    <label>活动学生负责人（消防协管）<span class="req">*</span></label>
+    <input type="text" value="张三">
+  </div>
+  <div class="field">
+    <label>学生负责人联系方式<span class="req">*</span></label>
+    <input type="tel" value="159****1234">
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <a class="btn btn-secondary" href="03-book-select-venue.html">上一步</a>
+  <a class="btn btn-primary" href="06-book-select-slot.html">下一步</a>
+</div>
+
+</body>
+</html>

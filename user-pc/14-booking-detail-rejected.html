@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>预约详情 - 已驳回 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#eef2ff;color:#4f46e5}
+.topnav-user{font-size:13px;color:#64748b}
+.container{max-width:700px;margin:0 auto;padding:24px 32px 48px}
+.breadcrumb{font-size:13px;color:#64748b;margin-bottom:20px}
+.breadcrumb a{color:#4f46e5}
+.result-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:20px;text-align:center;margin-bottom:20px}
+.result-banner .icon{font-size:32px;margin-bottom:6px}
+.result-banner .title{font-size:17px;font-weight:600;color:#dc2626}
+.result-banner .sub{font-size:13px;color:#b91c1c;margin-top:4px}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:20px;margin-bottom:16px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:14px}
+.detail-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13.5px}
+.detail-row:last-child{border-bottom:none}
+.dl{color:#64748b;flex-shrink:0;width:140px}
+.dv{font-weight:500;text-align:right;flex:1}
+.reject-reason{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#991b1b;margin-top:12px;line-height:1.6}
+.reject-reason strong{display:block;font-size:12.5px;color:#dc2626;margin-bottom:4px}
+.flow-visual{display:flex;align-items:center;gap:0;margin:12px 0;flex-wrap:wrap}
+.flow-node{padding:8px 14px;border-radius:8px;font-size:12.5px;font-weight:500;border:1px solid #e2e8f0;background:#f8fafc;color:#64748b}
+.flow-node.done{background:#ecfdf5;color:#059669;border-color:#a7f3d0}
+.flow-node.rejected{background:#fef2f2;color:#dc2626;border-color:#fecaca}
+.flow-arrow{padding:0 6px;color:#94a3b8;font-size:16px}
+.btn-row{display:flex;gap:10px;margin-top:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 22px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.btn-primary{background:#4f46e5;color:#fff}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">学</div>智慧学工 · 场地预约</div>
+  <div class="topnav-links"><a href="01-venue-list.html">场地预约</a><a class="active" href="11-my-bookings.html">我的预约</a></div>
+  <span class="topnav-user">张三 · 学生工作部</span>
+</nav>
+
+<div class="container">
+  <div class="breadcrumb"><a href="11-my-bookings.html">我的预约</a> &gt; 预约详情</div>
+
+  <div class="result-banner">
+    <div class="icon">✕</div>
+    <div class="title">预约已驳回</div>
+    <div class="sub">审批人：李老师 · 驳回时间：2026-04-09 14:20</div>
+  </div>
+
+  <div class="section">
+    <h3>预约信息</h3>
+    <div class="detail-row"><span class="dl">预约编号</span><span class="dv">B20260410003</span></div>
+    <div class="detail-row"><span class="dl">场地</span><span class="dv">知新馆（团辅A）</span></div>
+    <div class="detail-row"><span class="dl">预约日期</span><span class="dv">2026-04-10</span></div>
+    <div class="detail-row"><span class="dl">预约时段</span><span class="dv">3-4节</span></div>
+    <div class="detail-row"><span class="dl">活动名称</span><span class="dv">班级团体心理辅导</span></div>
+    <div class="detail-row"><span class="dl">参与人数</span><span class="dv">15人</span></div>
+    <div class="detail-row"><span class="dl">咨询师</span><span class="dv">李心理老师</span></div>
+  </div>
+
+  <div class="section">
+    <h3>驳回原因</h3>
+    <div class="reject-reason">
+      <strong>审批意见</strong>
+      该时段已有其他团体辅导活动安排，请更换至下午（5-6节或7-8节）时段，或选择团辅B教室。如有疑问请联系心理健康教育中心（电话：88886666）。
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>审批记录</h3>
+    <div class="flow-visual">
+      <div class="flow-node done">✓ 张三提交</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node rejected">✕ 李老师驳回</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary" href="11-my-bookings.html">返回列表</a>
+    <a class="btn btn-primary" href="03-book-step1-select.html">重新预约</a>
+  </div>
+</div>
+
+</body>
+</html>

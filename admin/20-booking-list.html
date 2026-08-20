@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>预约记录 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600}
+.content{padding:24px 28px 48px}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-bar input{padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;width:200px}
+.filter-bar select{padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;background:#fff}
+.status-tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid #e2e8f0}
+.st-tab{padding:8px 16px;font-size:13px;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;cursor:pointer}
+.st-tab.active{color:#4f46e5;border-bottom-color:#4f46e5}
+.st-tab .count{font-size:11px;background:#f1f5f9;padding:1px 6px;border-radius:8px;margin-left:4px}
+.st-tab.active .count{background:#eef2ff;color:#4f46e5}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
+.badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:10px;font-weight:500}
+.badge-success{background:#ecfdf5;color:#059669}
+.badge-warning{background:#fffbeb;color:#d97706}
+.badge-danger{background:#fef2f2;color:#dc2626}
+.action-link{color:#4f46e5;font-size:12.5px}
+.action-link:hover{text-decoration:underline}
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:13px;color:#64748b}
+.page-btns{display:flex;gap:4px}
+.page-btn{padding:6px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:12.5px;background:#fff;cursor:pointer}
+.page-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item active" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title">预约记录</span>
+    <span style="font-size:13px;color:#64748b">共 47 条记录</span>
+  </header>
+  <div class="content">
+
+    <div class="filter-bar">
+      <input type="search" placeholder="搜索申请人或场地…">
+      <select>
+        <option value="">全部科室</option>
+        <option>综合办</option>
+        <option>民族办</option>
+        <option>思政办</option>
+        <option>就业指导中心</option>
+        <option>心理中心</option>
+        <option>学生事务办</option>
+        <option>武装部</option>
+      </select>
+      <input type="date" style="width:150px">
+      <span style="color:#64748b;font-size:12px">至</span>
+      <input type="date" style="width:150px">
+    </div>
+
+    <div class="status-tabs">
+      <span class="st-tab active">全部<span class="count">47</span></span>
+      <span class="st-tab">待审批<span class="count">8</span></span>
+      <span class="st-tab">已通过<span class="count">32</span></span>
+      <span class="st-tab">已驳回<span class="count">5</span></span>
+      <span class="st-tab">已撤销<span class="count">2</span></span>
+    </div>
+
+    <table>
+      <thead><tr><th>预约编号</th><th>申请人</th><th>场地</th><th>科室</th><th>日期</th><th>时段</th><th>状态</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td>B20260415001</td><td>张三</td><td>206会议室</td><td>综合办</td><td>2026-04-15</td><td>14:00-15:00</td><td><span class="badge badge-warning">待审批</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260414002</td><td>李四</td><td>238云麓阁报告厅</td><td>综合办</td><td>2026-04-14</td><td>09:00-11:00</td><td><span class="badge badge-success">已通过</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260414003</td><td>王五</td><td>知新馆（团辅A）</td><td>学生事务办</td><td>2026-04-14</td><td>3-4节</td><td><span class="badge badge-warning">待审批</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260413004</td><td>赵六</td><td>117民族团结进步之家</td><td>民族办</td><td>2026-04-13</td><td>14:00-15:30</td><td><span class="badge badge-danger">已驳回</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260413005</td><td>刘七</td><td>立言厅</td><td>就业指导中心</td><td>2026-04-13</td><td>10:00-12:00</td><td><span class="badge badge-success">已通过</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260412006</td><td>陈八</td><td>"爱国"体验课堂</td><td>思政办</td><td>2026-04-12</td><td>14:00-16:00</td><td><span class="badge badge-success">已通过</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260412007</td><td>周九</td><td>问渠长廊</td><td>学生事务办</td><td>2026-04-12</td><td>下午</td><td><span class="badge badge-success">已通过</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260411008</td><td>吴十</td><td>网络面试间</td><td>就业指导中心</td><td>2026-04-11</td><td>14:00-16:00</td><td><span class="badge badge-warning">待审批</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260411009</td><td>钱十一</td><td>积极心理体验馆</td><td>心理中心</td><td>2026-04-11</td><td>10:00-12:00</td><td><span class="badge badge-success">已通过</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+        <tr><td>B20260410010</td><td>孙十二</td><td>国防教育体验课堂</td><td>武装部</td><td>2026-04-10</td><td>上午第1场</td><td><span class="badge badge-success">已通过</span></td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <span>显示 1-10 / 共 47 条</span>
+      <div class="page-btns">
+        <span class="page-btn active">1</span>
+        <span class="page-btn">2</span>
+        <span class="page-btn">3</span>
+        <span class="page-btn">4</span>
+        <span class="page-btn">5</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

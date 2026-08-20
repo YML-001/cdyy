@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>新增场地 - 基础信息 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600}
+.breadcrumb{font-size:13px;color:#64748b}
+.breadcrumb a{color:#4f46e5}
+.content{padding:24px 28px 48px;max-width:900px}
+.tabs{display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:24px}
+.tab{padding:10px 20px;font-size:13.5px;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;font-weight:500}
+.tab:hover{color:#0f172a}
+.tab.active{color:#4f46e5;border-bottom-color:#4f46e5}
+.tab.disabled{color:#cbd5e1;pointer-events:none}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:24px;margin-bottom:20px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12.5px;font-weight:500;color:#0f172a}
+.field label .req{color:#dc2626;margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;color:#0f172a;background:#fff}
+.field textarea{min-height:80px;resize:vertical}
+.field .hint{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.radio-group{display:flex;gap:16px;padding:4px 0}
+.radio-group label{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;font-weight:400}
+.radio-group input{width:16px;height:16px;accent-color:#4f46e5}
+.upload-area{display:flex;gap:12px;flex-wrap:wrap}
+.upload-item{width:100px;height:100px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;position:relative;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-item .cover-tag{position:absolute;top:0;left:0;background:#4f46e5;color:#fff;font-size:9px;padding:1px 6px;border-radius:0 0 6px 0;font-weight:600}
+.upload-item .del-btn{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer}
+.upload-add{width:100px;height:100px;border-radius:8px;border:2px dashed #cbd5e1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:12px;cursor:pointer;flex-shrink:0}
+.upload-add:hover{border-color:#4f46e5;color:#4f46e5}
+.upload-add .plus{font-size:24px;line-height:1}
+.upload-hint{font-size:11px;color:#94a3b8;margin-top:6px}
+.btn-row{display:flex;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.day-picker{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.day-chip{min-width:36px;height:36px;padding:0 6px;border-radius:8px;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#64748b;cursor:pointer;user-select:none;background:#fff;transition:all .15s}
+.day-chip:hover{border-color:#4f46e5;color:#4f46e5}
+.day-chip.active{background:#4f46e5;border-color:#4f46e5;color:#fff;font-weight:600}
+.day-chip.active:hover{color:#fff}
+.period-list{display:flex;flex-direction:column;gap:8px}
+.period-row{display:flex;gap:8px;align-items:center}
+.period-row select{flex:1;min-width:0}
+.period-row .p-sep{color:#94a3b8;font-size:13px;flex-shrink:0}
+.period-row .p-del{width:30px;height:34px;flex-shrink:0;border-radius:6px;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;color:#94a3b8;cursor:pointer;font-size:12px;background:#fff}
+.period-row .p-del:hover{border-color:#fca5a5;color:#dc2626;background:#fef2f2}
+.period-row.invalid select{border-color:#fca5a5;background:#fef2f2}
+.add-period{margin-top:8px;display:inline-flex;align-items:center;gap:4px;padding:7px 12px;border:1px dashed #cbd5e1;border-radius:6px;background:#fff;color:#4f46e5;font-size:12.5px;cursor:pointer;font-family:inherit}
+.add-period:hover{border-color:#4f46e5;background:#eef2ff}
+.type-tip{margin-top:8px;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.6}
+.type-tip.inner{background:#eef2ff;border:1px solid #c7d2fe;color:#4338ca}
+.type-tip.outer{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.tab.skip{color:#cbd5e1;pointer-events:none;text-decoration:line-through}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item active" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div>
+      <div class="breadcrumb"><a href="02-venue-list.html">场地管理</a> &gt; 新增场地</div>
+    </div>
+    <a class="btn btn-secondary" href="02-venue-list.html">取消</a>
+  </header>
+  <div class="content">
+
+    <div class="tabs" id="stepTabs">
+      <a class="tab active" href="05-venue-add-basic.html">基础信息</a>
+      <a class="tab disabled" href="06-venue-add-timeslot.html" data-step="2">时段配置</a>
+      <a class="tab disabled" href="07-venue-add-form.html" data-step="3">表单模板</a>
+      <a class="tab disabled" href="08-venue-add-approval.html" data-step="4">审批流程</a>
+      <a class="tab disabled" href="09-venue-add-permission.html" data-step="5">权限配置</a>
+    </div>
+
+    <div class="section">
+      <h3>基础信息</h3>
+      <div class="form-grid">
+        <div class="field full">
+          <label>场地类型<span class="req">*</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="venueType" id="typeInner" checked> 系统内预约</label>
+            <label><input type="radio" name="venueType" id="typeOuter"> 外部链接跳转</label>
+          </div>
+          <div class="type-tip inner" id="tipInner">系统内预约：需完成时段配置、表单模板、审批流程、权限配置，师生在本系统内完成申请与审批。</div>
+          <div class="type-tip outer" id="tipOuter" style="display:none">外部链接跳转：本场地仅在列表中展示，师生点击后直接跳转到外部预约系统，无需配置开放时段、表单字段、审批流程与预约权限。</div>
+        </div>
+        <div class="field" id="externalUrlField" style="display:none">
+          <label>外链地址<span class="req">*</span></label>
+          <input type="url" placeholder="如：https://tyb.csu.edu.cn/booking">
+          <div class="hint">请填写完整地址（含 http:// 或 https://）</div>
+        </div>
+        <div class="field" id="externalTargetField" style="display:none">
+          <label>打开方式</label>
+          <select>
+            <option selected>新窗口打开</option>
+            <option>当前窗口打开</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>场地名称<span class="req">*</span></label>
+          <input type="text" placeholder="请输入场地名称">
+        </div>
+        <div class="field">
+          <label>所属科室<span class="req">*</span></label>
+          <input type="text" list="deptDict" placeholder="请输入所属科室，如：综合办" autocomplete="off">
+          <datalist id="deptDict">
+            <option value="综合办"></option>
+            <option value="民族办"></option>
+            <option value="思政办"></option>
+            <option value="就业指导中心"></option>
+            <option value="心理中心"></option>
+            <option value="学生事务办"></option>
+            <option value="武装部"></option>
+            <option value="校团委"></option>
+          </datalist>
+        </div>
+        <div class="field">
+          <label>场地地址<span class="req">*</span></label>
+          <input type="text" placeholder="如：潇湘校区毓秀楼206室">
+        </div>
+        <div class="field">
+          <label>场地负责人<span class="req">*</span></label>
+          <select>
+            <option selected>孙瀚（综合办）— 当前登录人</option>
+            <option>李明（民族办）</option>
+            <option>张华（思政办）</option>
+            <option>王芳（就业指导中心）</option>
+            <option>赵丽（心理中心）</option>
+            <option>陈伟（学生事务办）</option>
+            <option>刘洋（武装部）</option>
+            <option>王强（校团委）</option>
+          </select>
+        </div>
+        <div class="field" id="capacityField">
+          <label>容纳人数<span class="req">*</span></label>
+          <input type="number" placeholder="请输入人数">
+        </div>
+        <div class="field" id="advanceDaysField">
+          <label>可提前预定天数</label>
+          <select>
+            <option value="">请选择</option>
+            <option>1天</option>
+            <option>3天</option>
+            <option>7天（一周）</option>
+            <option>14天（两周）</option>
+            <option selected>30天（一个月）</option>
+            <option>60天（两个月）</option>
+            <option>90天</option>
+            <option>不限</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>启用状态</label>
+          <div class="radio-group">
+            <label><input type="radio" name="status" checked> 正常使用</label>
+            <label><input type="radio" name="status"> 暂时闭馆</label>
+          </div>
+        </div>
+        <div class="field" id="guideField">
+          <label>是否有解说员/教练</label>
+          <div class="radio-group">
+            <a href="26-venue-add-basic-guide.html" style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #4f46e5;display:inline-block;flex-shrink:0"></span> 是</a>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #4f46e5;background:#4f46e5;display:inline-block;flex-shrink:0;box-shadow:inset 0 0 0 3px #fff"></span> 否</label>
+          </div>
+        </div>
+        <div class="field" id="openDayField">
+          <label>开放日</label>
+          <select id="openDaySelect">
+            <option value="all" selected>周一到周日（全周）</option>
+            <option value="workday">周一到周五（工作日）</option>
+            <option value="monsat">周一到周六</option>
+            <option value="weekend">仅周末</option>
+            <option value="custom">自定义</option>
+          </select>
+          <div class="day-picker" id="dayPicker">
+            <span class="day-chip" data-day="1">一</span>
+            <span class="day-chip" data-day="2">二</span>
+            <span class="day-chip" data-day="3">三</span>
+            <span class="day-chip" data-day="4">四</span>
+            <span class="day-chip" data-day="5">五</span>
+            <span class="day-chip" data-day="6">六</span>
+            <span class="day-chip" data-day="7">日</span>
+          </div>
+          <div class="hint" id="dayHint">点击下方日期可切换为「自定义」开放日</div>
+        </div>
+        <div class="field" id="openPeriodField">
+          <label>每日开放时段</label>
+          <div class="period-list" id="periodList"></div>
+          <button type="button" class="add-period" id="addPeriod">+ 添加时段</button>
+          <div class="hint" id="timeHint">可添加多个时段，如上午 8:00-12:00、下午 14:00-18:00</div>
+        </div>
+        <div class="field full">
+          <label>场地照片</label>
+          <div class="upload-area">
+            <div class="upload-item">
+              <span class="cover-tag">封面</span>
+              <span class="del-btn">✕</span>
+            </div>
+            <div class="upload-item">
+              <span class="del-btn">✕</span>
+            </div>
+            <div class="upload-item">
+              <span class="del-btn">✕</span>
+            </div>
+            <div class="upload-add">
+              <span class="plus">+</span>
+              上传图片
+            </div>
+          </div>
+          <div class="upload-hint">支持 JPG/PNG，每张不超过 5MB，最多 9 张，第一张将作为场地封面</div>
+        </div>
+        <div class="field full">
+          <label>使用备注</label>
+          <textarea placeholder="场地使用须知、设备清单等"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="noticeSection">
+      <h3>预约须知 / 用户协议</h3>
+      <div class="form-grid">
+        <div class="field full">
+          <label>是否启用预约须知</label>
+          <div class="radio-group">
+            <label><input type="radio" name="notice" id="noticeYes"> 是</label>
+            <label><input type="radio" name="notice" id="noticeNo" checked> 否</label>
+          </div>
+          <div class="hint">启用后，用户预约该场地时需阅读并确认须知内容方可提交</div>
+        </div>
+        <div class="field full" id="noticeContent">
+          <label>须知内容</label>
+          <textarea style="min-height:140px" placeholder="请输入预约须知内容，支持多行文本。&#10;例如：场地使用安全责任状、注意事项、管理规定等。&#10;用户预约时将弹出此内容，需阅读至底部方可确认提交。"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn-secondary" href="02-venue-list.html">取消</a>
+      <a class="btn btn-primary" id="nextBtn" href="06-venue-add-timeslot.html">下一步：时段配置 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  // ===== 开放日：预设 / 自定义 =====
+  var presets={all:[1,2,3,4,5,6,7],workday:[1,2,3,4,5],monsat:[1,2,3,4,5,6],weekend:[6,7],custom:[]};
+  var labels={1:'周一',2:'周二',3:'周三',4:'周四',5:'周五',6:'周六',7:'周日'};
+  var sel=document.getElementById('openDaySelect');
+  var picker=document.getElementById('dayPicker');
+  var hint=document.getElementById('dayHint');
+  var chips=Array.prototype.slice.call(picker.querySelectorAll('.day-chip'));
+
+  function activeDays(){
+    return chips.filter(function(c){return c.classList.contains('active');})
+      .map(function(c){return parseInt(c.dataset.day,10);})
+      .sort(function(a,b){return a-b;});
+  }
+  function applyActive(arr){
+    chips.forEach(function(c){
+      c.classList.toggle('active', arr.indexOf(parseInt(c.dataset.day,10))>-1);
+    });
+  }
+  function updateHint(){
+    var days=activeDays();
+    if(sel.value==='custom'){
+      hint.textContent=days.length
+        ? ('自定义开放日：'+days.map(function(d){return labels[d];}).join('、'))
+        : '请点击下方日期选择开放日（可多选）';
+    }else{
+      hint.textContent='点击下方日期可切换为「自定义」开放日';
+    }
+  }
+  sel.addEventListener('change',function(){
+    if(sel.value!=='custom'){applyActive(presets[sel.value]);}
+    updateHint();
+  });
+  chips.forEach(function(c){
+    c.addEventListener('click',function(){
+      if(sel.value!=='custom'){sel.value='custom';}
+      c.classList.toggle('active');
+      if(activeDays().length===0){c.classList.add('active');} // 至少保留一天
+      updateHint();
+    });
+  });
+  applyActive(presets[sel.value]||[]);
+  updateHint();
+
+  // ===== 预约须知 是/否 联动 =====
+  var noticeContent=document.getElementById('noticeContent');
+  var noticeYes=document.getElementById('noticeYes');
+  function toggleNotice(){noticeContent.style.display=noticeYes.checked?'':'none';}
+  document.querySelectorAll('input[name="notice"]').forEach(function(r){r.addEventListener('change',toggleNotice);});
+  toggleNotice();
+
+  // ===== 场地类型：系统内预约 / 外部链接跳转 =====
+  var typeOuter=document.getElementById('typeOuter');
+  var innerOnly=['advanceDaysField','guideField','openDayField','openPeriodField','noticeSection'];
+  var outerOnly=['externalUrlField','externalTargetField'];
+  var nextBtn=document.getElementById('nextBtn');
+  var skipTabs=Array.prototype.slice.call(document.querySelectorAll('#stepTabs .tab[data-step]'));
+  function show(id,visible){var el=document.getElementById(id);if(el){el.style.display=visible?'':'none';}}
+  function toggleVenueType(){
+    var outer=typeOuter.checked;
+    innerOnly.forEach(function(id){show(id,!outer);});
+    outerOnly.forEach(function(id){show(id,outer);});
+    document.getElementById('tipInner').style.display=outer?'none':'';
+    document.getElementById('tipOuter').style.display=outer?'':'none';
+    skipTabs.forEach(function(t){
+      t.classList.toggle('skip',outer);
+      t.textContent=t.textContent.replace(/（不适用）$/,'')+(outer?'（不适用）':'');
+    });
+    if(outer){
+      nextBtn.textContent='✓ 保存并创建场地';
+      nextBtn.setAttribute('href','31-venue-add-success.html');
+      nextBtn.style.background='#059669';
+    }else{
+      nextBtn.textContent='下一步：时段配置 →';
+      nextBtn.setAttribute('href','06-venue-add-timeslot.html');
+      nextBtn.style.background='';
+      toggleNotice();
+    }
+  }
+  document.querySelectorAll('input[name="venueType"]').forEach(function(r){r.addEventListener('change',toggleVenueType);});
+  toggleVenueType();
+
+  // ===== 每日开放时段：支持多个时段 =====
+  var TIME_OPTIONS=(function(){var a=[];for(var h=7;h<=23;h++){a.push(h+':00');if(h<23)a.push(h+':30');}return a;})();
+  var periodList=document.getElementById('periodList');
+  var addBtn=document.getElementById('addPeriod');
+  var timeHint=document.getElementById('timeHint');
+  function toMin(t){var p=t.split(':');return parseInt(p[0],10)*60+parseInt(p[1],10);}
+  function buildOptions(val){
+    return TIME_OPTIONS.map(function(t){return '<option'+(t===val?' selected':'')+'>'+t+'</option>';}).join('');
+  }
+  function validatePeriods(){
+    var rows=Array.prototype.slice.call(periodList.children),summary=[],bad=false;
+    rows.forEach(function(r){
+      var s=r.querySelector('.p-start').value,e=r.querySelector('.p-end').value;
+      var invalid=toMin(e)<=toMin(s);
+      r.classList.toggle('invalid',invalid);
+      if(invalid){bad=true;}else{summary.push(s+'-'+e);}
+    });
+    if(bad){timeHint.style.color='#dc2626';timeHint.textContent='每个时段的结束时间需晚于开始时间';}
+    else{timeHint.style.color='#94a3b8';timeHint.textContent='开放时段：'+summary.join('、');}
+  }
+  function addPeriod(start,end){
+    var row=document.createElement('div');
+    row.className='period-row';
+    row.innerHTML='<select class="p-start">'+buildOptions(start)+'</select>'+
+                  '<span class="p-sep">至</span>'+
+                  '<select class="p-end">'+buildOptions(end)+'</select>'+
+                  '<span class="p-del" title="删除时段">✕</span>';
+    periodList.appendChild(row);
+    row.querySelector('.p-start').addEventListener('change',validatePeriods);
+    row.querySelector('.p-end').addEventListener('change',validatePeriods);
+    row.querySelector('.p-del').addEventListener('click',function(){
+      if(periodList.children.length<=1){return;} // 至少保留一个时段
+      periodList.removeChild(row);
+      validatePeriods();
+    });
+    validatePeriods();
+  }
+  addBtn.addEventListener('click',function(){
+    var rows=periodList.children,start='19:00',end='21:00';
+    if(rows.length){
+      var lastEnd=rows[rows.length-1].querySelector('.p-end').value,idx=TIME_OPTIONS.indexOf(lastEnd);
+      start=lastEnd;
+      end=TIME_OPTIONS[Math.min(idx+4,TIME_OPTIONS.length-1)]||lastEnd;
+    }
+    addPeriod(start,end);
+  });
+  // 初始化：默认展示「上午 + 下午」两个时段
+  addPeriod('8:00','12:00');
+  addPeriod('14:00','18:00');
+})();
+</script>
+
+</body>
+</html>

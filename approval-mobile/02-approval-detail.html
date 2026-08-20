@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>任务详情 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1e293b;max-width:375px;margin:0 auto;min-height:100vh;padding-bottom:70px}
+a{text-decoration:none;color:inherit}
+
+/* 顶部固定区域 */
+.header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:50}
+.header .back{font-size:18px;color:#64748b}
+.header h1{font-size:16px;font-weight:600;flex:1;text-align:center}
+.top-info{background:#fff;padding:14px 16px;position:relative}
+.flow-title{font-size:16px;font-weight:700;padding-right:60px;line-height:1.4}
+.flow-meta{font-size:12.5px;color:#64748b;margin-top:6px}
+.flow-admin{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#64748b;margin-top:6px}
+.flow-admin .admin-icon{width:20px;height:20px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600}
+.flow-stamp{position:absolute;top:12px;right:16px;width:48px;height:48px;border-radius:50%;border:2px solid #d97706;display:flex;align-items:center;justify-content:center;font-size:10px;color:#d97706;font-weight:600;transform:rotate(-15deg);opacity:0.7}
+
+/* Tab 切换 */
+.detail-tabs{background:#fff;display:flex;border-bottom:1px solid #f0f0f0;position:sticky;top:44px;z-index:40}
+.detail-tab{flex:1;text-align:center;padding:12px 0;font-size:14px;color:#94a3b8;font-weight:500;border-bottom:2px solid transparent}
+.detail-tab.active{color:#d97706;font-weight:600;border-bottom-color:#d97706}
+
+/* 表单内容 */
+.form-section{background:#fff;margin:8px 0;padding:14px 16px}
+.form-section-title{font-size:14px;font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f1f5f9}
+.form-row{display:flex;justify-content:space-between;padding:10px 0;font-size:13.5px;border-bottom:1px solid #f8fafc}
+.form-row:last-child{border-bottom:none}
+.form-label{color:#94a3b8;flex-shrink:0;min-width:80px}
+.form-value{font-weight:500;text-align:right;flex:1;margin-left:12px;word-break:break-all}
+.form-star{color:#dc2626;margin-right:2px;font-size:12px}
+
+/* 抄送设置 */
+.cc-section{background:#fff;margin:8px 0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-radius:0}
+.cc-title{font-size:14px;font-weight:500}
+.cc-add{width:24px;height:24px;border-radius:50%;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:16px;color:#94a3b8}
+
+/* 底部按钮 */
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:375px;background:#fff;border-top:1px solid #e5e7eb;padding:10px 16px env(safe-area-inset-bottom,10px);z-index:50}
+.btn-agree{width:100%;padding:14px;border-radius:10px;text-align:center;font-size:16px;font-weight:600;background:#d97706;color:#fff;display:block}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="01-pending-list.html">←</a>
+  <h1>任务详情</h1>
+</div>
+
+<!-- 固定顶部：流程信息 -->
+<div class="top-info">
+  <div class="flow-title">206会议室的申请审核</div>
+  <div class="flow-meta">当前任务：管理员审批</div>
+  <div class="flow-admin"><div class="admin-icon">管</div>管理员</div>
+  <div class="flow-stamp">审批中</div>
+</div>
+
+<!-- Tab 切换 -->
+<div class="detail-tabs">
+  <a class="detail-tab active" href="02-approval-detail.html">表单详情</a>
+  <a class="detail-tab" href="02-detail-record.html">审批记录</a>
+</div>
+
+<!-- 表单详情 tab 内容 -->
+<div class="form-section">
+  <div class="form-section-title">基础信息</div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>流程发起时间</span><span class="form-value">2026-04-09 16:30:00</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>姓名</span><span class="form-value">张三</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>学号/工号</span><span class="form-value">T20180023</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>院系/单位</span><span class="form-value">学生工作部</span></div>
+  <div class="form-row"><span class="form-label">科室</span><span class="form-value">综合办</span></div>
+  <div class="form-row"><span class="form-label">职务</span><span class="form-value">科员</span></div>
+</div>
+
+<div class="form-section">
+  <div class="form-section-title">预约信息</div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>预约编号</span><span class="form-value">B20260415001</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>预约场地</span><span class="form-value">206会议室</span></div>
+  <div class="form-row"><span class="form-label">所属科室</span><span class="form-value">综合办</span></div>
+  <div class="form-row"><span class="form-label">场地管理员</span><span class="form-value">孙瀚</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>预约日期</span><span class="form-value">2026-04-15</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>预约时段</span><span class="form-value">14:00 - 15:00</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>活动名称</span><span class="form-value">2026年春季学工例会</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>参与人数</span><span class="form-value">30人</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>承办单位</span><span class="form-value">学生工作部综合办</span></div>
+  <div class="form-row"><span class="form-label">负责老师</span><span class="form-value">王老师</span></div>
+  <div class="form-row"><span class="form-label">老师电话</span><span class="form-value">138****5678</span></div>
+  <div class="form-row"><span class="form-label">学生负责人</span><span class="form-value">张三</span></div>
+  <div class="form-row"><span class="form-label">其他需求</span><span class="form-value">投屏器×1、笔记本电脑×1、茶水30杯</span></div>
+</div>
+
+<div class="cc-section">
+  <span class="cc-title">抄送设置</span>
+  <span class="cc-add">＋</span>
+</div>
+
+<!-- 底部按钮 -->
+<div class="bottom-bar">
+  <a class="btn-agree" href="03-approve-confirm.html">同意</a>
+</div>
+
+</body>
+</html>

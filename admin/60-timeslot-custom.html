@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>新增场地 - 时段配置（自定义时段） - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.breadcrumb{font-size:13px;color:#64748b}
+.breadcrumb a{color:#4f46e5}
+.content{padding:24px 28px 48px;max-width:900px}
+.tabs{display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:24px}
+.tab{padding:10px 20px;font-size:13.5px;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;font-weight:500}
+.tab:hover{color:#0f172a}
+.tab.active{color:#4f46e5;border-bottom-color:#4f46e5}
+.tab.done{color:#059669}
+.tab.disabled{color:#cbd5e1;pointer-events:none}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:24px;margin-bottom:20px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:16px}
+.section .desc{font-size:12.5px;color:#64748b;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12.5px;font-weight:500;color:#0f172a}
+.field label .req{color:#dc2626;margin-left:2px}
+.field input,.field select{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;color:#0f172a;background:#fff}
+.field .hint{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.radio-group{display:flex;gap:16px;padding:4px 0}
+.radio-group label{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;font-weight:400}
+.radio-group input{width:16px;height:16px;accent-color:#4f46e5}
+.slot-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.slot-opt{display:block;padding:12px 16px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer}
+.slot-opt:hover{border-color:#c7d2fe;background:#fafafe}
+.slot-opt.selected{border-color:#4f46e5;background:#eef2ff}
+.slot-opt .sname{font-size:13.5px;font-weight:500;margin-bottom:2px}
+.slot-opt .sdesc{font-size:11.5px;color:#64748b}
+
+.open-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 14px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;margin-bottom:16px}
+.open-bar .ob-label{font-size:12.5px;color:#64748b}
+.open-chip{font-size:12px;padding:3px 10px;border-radius:6px;background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe;font-weight:500}
+.open-bar .ob-edit{margin-left:auto;font-size:12px;color:#4f46e5}
+
+.cs-head{display:grid;grid-template-columns:1fr 130px 22px 130px 76px 34px;gap:8px;padding:0 2px 6px;font-size:11.5px;color:#94a3b8}
+.cs-list{display:flex;flex-direction:column;gap:8px}
+.cs-row{display:grid;grid-template-columns:1fr 130px 22px 130px 76px 34px;gap:8px;align-items:center}
+.cs-row input,.cs-row select{width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;color:#0f172a;background:#fff}
+.cs-row .cs-sep{text-align:center;color:#94a3b8;font-size:13px}
+.cs-row .cs-dur{font-size:12px;color:#64748b;text-align:center}
+.cs-row .cs-del{width:34px;height:34px;border-radius:6px;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;color:#94a3b8;cursor:pointer;font-size:12px;background:#fff}
+.cs-row .cs-del:hover{border-color:#fca5a5;color:#dc2626;background:#fef2f2}
+.cs-row.invalid select{border-color:#fca5a5;background:#fef2f2}
+.cs-row.invalid .cs-dur{color:#dc2626}
+.cs-err{grid-column:1/-1;font-size:11.5px;color:#dc2626;margin-top:-2px}
+.add-slot{margin-top:12px;display:inline-flex;align-items:center;gap:4px;padding:7px 12px;border:1px dashed #cbd5e1;border-radius:6px;background:#fff;color:#4f46e5;font-size:12.5px;cursor:pointer;font-family:inherit}
+.add-slot:hover{border-color:#4f46e5;background:#eef2ff}
+.cs-summary{margin-top:12px;font-size:12px;color:#64748b}
+.cs-summary.bad{color:#dc2626}
+
+.preview-title{font-size:13px;font-weight:500;margin-bottom:10px;color:#0f172a;display:flex;align-items:center;gap:6px}
+.preview-title .tag{font-size:10.5px;padding:2px 8px;border-radius:4px;background:#eef2ff;color:#4f46e5;font-weight:500}
+.group-label{font-size:12.5px;font-weight:600;color:#334155;margin:14px 0 8px}
+.group-label:first-of-type{margin-top:0}
+.group-label .gl-time{font-weight:400;color:#94a3b8;font-size:11.5px;margin-left:6px}
+.slot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.slot-cell{padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;text-align:center;font-size:13px;color:#0f172a;background:#fff}
+.slot-cell .slot-time{font-weight:600;margin-bottom:2px}
+.slot-cell .slot-dur{font-size:11px;color:#94a3b8}
+.slot-cell.booked{background:#fef2f2;border-color:#fca5a5;color:#dc2626}
+.slot-cell.booked .slot-dur{color:#f87171}
+.empty-tip{font-size:12.5px;color:#94a3b8;padding:16px;border:1px dashed #e2e8f0;border-radius:8px;text-align:center}
+.preview-hint{font-size:11px;color:#94a3b8;margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.preview-hint .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+.preview-hint .dot.avail{background:#fff;border:1px solid #e2e8f0}
+.preview-hint .dot.busy{background:#fef2f2;border:1px solid #fca5a5}
+.info-box{background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:14px 16px;margin-top:14px;font-size:12.5px;color:#4f46e5;line-height:1.6}
+.btn-row{display:flex;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item active" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="breadcrumb"><a href="02-venue-list.html">场地管理</a> &gt; 新增场地</div>
+    <a class="btn btn-secondary" href="02-venue-list.html">取消</a>
+  </header>
+  <div class="content">
+
+    <div class="tabs">
+      <a class="tab done" href="05-venue-add-basic.html">✓ 基础信息</a>
+      <a class="tab active" href="06-venue-add-timeslot.html">时段配置</a>
+      <a class="tab disabled">表单模板</a>
+      <a class="tab disabled">审批流程</a>
+      <a class="tab disabled">权限配置</a>
+    </div>
+
+    <div class="section">
+      <h3>选择时段策略</h3>
+      <div class="slot-options">
+        <a class="slot-opt" href="06-venue-add-timeslot.html"><div class="sname">⏱ 整点制（1小时）</div><div class="sdesc">以1小时为标准单位生成时段格子，如 8:00-9:00</div></a>
+        <a class="slot-opt" href="36-timeslot-90min.html"><div class="sname">⏱ 90分钟制</div><div class="sdesc">以90分钟为一个区间，如 8:00-9:30</div></a>
+        <a class="slot-opt" href="37-timeslot-2hour.html"><div class="sname">⏱ 2小时制</div><div class="sdesc">以2小时为标准单位，如 8:00-10:00</div></a>
+        <a class="slot-opt" href="38-timeslot-mixed.html"><div class="sname">⏱ 混合制（1h/2h/半天）</div><div class="sdesc">同时提供1小时、2小时、半天选项</div></a>
+        <a class="slot-opt" href="39-timeslot-period.html"><div class="sname">📚 节次制</div><div class="sdesc">1-2节、3-4节、午间、5-6节、7-8节、9-10节、晚间</div></a>
+        <a class="slot-opt" href="40-timeslot-halfday.html"><div class="sname">🌅 半天制</div><div class="sdesc">上午/下午各若干场次</div></a>
+        <a class="slot-opt" href="41-timeslot-free.html"><div class="sname">✏️ 自由时段</div><div class="sdesc">由用户自行输入具体时间段文本</div></a>
+        <div class="slot-opt selected"><div class="sname">🧩 自定义时段</div><div class="sdesc">在开放时间内自行定义每个可预约时段，可添加多个</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>自定义时段设置</h3>
+      <div class="desc">在场地开放时间范围内逐条定义可预约时段，用户预约时只能在这些时段中选择。时段之间不得重叠，允许留出间隔（如场地清洁、设备调试时间）。</div>
+
+      <div class="open-bar">
+        <span class="ob-label">本场地开放时间：</span>
+        <span class="open-chip">8:00 - 12:00</span>
+        <span class="open-chip">14:00 - 18:00</span>
+        <a class="ob-edit" href="05-venue-add-basic.html">修改开放时间 →</a>
+      </div>
+
+      <div class="cs-head">
+        <span>时段名称（选填）</span><span>开始时间</span><span></span><span>结束时间</span><span>时长</span><span></span>
+      </div>
+      <div class="cs-list" id="csList"></div>
+      <button type="button" class="add-slot" id="addSlot">+ 添加时段</button>
+      <div class="cs-summary" id="csSummary"></div>
+    </div>
+
+    <div class="section">
+      <h3>时段预览</h3>
+      <div class="desc">以下为用户预约时看到的时段格子效果（以某日为例，红色为已被预约）</div>
+      <div class="preview-title">📅 2026年4月10日（周五）<span class="tag">自定义时段</span></div>
+      <div id="previewBox"></div>
+      <div class="preview-hint">
+        <span><span class="dot avail"></span> 可预约</span>
+        <span><span class="dot busy"></span> 已预约</span>
+        <span style="margin-left:auto" id="previewCount"></span>
+      </div>
+      <div class="info-box">
+        💡 自定义时段适用于场次时长不统一的场地（如上午一场 8:00-11:30、下午两场各 2 小时）。未被任何时段覆盖的开放时间不可预约，可用于预留清场、布置或午休时间。
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>时段规则</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>是否允许多选时段</label>
+          <div class="radio-group">
+            <label><input type="radio" name="multi" checked> 是</label>
+            <label><input type="radio" name="multi"> 否（仅单选）</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>最大可选时段数</label>
+          <input type="number" value="2" placeholder="不填则不限">
+          <div class="hint">仅允许多选时生效，留空表示不限制</div>
+        </div>
+        <div class="field">
+          <label>同一时段最大预约次数<span class="req">*</span></label>
+          <select>
+            <option selected>1次</option>
+            <option>2次</option>
+            <option>3次</option>
+            <option>不限</option>
+          </select>
+          <div class="hint">相同时间段允许被不同人预约的次数</div>
+        </div>
+        <div class="field">
+          <label>预约规则描述</label>
+          <input type="text" value="每次最多可选2个时段，相同时段可预约1次">
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn-secondary" href="05-venue-add-basic.html">← 上一步</a>
+      <a class="btn btn-primary" href="07-venue-add-form.html">下一步：表单模板 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  // 开放时段来自「基础信息」步骤，此处作为自定义时段的可选范围
+  var OPEN_PERIODS=[{start:'8:00',end:'12:00',label:'上午开放'},{start:'14:00',end:'18:00',label:'下午开放'}];
+  var TIME_OPTIONS=(function(){
+    var a=[];
+    for(var h=7;h<=23;h++){
+      for(var m=0;m<60;m+=15){
+        if(h===23&&m>0){break;}
+        a.push(h+':'+(m<10?'0'+m:m));
+      }
+    }
+    return a;
+  })();
+  // 演示用：预览中标记为已被预约的时段
+  var BOOKED=['10:00-11:30'];
+
+  var list=document.getElementById('csList');
+  var summary=document.getElementById('csSummary');
+  var previewBox=document.getElementById('previewBox');
+  var previewCount=document.getElementById('previewCount');
+
+  function toMin(t){var p=t.split(':');return parseInt(p[0],10)*60+parseInt(p[1],10);}
+  function fmtDur(min){
+    var h=Math.floor(min/60),m=min%60;
+    return (h?h+'小时':'')+(m?m+'分钟':'')||'0';
+  }
+  function inOpenPeriod(s,e){
+    for(var i=0;i<OPEN_PERIODS.length;i++){
+      if(toMin(s)>=toMin(OPEN_PERIODS[i].start)&&toMin(e)<=toMin(OPEN_PERIODS[i].end)){return OPEN_PERIODS[i];}
+    }
+    return null;
+  }
+  function buildOptions(val){
+    return TIME_OPTIONS.map(function(t){return '<option'+(t===val?' selected':'')+'>'+t+'</option>';}).join('');
+  }
+  function rows(){return Array.prototype.slice.call(list.querySelectorAll('.cs-row'));}
+
+  function validate(){
+    var items=[],bad=0;
+    rows().forEach(function(r){
+      var s=r.querySelector('.cs-start').value,e=r.querySelector('.cs-end').value;
+      var err='';
+      if(toMin(e)<=toMin(s)){err='结束时间需晚于开始时间';}
+      else if(!inOpenPeriod(s,e)){err='该时段超出开放时间（8:00-12:00 / 14:00-18:00），或跨越了不开放区间';}
+      r.dataset.start=s;r.dataset.end=e;r.dataset.err=err;
+      items.push({row:r,start:s,end:e,err:err});
+    });
+    // 重叠校验
+    items.forEach(function(a){
+      if(a.err){return;}
+      items.forEach(function(b){
+        if(a===b||b.err){return;}
+        if(toMin(a.start)<toMin(b.end)&&toMin(b.start)<toMin(a.end)){a.err='与其他时段（'+b.start+'-'+b.end+'）重叠';}
+      });
+    });
+    items.forEach(function(it){
+      var r=it.row,old=r.querySelector('.cs-err');
+      if(old){r.removeChild(old);}
+      r.classList.toggle('invalid',!!it.err);
+      r.querySelector('.cs-dur').textContent=toMin(it.end)>toMin(it.start)?fmtDur(toMin(it.end)-toMin(it.start)):'—';
+      if(it.err){
+        bad++;
+        var d=document.createElement('div');
+        d.className='cs-err';d.textContent='⚠ '+it.err;
+        r.appendChild(d);
+      }
+    });
+    var okItems=items.filter(function(i){return !i.err;});
+    summary.classList.toggle('bad',bad>0);
+    summary.textContent=bad>0
+      ? '有 '+bad+' 个时段不符合要求，请修正后再进入下一步'
+      : '共 '+okItems.length+' 个可预约时段，合计 '+fmtDur(okItems.reduce(function(t,i){return t+toMin(i.end)-toMin(i.start);},0));
+    renderPreview(okItems);
+  }
+
+  function renderPreview(items){
+    if(!items.length){
+      previewBox.innerHTML='<div class="empty-tip">尚未配置可预约时段，用户预约时将看不到任何可选项</div>';
+      previewCount.textContent='';
+      return;
+    }
+    var html='';
+    OPEN_PERIODS.forEach(function(p){
+      var inP=items.filter(function(i){return toMin(i.start)>=toMin(p.start)&&toMin(i.end)<=toMin(p.end);})
+                   .sort(function(a,b){return toMin(a.start)-toMin(b.start);});
+      if(!inP.length){return;}
+      html+='<div class="group-label">'+p.label+'<span class="gl-time">'+p.start+' – '+p.end+'</span></div><div class="slot-grid">';
+      inP.forEach(function(i){
+        var name=i.row.querySelector('.cs-name').value.trim();
+        var key=i.start+'-'+i.end;
+        var booked=BOOKED.indexOf(key)>-1;
+        html+='<div class="slot-cell'+(booked?' booked':'')+'"><div class="slot-time">'+key+'</div>'+
+              '<div class="slot-dur">'+(booked?'已预约':(name||fmtDur(toMin(i.end)-toMin(i.start))))+'</div></div>';
+      });
+      html+='</div>';
+    });
+    previewBox.innerHTML=html;
+    previewCount.textContent='共 '+items.length+' 个时段 · 开放 8:00-12:00 / 14:00-18:00';
+  }
+
+  function addRow(name,start,end){
+    var row=document.createElement('div');
+    row.className='cs-row';
+    row.innerHTML='<input class="cs-name" type="text" value="'+(name||'')+'" placeholder="如：上午第一场">'+
+                  '<select class="cs-start">'+buildOptions(start)+'</select>'+
+                  '<span class="cs-sep">至</span>'+
+                  '<select class="cs-end">'+buildOptions(end)+'</select>'+
+                  '<span class="cs-dur"></span>'+
+                  '<span class="cs-del" title="删除时段">✕</span>';
+    list.appendChild(row);
+    row.querySelector('.cs-start').addEventListener('change',validate);
+    row.querySelector('.cs-end').addEventListener('change',validate);
+    row.querySelector('.cs-name').addEventListener('input',validate);
+    row.querySelector('.cs-del').addEventListener('click',function(){
+      if(rows().length<=1){return;} // 至少保留一个时段
+      list.removeChild(row);
+      validate();
+    });
+    validate();
+  }
+
+  function fmtTime(min){
+    var h=Math.floor(min/60),m=min%60;
+    return h+':'+(m<10?'0'+m:m);
+  }
+  // 在开放时段内找出第一段还没被占用的空档，作为新增时段的默认值
+  function suggestSlot(){
+    var used=rows().map(function(r){
+      return {s:toMin(r.querySelector('.cs-start').value),e:toMin(r.querySelector('.cs-end').value)};
+    }).filter(function(u){return u.e>u.s;});
+    for(var i=0;i<OPEN_PERIODS.length;i++){
+      var ps=toMin(OPEN_PERIODS[i].start),pe=toMin(OPEN_PERIODS[i].end),cursor=ps;
+      var inner=used.filter(function(u){return u.s<pe&&u.e>ps;}).sort(function(a,b){return a.s-b.s;});
+      for(var k=0;k<inner.length;k++){
+        if(inner[k].s-cursor>=30){return {start:fmtTime(cursor),end:fmtTime(Math.min(cursor+60,inner[k].s))};}
+        cursor=Math.max(cursor,inner[k].e);
+      }
+      if(pe-cursor>=30){return {start:fmtTime(cursor),end:fmtTime(Math.min(cursor+60,pe))};}
+    }
+    return {start:OPEN_PERIODS[0].start,end:fmtTime(toMin(OPEN_PERIODS[0].start)+60)};
+  }
+
+  document.getElementById('addSlot').addEventListener('click',function(){
+    var s=suggestSlot();
+    addRow('',s.start,s.end);
+  });
+
+  // 初始化：示例配置（上午两场时长不同，下午两场各 2 小时）
+  addRow('上午第一场','8:00','9:30');
+  addRow('上午第二场','10:00','11:30');
+  addRow('下午第一场','14:00','16:00');
+  addRow('下午第二场','16:00','18:00');
+})();
+</script>
+
+</body>
+</html>

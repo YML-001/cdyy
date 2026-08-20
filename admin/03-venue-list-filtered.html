@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>场地管理（筛选：心理中心） - 智慧学工场地预约管理</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  min-height: 100vh;
+  display: flex;
+}
+.sidebar {
+  width: 220px; min-height: 100vh; background: #fff;
+  border-right: 1px solid #e2e8f0;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  display: flex; flex-direction: column; z-index: 100;
+}
+.sidebar-brand { padding: 20px 16px; font-size: 15px; font-weight: 700; color: #4f46e5; border-bottom: 1px solid #e2e8f0; }
+.sidebar-nav { flex: 1; padding: 8px 0; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 20px; color: #64748b; text-decoration: none;
+  font-size: 14px; border-left: 3px solid transparent;
+  transition: background 0.15s, color 0.15s;
+}
+.sidebar-nav a:hover { background: #f1f5f9; color: #0f172a; }
+.sidebar-nav a.active { background: #eef2ff; color: #4f46e5; font-weight: 600; border-left-color: #4f46e5; }
+.sidebar-nav a .icon { font-size: 16px; width: 22px; text-align: center; }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid #e2e8f0; }
+.sidebar-footer a { color: #64748b; text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.sidebar-footer a:hover { color: #4f46e5; }
+
+.main { margin-left: 220px; flex: 1; min-height: 100vh; }
+.topbar {
+  background: #fff; border-bottom: 1px solid #e2e8f0;
+  padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar h1 { font-size: 18px; font-weight: 700; }
+.btn {
+  display: inline-block; padding: 8px 20px; border-radius: 8px;
+  font-size: 14px; text-decoration: none; font-weight: 500;
+}
+.btn-primary { background: #4f46e5; color: #fff; }
+.btn-primary:hover { background: #4338ca; }
+.content { padding: 28px 32px; }
+
+.filter-bar {
+  display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;
+}
+.filter-bar input, .filter-bar select {
+  padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: 8px;
+  font-size: 14px; background: #fff; color: #0f172a; outline: none;
+  font-family: inherit;
+}
+.filter-bar input { width: 240px; }
+.filter-bar input:focus, .filter-bar select:focus { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79,70,229,0.1); }
+
+.clear-filter {
+  color: #dc2626; font-size: 13px; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.clear-filter:hover { text-decoration: underline; }
+
+.active-filter {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #eef2ff; color: #4f46e5; padding: 4px 12px;
+  border-radius: 20px; font-size: 13px; font-weight: 500;
+  margin-bottom: 16px;
+}
+.active-filter a { color: #4f46e5; text-decoration: none; font-weight: 700; margin-left: 4px; }
+
+table {
+  width: 100%; border-collapse: collapse; background: #fff;
+  border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;
+}
+th, td { padding: 11px 14px; text-align: left; font-size: 13px; border-bottom: 1px solid #e2e8f0; }
+th { background: #f8fafc; font-weight: 600; color: #64748b; font-size: 12px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafbfd; }
+
+.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.badge-success { background: #ecfdf5; color: #059669; }
+.badge-gray { background: #f1f5f9; color: #64748b; }
+
+.actions a { color: #4f46e5; text-decoration: none; font-size: 13px; margin-right: 12px; }
+.actions a:hover { text-decoration: underline; }
+.actions a.danger { color: #dc2626; }
+
+.venue-link { color: #4f46e5; text-decoration: none; }
+.venue-link:hover { text-decoration: underline; }
+.cover-thumb { width: 48px; height: 32px; border-radius: 4px; object-fit: cover; background: linear-gradient(135deg,#667eea,#764ba2); display: inline-block; vertical-align: middle; }
+.admin-name { font-size: 12.5px; font-weight: 500; }
+.admin-dept { font-size: 11px; color: #94a3b8; }
+
+.table-wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">🏫 智慧学工</div>
+  <nav class="sidebar-nav">
+    <a href="01-dashboard.html"><span class="icon">📊</span>数据概览</a>
+    <a href="02-venue-list.html" class="active"><span class="icon">📍</span>场地管理</a>
+    <a href="17-form-template-list.html"><span class="icon">📋</span>表单模板</a>
+    <a href="20-booking-list.html"><span class="icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <h1>场地管理</h1>
+    <a href="05-venue-add-basic.html" class="btn btn-primary">＋ 新增场地</a>
+  </div>
+  <div class="content">
+
+    <div class="filter-bar">
+      <input type="text" placeholder="搜索场地名称或地址…">
+      <select>
+        <option value="">全部科室</option>
+        <option>综合办</option>
+        <option>民族办</option>
+        <option>思政办</option>
+        <option>就业指导中心</option>
+        <option selected>心理中心</option>
+        <option>学生事务办</option>
+        <option>武装部</option>
+      </select>
+      <select>
+        <option value="">全部状态</option>
+        <option>正常使用</option>
+        <option>暂时闭馆</option>
+      </select>
+      <a href="02-venue-list.html" class="clear-filter">✕ 清除筛选</a>
+    </div>
+
+    <div class="active-filter">
+      筛选：心理中心
+      <a href="02-venue-list.html" title="清除筛选">✕</a>
+    </div>
+
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>序号</th><th>封面</th><th>科室</th><th>场地名称</th><th>场地地址</th><th>容纳人数</th><th>审批管理员</th><th>场地负责人</th><th>状态</th><th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>15</td>
+          <td><span class="cover-thumb" style="background:linear-gradient(135deg,#a78bfa,#7c3aed)"></span></td>
+          <td>心理中心</td>
+          <td><a href="04-venue-detail.html" class="venue-link">岳麓山校区心理中心多功能室</a></td>
+          <td>岳麓山校区升华楼前楼二楼心理中心</td><td>12人</td>
+          <td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td>
+          <td><span class="badge badge-gray">暂时闭馆</span></td>
+          <td class="actions"><a href="04-venue-detail.html">详情</a><a href="10-venue-edit-basic.html">编辑</a><a href="15-venue-delete-confirm.html" class="danger">删除</a></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><span class="cover-thumb" style="background:linear-gradient(135deg,#c084fc,#9333ea)"></span></td>
+          <td>心理中心</td>
+          <td><a href="04-venue-detail.html" class="venue-link">杏林校区心理中心团体辅导室</a></td>
+          <td>杏林校区十二食堂三楼心理中心</td><td>15人</td>
+          <td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td>
+          <td><span class="badge badge-success">正常使用</span></td>
+          <td class="actions"><a href="04-venue-detail.html">详情</a><a href="10-venue-edit-basic.html">编辑</a><a href="15-venue-delete-confirm.html" class="danger">删除</a></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><span class="cover-thumb" style="background:linear-gradient(135deg,#d8b4fe,#a855f7)"></span></td>
+          <td>心理中心</td>
+          <td><a href="04-venue-detail.html" class="venue-link">天心校区心理中心团体辅导室（208）</a></td>
+          <td>天心校区学生素质大楼二楼</td><td>15人</td>
+          <td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td>
+          <td><span class="badge badge-gray">暂时闭馆</span></td>
+          <td class="actions"><a href="04-venue-detail.html">详情</a><a href="10-venue-edit-basic.html">编辑</a><a href="15-venue-delete-confirm.html" class="danger">删除</a></td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><span class="cover-thumb" style="background:linear-gradient(135deg,#e9d5ff,#8b5cf6)"></span></td>
+          <td>心理中心</td>
+          <td><a href="04-venue-detail.html" class="venue-link">潇湘校区心理中心团体辅导室</a></td>
+          <td>潇湘校区毓秀楼227室、229室、231室</td><td>30人</td>
+          <td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td>
+          <td><span class="badge badge-success">正常使用</span></td>
+          <td class="actions"><a href="04-venue-detail.html">详情</a><a href="10-venue-edit-basic.html">编辑</a><a href="15-venue-delete-confirm.html" class="danger">删除</a></td>
+        </tr>
+        <tr>
+          <td>29</td>
+          <td><span class="cover-thumb" style="background:linear-gradient(135deg,#f0abfc,#c026d3)"></span></td>
+          <td>心理中心</td>
+          <td><a href="04-venue-detail.html" class="venue-link">积极心理体验馆</a></td>
+          <td>南校区学生公寓6舍</td><td>30人</td>
+          <td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td>
+          <td><span class="badge badge-success">正常使用</span></td>
+          <td class="actions"><a href="04-venue-detail.html">详情</a><a href="10-venue-edit-basic.html">编辑</a><a href="15-venue-delete-confirm.html" class="danger">删除</a></td>
+        </tr>
+        <tr>
+          <td>30</td>
+          <td><span class="cover-thumb" style="background:linear-gradient(135deg,#f5d0fe,#a855f7)"></span></td>
+          <td>心理中心</td>
+          <td><a href="04-venue-detail.html" class="venue-link">大学生素质拓展基地</a></td>
+          <td>新校区素质拓展基地</td><td>30人</td>
+          <td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">周芳</div><div class="admin-dept">心理中心</div></td>
+          <td><span class="badge badge-success">正常使用</span></td>
+          <td class="actions"><a href="04-venue-detail.html">详情</a><a href="10-venue-edit-basic.html">编辑</a><a href="15-venue-delete-confirm.html" class="danger">删除</a></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div style="margin-top:16px;font-size:13px;color:#64748b;">共 6 条记录（已筛选：心理中心）</div>
+  </div>
+</div>
+
+</body>
+</html>

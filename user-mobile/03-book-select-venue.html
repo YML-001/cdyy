@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>选择场地 - 发起预约 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1e293b;max-width:375px;margin:0 auto;min-height:100vh;padding-bottom:80px}
+a{text-decoration:none;color:inherit}
+.header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:50}
+.header .back{font-size:18px;color:#64748b}
+.header h1{font-size:16px;font-weight:600;flex:1}
+.steps{display:flex;background:#fff;padding:16px;margin-bottom:8px}
+.step{flex:1;text-align:center;position:relative}
+.step .snum{width:24px;height:24px;border-radius:50%;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.step .slabel{font-size:11px;color:#94a3b8;margin-top:3px}
+.step.active .snum{background:#4f46e5;color:#fff}
+.step.active .slabel{color:#4f46e5;font-weight:500}
+.section{background:#fff;padding:16px;margin-bottom:8px}
+.section h3{font-size:14px;font-weight:600;margin-bottom:12px}
+.form-label{font-size:13px;color:#64748b;margin-bottom:6px}
+.form-select{width:100%;padding:11px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;appearance:auto}
+.preview{margin-top:16px;padding:14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0}
+.preview h4{font-size:13.5px;font-weight:600;margin-bottom:8px}
+.pv-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px}
+.pv-label{color:#94a3b8}
+.pv-val{font-weight:500}
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:375px;background:#fff;border-top:1px solid #e5e7eb;padding:10px 16px env(safe-area-inset-bottom,10px);display:flex;gap:10px;z-index:50}
+.btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-size:15px;font-weight:600}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#f1f5f9;color:#64748b}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="01-venue-list.html">←</a>
+  <h1>发起预约</h1>
+</div>
+
+<div class="steps">
+  <div class="step active"><div class="snum">1</div><div class="slabel">选择场地</div></div>
+  <div class="step"><div class="snum">2</div><div class="slabel">填写信息</div></div>
+  <div class="step"><div class="snum">3</div><div class="slabel">选择时段</div></div>
+  <div class="step"><div class="snum">4</div><div class="slabel">确认提交</div></div>
+</div>
+
+<div class="section">
+  <h3>选择预约场地</h3>
+  <div class="form-label">请选择场地</div>
+  <select class="form-select">
+    <option>206会议室 — 综合办</option>
+    <option>117民族团结进步之家 — 民族办</option>
+    <option>铸牢中华民族共同体意识教育体验课堂 — 民族办</option>
+    <option>238云麓阁报告厅 — 综合办</option>
+    <option>"扣好人生第一粒扣子"价值引领课堂 — 思政办</option>
+    <option>"党的二十大精神"学习体验课堂 — 思政办</option>
+    <option>知新馆（团辅B） — 学生事务办</option>
+  </select>
+
+  <div class="preview">
+    <h4>206会议室</h4>
+    <div class="pv-row"><span class="pv-label">所属科室</span><span class="pv-val">综合办</span></div>
+    <div class="pv-row"><span class="pv-label">地址</span><span class="pv-val">潇湘校区毓秀楼206室</span></div>
+    <div class="pv-row"><span class="pv-label">容纳人数</span><span class="pv-val">45人</span></div>
+    <div class="pv-row"><span class="pv-label">时段方式</span><span class="pv-val">1小时制</span></div>
+    <div class="pv-row"><span class="pv-label">提前预约</span><span class="pv-val">最多提前30天</span></div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <a class="btn btn-secondary" href="01-venue-list.html">取消</a>
+  <a class="btn btn-primary" href="04-book-form-standard.html">下一步</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>确认提交 - 发起预约 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#eef2ff;color:#4f46e5}
+.topnav-user{font-size:13px;color:#64748b}
+.container{max-width:700px;margin:0 auto;padding:24px 32px 48px}
+.page-title{font-size:20px;font-weight:700;margin-bottom:24px}
+.steps{display:flex;gap:0;margin-bottom:28px}
+.step{flex:1;text-align:center;padding:12px 0;position:relative;font-size:13px;color:#94a3b8}
+.step .snum{width:28px;height:28px;border-radius:50%;background:#e2e8f0;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-bottom:4px}
+.step.active{color:#4f46e5;font-weight:500}
+.step.active .snum{background:#4f46e5;color:#fff}
+.step.done{color:#059669}
+.step.done .snum{background:#ecfdf5;color:#059669}
+.step-line{position:absolute;top:24px;left:50%;right:-50%;height:2px;background:#e2e8f0;z-index:-1}
+.step:last-child .step-line{display:none}
+.section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:24px;margin-bottom:20px}
+.section h3{font-size:15px;font-weight:600;margin-bottom:14px}
+.summary-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13.5px}
+.summary-row:last-child{border-bottom:none}
+.sl{color:#64748b;flex-shrink:0}
+.sv{font-weight:500;text-align:right;flex:1;margin-left:16px}
+.flow-info{background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:12px 16px;font-size:13px;color:#4338ca;margin-top:16px}
+.btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 28px;border-radius:8px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">学</div>智慧学工 · 场地预约</div>
+  <div class="topnav-links"><a class="active" href="01-venue-list.html">场地预约</a><a href="11-my-bookings.html">我的预约</a></div>
+  <span class="topnav-user">张三 · 学生工作部</span>
+</nav>
+
+<div class="container">
+  <div class="page-title">发起预约</div>
+  <div class="steps">
+    <div class="step done"><div class="snum">✓</div><br>选择场地<div class="step-line"></div></div>
+    <div class="step done"><div class="snum">✓</div><br>填写信息<div class="step-line"></div></div>
+    <div class="step done"><div class="snum">✓</div><br>选择时段<div class="step-line"></div></div>
+    <div class="step active"><div class="snum">4</div><br>确认提交</div>
+  </div>
+
+  <div class="section">
+    <h3>预约信息确认</h3>
+    <div class="summary-row"><span class="sl">场地</span><span class="sv">206会议室</span></div>
+    <div class="summary-row"><span class="sl">预约日期</span><span class="sv">2026-04-15</span></div>
+    <div class="summary-row"><span class="sl">预约时段</span><span class="sv">14:00-15:00</span></div>
+    <div class="summary-row"><span class="sl">活动名称</span><span class="sv">2026年春季学工例会</span></div>
+    <div class="summary-row"><span class="sl">参与人数</span><span class="sv">30人</span></div>
+    <div class="summary-row"><span class="sl">承办单位</span><span class="sv">学生工作部综合办</span></div>
+    <div class="summary-row"><span class="sl">活动负责老师</span><span class="sv">王老师</span></div>
+    <div class="summary-row"><span class="sl">负责老师联系方式</span><span class="sv">138****5678</span></div>
+    <div class="summary-row"><span class="sl">活动学生负责人</span><span class="sv">张三</span></div>
+    <div class="summary-row"><span class="sl">学生负责人联系方式</span><span class="sv">159****1234</span></div>
+    <div class="summary-row"><span class="sl">其他需求</span><span class="sv">投屏器×1、笔记本电脑×1、茶水30杯</span></div>
+    <div class="summary-row"><span class="sl">解说员/教练</span><span class="sv">王解说员（解说员）</span></div>
+    <div class="flow-info">审批流程：提交后将由 <strong>孙瀚（管理员）</strong> 进行审批</div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400e;margin-top:12px;display:flex;align-items:center;gap:8px">
+      <span style="font-size:16px">📋</span>该场地已启用预约须知，提交前需阅读并确认
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary" href="07-book-step3-slot-hour.html">← 上一步</a>
+    <a class="btn btn-primary" href="09-book-confirm-agreement.html">确认提交</a>
+  </div>
+</div>
+
+</body>
+</html>

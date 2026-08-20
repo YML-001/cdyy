@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>场地预约 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1e293b;max-width:375px;margin:0 auto;min-height:100vh;padding-bottom:60px}
+a{text-decoration:none;color:inherit}
+.header{background:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:50}
+.header h1{font-size:17px;font-weight:600}
+.header .avatar{width:28px;height:28px;border-radius:50%;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.search{padding:12px 16px;background:#fff;margin-bottom:8px}
+.search input{width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;background:#f9fafb}
+.filter-tabs{display:flex;gap:6px;padding:0 16px 10px;background:#fff;overflow-x:auto;margin-bottom:8px}
+.filter-tab{padding:5px 12px;border-radius:14px;font-size:12.5px;white-space:nowrap;border:1px solid #e5e7eb;background:#fff;color:#64748b;flex-shrink:0}
+.filter-tab.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+.venue-list{padding:0 12px}
+.venue-item{background:#fff;border-radius:10px;padding:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.vi-info{flex:1;min-width:0}
+.vi-name{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vi-addr{font-size:12px;color:#94a3b8;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vi-tags{display:flex;gap:6px;flex-wrap:wrap}
+.vi-tag{font-size:10.5px;padding:2px 6px;border-radius:4px;background:#f1f5f9;color:#64748b}
+.vi-dept{font-size:10.5px;padding:2px 6px;border-radius:4px;background:#eef2ff;color:#4f46e5}
+.vi-right{flex-shrink:0;text-align:right}
+.vi-status{font-size:10.5px;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:6px}
+.vi-status.on{background:#ecfdf5;color:#059669}
+.vi-status.off{background:#f1f5f9;color:#94a3b8}
+.vi-btn{display:inline-block;padding:6px 14px;border-radius:6px;background:#4f46e5;color:#fff;font-size:12px;font-weight:500}
+.vi-btn.disabled{background:#f1f5f9;color:#94a3b8}
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:375px;background:#fff;border-top:1px solid #e5e7eb;display:flex;padding:6px 0 env(safe-area-inset-bottom,8px);z-index:50}
+.tab-bar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:#94a3b8;padding:4px 0}
+.tab-bar a.active{color:#4f46e5}
+.tab-bar a .ticon{font-size:18px}
+.back-home{display:inline-block;font-size:12px;color:#4f46e5;padding:8px 16px}
+.venue-item.external{border:1px solid #fde68a;background:#fffefa}
+.vi-tag.link{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.vi-btn.outer{background:#d97706}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>场地预约</h1>
+  <div class="avatar">张</div>
+</div>
+
+<a class="back-home" href="../index.html">← 返回首页</a>
+
+<div class="search"><input type="search" placeholder="搜索场地名称…"></div>
+
+<div class="filter-tabs">
+  <span class="filter-tab active">全部</span>
+  <span class="filter-tab">综合办</span>
+  <span class="filter-tab">民族办</span>
+  <span class="filter-tab">思政办</span>
+  <span class="filter-tab">就业指导中心</span>
+  <span class="filter-tab">心理中心</span>
+  <span class="filter-tab">学生事务办</span>
+  <span class="filter-tab">武装部</span>
+  <span class="filter-tab">校团委</span>
+</div>
+
+<div class="venue-list">
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">206会议室</div><div class="vi-addr">潇湘校区毓秀楼206室</div><div class="vi-tags"><span class="vi-dept">综合办</span><span class="vi-tag">45人</span><span class="vi-tag">1小时制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">117民族团结进步之家</div><div class="vi-addr">潇湘校区毓秀楼一楼117</div><div class="vi-tags"><span class="vi-dept">民族办</span><span class="vi-tag">35人</span><span class="vi-tag">90分钟</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">铸牢中华民族共同体意识教育体验课堂</div><div class="vi-addr">潇湘校区毓秀楼一楼进门右侧走廊</div><div class="vi-tags"><span class="vi-dept">民族办</span><span class="vi-tag">35人</span><span class="vi-tag">90分钟</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">238云麓阁报告厅</div><div class="vi-addr">潇湘校区毓秀楼238室</div><div class="vi-tags"><span class="vi-dept">综合办</span><span class="vi-tag">128人</span><span class="vi-tag">混合制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">"扣好人生第一粒扣子"价值引领课堂</div><div class="vi-addr">潇湘校区毓秀楼二楼和声堂旁</div><div class="vi-tags"><span class="vi-dept">思政办</span><span class="vi-tag">40人</span><span class="vi-tag">1小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">"党的二十大精神"学习体验课堂</div><div class="vi-addr">潇湘校区毓秀楼一楼</div><div class="vi-tags"><span class="vi-dept">思政办</span><span class="vi-tag">30人</span><span class="vi-tag">1小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">"爱国"体验课堂</div><div class="vi-addr">麓南校区升华学生公寓19栋1楼</div><div class="vi-tags"><span class="vi-dept">思政办</span><span class="vi-tag">40人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">"敬业"体验课堂</div><div class="vi-addr">麓南校区升华学生公寓18栋1楼</div><div class="vi-tags"><span class="vi-dept">思政办</span><span class="vi-tag">40人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">"诚信"体验课堂</div><div class="vi-addr">麓南校区升华学生公寓18栋1楼</div><div class="vi-tags"><span class="vi-dept">思政办</span><span class="vi-tag">40人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">"友善"体验课堂</div><div class="vi-addr">潇湘校区毓秀楼一楼107</div><div class="vi-tags"><span class="vi-dept">思政办</span><span class="vi-tag">30人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">职业选择能力训练实验中心体验课</div><div class="vi-addr">潇湘校区毓秀楼3楼</div><div class="vi-tags"><span class="vi-dept">就业指导中心</span><span class="vi-tag">40人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">网络面试间</div><div class="vi-addr">潇湘校区毓秀楼3楼</div><div class="vi-tags"><span class="vi-dept">就业指导中心</span><span class="vi-tag">1人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">立言厅</div><div class="vi-addr">岳麓山校区餐饮文化城3楼</div><div class="vi-tags"><span class="vi-dept">就业指导中心</span><span class="vi-tag">200人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">立德厅</div><div class="vi-addr">岳麓山校区餐饮文化城4楼</div><div class="vi-tags"><span class="vi-dept">就业指导中心</span><span class="vi-tag">200人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">岳麓山校区心理中心多功能室</div><div class="vi-addr">岳麓山校区升华楼前楼二楼</div><div class="vi-tags"><span class="vi-dept">心理中心</span><span class="vi-tag">12人</span><span class="vi-tag">1小时</span></div></div><div class="vi-right"><div class="vi-status off">已闭馆</div><div class="vi-btn disabled">不可约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">杏林校区心理中心团体辅导室</div><div class="vi-addr">杏林校区十二食堂三楼</div><div class="vi-tags"><span class="vi-dept">心理中心</span><span class="vi-tag">15人</span><span class="vi-tag">1小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">天心校区心理中心团体辅导室（208）</div><div class="vi-addr">天心校区学生素质大楼二楼</div><div class="vi-tags"><span class="vi-dept">心理中心</span><span class="vi-tag">15人</span><span class="vi-tag">1小时</span></div></div><div class="vi-right"><div class="vi-status off">已闭馆</div><div class="vi-btn disabled">不可约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">潇湘校区心理中心团体辅导室</div><div class="vi-addr">潇湘校区毓秀楼227/229/231室</div><div class="vi-tags"><span class="vi-dept">心理中心</span><span class="vi-tag">30人</span><span class="vi-tag">1小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">中南大学大学生安全教育沉浸式体验课堂</div><div class="vi-addr">中南大学升华公寓6栋1楼</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">35人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">中南大学国防教育体验课堂</div><div class="vi-addr">潇湘校区体育场C105</div><div class="vi-tags"><span class="vi-dept">武装部</span><span class="vi-tag">35人</span><span class="vi-tag">半天制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">知新馆（团辅A）</div><div class="vi-addr">中南大学升华学生公寓12栋</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">20人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status off">已闭馆</div><div class="vi-btn disabled">不可约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">知新馆（团辅B）</div><div class="vi-addr">中南大学升华学生公寓12栋</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">40-50人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">知新馆（团辅C）</div><div class="vi-addr">中南大学升华学生公寓12栋</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">40-50人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">知新馆（咨询A）</div><div class="vi-addr">中南大学升华学生公寓12栋</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">20人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status off">已闭馆</div><div class="vi-btn disabled">不可约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">知新馆（咨询B）</div><div class="vi-addr">中南大学升华学生公寓12栋</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">20人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">知新馆（研讨A）</div><div class="vi-addr">中南大学升华学生公寓12栋</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">20人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status off">已闭馆</div><div class="vi-btn disabled">不可约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">知新馆（研讨B）</div><div class="vi-addr">中南大学升华学生公寓12栋</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">20人</span><span class="vi-tag">节次制</span></div></div><div class="vi-right"><div class="vi-status off">已闭馆</div><div class="vi-btn disabled">不可约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">问渠长廊</div><div class="vi-addr">中南大学潇湘校区 问渠长廊</div><div class="vi-tags"><span class="vi-dept">学生事务办</span><span class="vi-tag">100人</span><span class="vi-tag">自由时段</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">积极心理体验馆</div><div class="vi-addr">南校区学生公寓6舍</div><div class="vi-tags"><span class="vi-dept">心理中心</span><span class="vi-tag">30人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail.html"><div class="vi-info"><div class="vi-name">大学生素质拓展基地</div><div class="vi-addr">新校区素质拓展基地</div><div class="vi-tags"><span class="vi-dept">心理中心</span><span class="vi-tag">30人</span><span class="vi-tag">2小时</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail-tuanwei.html"><div class="vi-info"><div class="vi-name">校本部立功厅</div><div class="vi-addr">校本部学生活动中心1楼</div><div class="vi-tags"><span class="vi-dept">校团委</span><span class="vi-tag">800人</span><span class="vi-tag">半天制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail-tuanwei.html"><div class="vi-info"><div class="vi-name">南校区礼堂</div><div class="vi-addr">南校区学生活动中心</div><div class="vi-tags"><span class="vi-dept">校团委</span><span class="vi-tag">600人</span><span class="vi-tag">半天制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail-tuanwei.html"><div class="vi-info"><div class="vi-name">新校区毓秀楼和声堂</div><div class="vi-addr">新校区毓秀楼1楼</div><div class="vi-tags"><span class="vi-dept">校团委</span><span class="vi-tag">500人</span><span class="vi-tag">半天制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail-tuanwei.html"><div class="vi-info"><div class="vi-name">新校区毓秀楼演播室</div><div class="vi-addr">新校区毓秀楼2楼</div><div class="vi-tags"><span class="vi-dept">校团委</span><span class="vi-tag">100人</span><span class="vi-tag">半天制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item" href="02-venue-detail-tuanwei.html"><div class="vi-info"><div class="vi-name">新校区毓秀楼书香斋</div><div class="vi-addr">新校区毓秀楼3楼</div><div class="vi-tags"><span class="vi-dept">校团委</span><span class="vi-tag">80人</span><span class="vi-tag">半天制</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn">预约</div></div></a>
+
+  <a class="venue-item external" href="https://tyb.csu.edu.cn/booking" target="_blank" rel="noopener"><div class="vi-info"><div class="vi-name">校本部体育馆</div><div class="vi-addr">校本部体育馆 · 由体育部预约系统受理</div><div class="vi-tags"><span class="vi-dept">武装部</span><span class="vi-tag link">🔗 外部系统</span></div></div><div class="vi-right"><div class="vi-status on">可预约</div><div class="vi-btn outer">前往 ↗</div></div></a>
+</div>
+
+<nav class="tab-bar">
+  <a class="active" href="01-venue-list.html"><span class="ticon">🏠</span>场地</a>
+  <a href="09-my-bookings.html"><span class="ticon">📋</span>我的预约</a>
+</nav>
+
+</body>
+</html>

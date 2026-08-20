@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>场地管理 - 智慧学工场地预约管理</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background: #f8fafc; color: #0f172a; min-height: 100vh; }
+
+.sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: #fff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; z-index: 100; }
+.sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 20px 16px; font-size: 15px; font-weight: 700; color: #0f172a; border-bottom: 1px solid #e2e8f0; letter-spacing: 0.5px; text-decoration: none; }
+.sidebar-logo .logo-icon { width: 32px; height: 32px; background: #4f46e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+.sidebar-nav { flex: 1; padding: 8px 0; }
+.sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 14px; color: #64748b; text-decoration: none; transition: all .15s; }
+.sidebar-nav a:hover { color: #0f172a; background: #f8fafc; }
+.sidebar-nav a.active { color: #4f46e5; background: #eef2ff; font-weight: 600; }
+.sidebar-nav a .icon { font-size: 16px; width: 22px; text-align: center; }
+.sidebar-bottom { padding: 16px; border-top: 1px solid #e2e8f0; }
+.sidebar-bottom a { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; text-decoration: none; }
+.sidebar-bottom a:hover { color: #4f46e5; }
+
+.main { margin-left: 220px; min-height: 100vh; }
+.topbar { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.topbar-title { font-size: 16px; font-weight: 600; }
+.btn-primary { display: inline-flex; align-items: center; gap: 4px; padding: 8px 18px; background: #4f46e5; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer; transition: background .15s; }
+.btn-primary:hover { background: #4338ca; }
+.content { padding: 24px 32px; }
+
+.filter-bar { display: flex; gap: 12px; margin-bottom: 20px; }
+.filter-bar input,
+.filter-bar select { height: 38px; padding: 0 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #0f172a; background: #fff; outline: none; transition: border-color .15s; }
+.filter-bar input:focus,
+.filter-bar select:focus { border-color: #4f46e5; }
+.filter-bar input { width: 280px; }
+.filter-bar select { min-width: 130px; color: #64748b; cursor: pointer; }
+
+.section { background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #f1f5f9; }
+th { color: #64748b; font-weight: 500; background: #f8fafc; white-space: nowrap; }
+th:first-child { border-radius: 8px 0 0 0; }
+th:last-child { border-radius: 0 8px 0 0; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
+td.venue-name a { color: #4f46e5; text-decoration: none; font-weight: 500; }
+td.venue-name a:hover { text-decoration: underline; }
+.cover-thumb { width: 48px; height: 32px; border-radius: 4px; object-fit: cover; background: linear-gradient(135deg,#667eea,#764ba2); display: inline-block; vertical-align: middle; }
+.admin-name { font-size: 12.5px; font-weight: 500; }
+.admin-dept { font-size: 11px; color: #94a3b8; }
+.role-chip { display: inline-block; padding: 0 5px; border-radius: 4px; font-size: 10px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; margin-left: 4px; vertical-align: 1px; }
+.link-chip { display: inline-block; padding: 0 6px; border-radius: 4px; font-size: 10.5px; background: #fffbeb; color: #92400e; border: 1px solid #fde68a; margin-left: 6px; vertical-align: 1px; }
+
+.badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+.badge-success { background: #ecfdf5; color: #059669; }
+.badge-gray { background: #f1f5f9; color: #64748b; }
+
+.actions a { color: #4f46e5; text-decoration: none; font-size: 13px; }
+.actions a:hover { text-decoration: underline; }
+.actions .sep { color: #e2e8f0; margin: 0 6px; }
+
+.table-footer { padding: 14px 16px; font-size: 13px; color: #64748b; border-top: 1px solid #f1f5f9; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo"><span class="logo-icon">学</span> 智慧学工 · 后台</div>
+  <nav class="sidebar-nav">
+    <a href="01-dashboard.html"><span class="icon">📊</span> 数据概览</a>
+    <a href="02-venue-list.html" class="active"><span class="icon">📍</span> 场地管理</a>
+    <a href="17-form-template-list.html"><span class="icon">📋</span> 表单模板</a>
+    <a href="20-booking-list.html"><span class="icon">📅</span> 预约记录</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="../index.html">← 返回首页</a>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">场地管理</div>
+    <a href="05-venue-add-basic.html" class="btn-primary">＋ 新增场地</a>
+  </div>
+  <div class="content">
+
+    <div class="filter-bar">
+      <input type="text" placeholder="搜索场地名称或地址…">
+      <select><option>全部科室</option></select>
+      <select><option>全部状态</option></select>
+      <select><option>全部类型</option><option>系统内预约</option><option>外部链接跳转</option></select>
+      <a href="59-venue-list-owner.html" style="display:inline-flex;align-items:center;height:38px;padding:0 14px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;font-size:13px;color:#4f46e5;text-decoration:none">仅看我负责的场地</a>
+    </div>
+
+    <div class="section">
+      <table>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>封面</th>
+            <th>科室</th>
+            <th>场地名称</th>
+            <th>场地地址</th>
+            <th>容纳人数</th>
+            <th>审批管理员</th>
+            <th>场地负责人</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td><td><span class="cover-thumb"></span></td><td>综合办</td>
+            <td class="venue-name"><a href="04-venue-detail.html">206会议室</a></td>
+            <td>潇湘校区毓秀楼206室</td><td>45人</td><td><div class="admin-name">所属科室管理员<span class="role-chip">角色</span></div><div class="admin-dept">当前匹配：孙瀚</div></td><td><div class="admin-name">孙瀚</div><div class="admin-dept">综合办</div></td>
+            <td><span class="badge badge-success">正常使用</span></td>
+            <td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td>
+          </tr>
+          <tr>
+            <td>2</td><td><span class="cover-thumb"></span></td><td>民族办</td>
+            <td class="venue-name"><a href="04-venue-detail.html">117民族团结进步之家</a></td>
+            <td>潇湘校区毓秀楼一楼117</td><td>35人</td><td><div class="admin-name">陈老师</div><div class="admin-dept">民族办</div></td><td><div class="admin-name">陈老师</div><div class="admin-dept">民族办</div></td>
+            <td><span class="badge badge-success">正常使用</span></td>
+            <td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td>
+          </tr>
+          <tr>
+            <td>3</td><td><span class="cover-thumb"></span></td><td>民族办</td>
+            <td class="venue-name"><a href="04-venue-detail.html">铸牢中华民族共同体意识教育体验课堂</a></td>
+            <td>潇湘校区毓秀楼一楼进门右侧走廊</td><td>35人</td><td><div class="admin-name">陈老师</div><div class="admin-dept">民族办</div></td><td><div class="admin-name">陈老师</div><div class="admin-dept">民族办</div></td>
+            <td><span class="badge badge-success">正常使用</span></td>
+            <td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td>
+          </tr>
+          <tr>
+            <td>4</td><td><span class="cover-thumb"></span></td><td>综合办</td>
+            <td class="venue-name"><a href="04-venue-detail.html">238云麓阁报告厅</a></td>
+            <td>潇湘校区毓秀楼238室</td><td>128人</td><td><div class="admin-name">孙瀚</div><div class="admin-dept">综合办</div></td><td><div class="admin-name">孙瀚</div><div class="admin-dept">综合办</div></td>
+            <td><span class="badge badge-success">正常使用</span></td>
+            <td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td>
+          </tr>
+          <tr><td>5</td><td><span class="cover-thumb"></span></td><td>思政办</td><td class="venue-name"><a href="04-venue-detail.html">"扣好人生第一粒扣子"价值引领课堂</a></td><td>潇湘校区毓秀楼二楼和声堂旁</td><td>40人</td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>6</td><td><span class="cover-thumb"></span></td><td>思政办</td><td class="venue-name"><a href="04-venue-detail.html">"党的二十大精神"学习体验课堂</a></td><td>潇湘校区毓秀楼一楼</td><td>30人</td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>7</td><td><span class="cover-thumb"></span></td><td>思政办</td><td class="venue-name"><a href="04-venue-detail.html">"爱国"体验课堂</a></td><td>麓南校区升华学生公寓19栋1楼</td><td>40人</td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>8</td><td><span class="cover-thumb"></span></td><td>思政办</td><td class="venue-name"><a href="04-venue-detail.html">"敬业"体验课堂</a></td><td>麓南校区升华学生公寓18栋1楼</td><td>40人</td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>9</td><td><span class="cover-thumb"></span></td><td>思政办</td><td class="venue-name"><a href="04-venue-detail.html">"诚信"体验课堂</a></td><td>麓南校区升华学生公寓18栋1楼</td><td>40人</td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>10</td><td><span class="cover-thumb"></span></td><td>思政办</td><td class="venue-name"><a href="04-venue-detail.html">"友善"体验课堂</a></td><td>潇湘校区毓秀楼一楼107</td><td>30人</td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><div class="admin-name">周老师</div><div class="admin-dept">思政办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>11</td><td><span class="cover-thumb"></span></td><td>就业指导中心</td><td class="venue-name"><a href="04-venue-detail.html">职业选择能力训练实验中心体验课</a></td><td>潇湘校区毓秀楼3楼</td><td>40人</td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>12</td><td><span class="cover-thumb"></span></td><td>就业指导中心</td><td class="venue-name"><a href="04-venue-detail.html">网络面试间</a></td><td>潇湘校区毓秀楼3楼</td><td>1人</td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>13</td><td><span class="cover-thumb"></span></td><td>就业指导中心</td><td class="venue-name"><a href="04-venue-detail.html">立言厅</a></td><td>岳麓山校区餐饮文化城3楼</td><td>200人</td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>14</td><td><span class="cover-thumb"></span></td><td>就业指导中心</td><td class="venue-name"><a href="04-venue-detail.html">立德厅</a></td><td>岳麓山校区餐饮文化城4楼</td><td>200人</td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><div class="admin-name">吴老师</div><div class="admin-dept">就业中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>15</td><td><span class="cover-thumb"></span></td><td>心理中心</td><td class="venue-name"><a href="04-venue-detail.html">岳麓山校区心理中心多功能室</a></td><td>岳麓山校区升华楼前楼二楼</td><td>12人</td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><span class="badge badge-gray">暂时闭馆</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>16</td><td><span class="cover-thumb"></span></td><td>心理中心</td><td class="venue-name"><a href="04-venue-detail.html">杏林校区心理中心团体辅导室</a></td><td>杏林校区十二食堂三楼</td><td>15人</td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>17</td><td><span class="cover-thumb"></span></td><td>心理中心</td><td class="venue-name"><a href="04-venue-detail.html">天心校区心理中心团体辅导室（208）</a></td><td>天心校区学生素质大楼二楼</td><td>15人</td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><span class="badge badge-gray">暂时闭馆</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>18</td><td><span class="cover-thumb"></span></td><td>心理中心</td><td class="venue-name"><a href="04-venue-detail.html">潇湘校区心理中心团体辅导室</a></td><td>潇湘校区毓秀楼227/229/231室</td><td>30人</td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>19</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">中南大学大学生安全教育沉浸式体验课堂</a></td><td>中南大学升华公寓6栋1楼</td><td>35人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>20</td><td><span class="cover-thumb"></span></td><td>武装部</td><td class="venue-name"><a href="04-venue-detail.html">中南大学国防教育体验课堂</a></td><td>潇湘校区体育场C105</td><td>35人</td><td><div class="admin-name">刘老师</div><div class="admin-dept">武装部</div></td><td><div class="admin-name">刘老师</div><div class="admin-dept">武装部</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>21</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">知新馆（团辅A）</a></td><td>升华学生公寓12栋</td><td>20人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-gray">暂时闭馆</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>22</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">知新馆（团辅B）</a></td><td>升华学生公寓12栋</td><td>40-50人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">郭老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>23</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">知新馆（团辅C）</a></td><td>升华学生公寓12栋</td><td>40-50人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>24</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">知新馆（咨询A）</a></td><td>升华学生公寓12栋</td><td>20人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-gray">暂时闭馆</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>25</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">知新馆（咨询B）</a></td><td>升华学生公寓12栋</td><td>20人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>26</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">知新馆（研讨A）</a></td><td>升华学生公寓12栋</td><td>20人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-gray">暂时闭馆</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>27</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">知新馆（研讨B）</a></td><td>升华学生公寓12栋</td><td>20人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-gray">暂时闭馆</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>28</td><td><span class="cover-thumb"></span></td><td>学生事务办</td><td class="venue-name"><a href="04-venue-detail.html">问渠长廊</a></td><td>中南大学潇湘校区</td><td>100人</td><td><div class="admin-name">张老师</div><div class="admin-dept">学生事务办</div></td><td><div class="admin-name">彭老师</div><div class="admin-dept">学生事务办</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>29</td><td><span class="cover-thumb"></span></td><td>心理中心</td><td class="venue-name"><a href="04-venue-detail.html">积极心理体验馆</a></td><td>南校区学生公寓6舍</td><td>30人</td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>30</td><td><span class="cover-thumb"></span></td><td>心理中心</td><td class="venue-name"><a href="04-venue-detail.html">大学生素质拓展基地</a></td><td>新校区素质拓展基地</td><td>30人</td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><div class="admin-name">李老师</div><div class="admin-dept">心理中心</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>31</td><td><span class="cover-thumb"></span></td><td>校团委</td><td class="venue-name"><a href="04-venue-detail-tuanwei.html">校本部立功厅</a></td><td>校本部学生活动中心1楼</td><td>800人</td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail-tuanwei.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>32</td><td><span class="cover-thumb"></span></td><td>校团委</td><td class="venue-name"><a href="04-venue-detail-tuanwei.html">南校区礼堂</a></td><td>南校区学生活动中心</td><td>600人</td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail-tuanwei.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>33</td><td><span class="cover-thumb"></span></td><td>校团委</td><td class="venue-name"><a href="04-venue-detail-tuanwei.html">新校区毓秀楼和声堂</a></td><td>新校区毓秀楼1楼</td><td>500人</td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail-tuanwei.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>34</td><td><span class="cover-thumb"></span></td><td>校团委</td><td class="venue-name"><a href="04-venue-detail-tuanwei.html">新校区毓秀楼演播室</a></td><td>新校区毓秀楼2楼</td><td>100人</td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><div class="admin-name">罗老师</div><div class="admin-dept">校团委</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail-tuanwei.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>35</td><td><span class="cover-thumb"></span></td><td>校团委</td><td class="venue-name"><a href="04-venue-detail-tuanwei.html">新校区毓秀楼书香斋</a></td><td>新校区毓秀楼3楼</td><td>80人</td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><div class="admin-name">王老师</div><div class="admin-dept">校团委</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail-tuanwei.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+          <tr><td>36</td><td><span class="cover-thumb"></span></td><td>武装部</td><td class="venue-name"><a href="04-venue-detail-external.html">校本部体育馆<span class="link-chip">外链</span></a></td><td>校本部体育馆（跳转体育部预约系统）</td><td>—</td><td><div class="admin-name" style="color:#94a3b8">不适用</div><div class="admin-dept">外链场地无需审批</div></td><td><div class="admin-name">刘老师</div><div class="admin-dept">武装部</div></td><td><span class="badge badge-success">正常使用</span></td><td class="actions"><a href="04-venue-detail-external.html">详情</a><span class="sep">|</span><a href="10-venue-edit-basic.html">编辑</a><span class="sep">|</span><a href="15-venue-delete-confirm.html">删除</a></td></tr>
+        </tbody>
+      </table>
+      <div class="table-footer">共 36 个场地（其中外链场地 1 个）</div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
