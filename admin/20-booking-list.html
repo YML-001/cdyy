@@ -60,7 +60,7 @@ th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
 <div class="main">
   <header class="topbar">
     <span class="topbar-title">预约记录</span>
-    <span style="font-size:13px;color:#64748b">共 47 条记录</span>
+    <button type="button" id="exportBtn" style="padding:7px 14px;border-radius:8px;border:1px solid #4f46e5;background:#4f46e5;color:#fff;font-size:13px;cursor:pointer;font-family:inherit">导出 Excel</button>
   </header>
   <div class="content">
 
@@ -119,5 +119,18 @@ th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
   </div>
 </div>
 
+<script>
+document.getElementById('exportBtn').onclick=function(){
+  var rows=Array.prototype.map.call(document.querySelectorAll('tbody tr'),function(tr){
+    var cells=Array.prototype.slice.call(tr.cells,0,-1);
+    return '<tr>'+cells.map(function(td){return '<td>'+td.innerText.replace(/\n/g,' ')+'</td>';}).join('')+'</tr>';
+  }).join('');
+  var head='<tr><th>预约编号</th><th>申请人</th><th>场地</th><th>科室</th><th>日期</th><th>时段</th><th>状态</th></tr>';
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\ufeff<html><head><meta charset="UTF-8"></head><body><table>'+head+rows+'</table></body></html>'],{type:'application/vnd.ms-excel'}));
+  a.download='预约记录.xls';
+  a.click();
+};
+</script>
 </body>
 </html>

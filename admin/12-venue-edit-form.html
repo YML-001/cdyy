@@ -70,6 +70,10 @@ a{text-decoration:none;color:inherit}
 </style>
 </head>
 <body>
+<script>
+// 校团委活动场地使用团委专用配置页
+if(new URLSearchParams(location.search).get('type')==='tuanwei'){location.replace('57-venue-add-form-tuanwei.html?type=tuanwei&mode=edit');}
+</script>
 
 <aside class="sidebar">
   <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>

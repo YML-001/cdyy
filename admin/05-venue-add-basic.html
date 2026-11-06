@@ -70,6 +70,23 @@ a{text-decoration:none;color:inherit}
 .type-tip{margin-top:8px;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.6}
 .type-tip.inner{background:#eef2ff;border:1px solid #c7d2fe;color:#4338ca}
 .type-tip.outer{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.type-tip.tuanwei{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}
+.tw-sub{font-size:12.5px;font-weight:600;color:#0f172a;margin:4px 0 8px}
+.equip-table{width:100%;border-collapse:collapse;font-size:13px}
+.equip-table th{background:#f8fafc;color:#64748b;font-weight:500;text-align:left;padding:8px 10px;border-bottom:1px solid #e2e8f0}
+.equip-table td{padding:6px 10px;border-bottom:1px solid #f1f5f9}
+.equip-table input{width:100%;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:inherit}
+.equip-table .e-del{color:#94a3b8;cursor:pointer;font-size:12px;border:none;background:none}
+.equip-table .e-del:hover{color:#dc2626}
+.equip-tools{display:flex;gap:8px;margin-top:8px}
+.paste-box{display:none;margin-top:8px}
+.paste-box textarea{width:100%;min-height:90px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit}
+.img-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.img-group{border:1px solid #e2e8f0;border-radius:8px;padding:10px}
+.img-group .ig-t{font-size:12.5px;font-weight:500;margin-bottom:8px}
+.img-group .upload-area{gap:8px}
+.img-group .upload-item,.img-group .upload-add{width:72px;height:72px}
+.img-group .upload-item{background:linear-gradient(135deg,#fdba74,#f97316)}
 .tab.skip{color:#cbd5e1;pointer-events:none;text-decoration:line-through}
 </style>
 </head>
@@ -111,9 +128,11 @@ a{text-decoration:none;color:inherit}
           <div class="radio-group">
             <label><input type="radio" name="venueType" id="typeInner" checked> 系统内预约</label>
             <label><input type="radio" name="venueType" id="typeOuter"> 外部链接跳转</label>
+            <label><input type="radio" name="venueType" id="typeTuanwei"> 校团委活动场地</label>
           </div>
           <div class="type-tip inner" id="tipInner">系统内预约：需完成时段配置、表单模板、审批流程、权限配置，师生在本系统内完成申请与审批。</div>
           <div class="type-tip outer" id="tipOuter" style="display:none">外部链接跳转：本场地仅在列表中展示，师生点击后直接跳转到外部预约系统，无需配置开放时段、表单字段、审批流程与预约权限。</div>
+          <div class="type-tip tuanwei" id="tipTuanwei" style="display:none">校团委活动场地：时段配置与通用场地一致；表单模板自动套用《校园文化活动场地申请表》，审批流程自动套用团委 6 步流程（活动负责老师 → 二级单位 → 保卫部（500人以上）→ 场地主管 → 值班安排知会）。</div>
         </div>
         <div class="field" id="externalUrlField" style="display:none">
           <label>外链地址<span class="req">*</span></label>
@@ -162,9 +181,15 @@ a{text-decoration:none;color:inherit}
             <option>王强（校团委）</option>
           </select>
         </div>
+        <div class="field" id="adminField">
+          <label>场地管理员<span class="req">*</span></label>
+          <div class="mp" id="venueAdmins" data-selected="孙瀚（综合办）"></div>
+          <div class="hint">可多选。所选人员均可管理本场地的配置、预约记录和预约时段</div>
+        </div>
         <div class="field" id="capacityField">
           <label>容纳人数<span class="req">*</span></label>
           <input type="number" placeholder="请输入人数">
+          <div class="hint" id="capHint" style="display:none">团委场地必填：申请表的「预估人数」不能超过该值</div>
         </div>
         <div class="field" id="advanceDaysField">
           <label>可提前预定天数</label>
@@ -243,6 +268,49 @@ a{text-decoration:none;color:inherit}
         <div class="field full">
           <label>使用备注</label>
           <textarea placeholder="场地使用须知、设备清单等"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="tuanweiSection" style="display:none">
+      <h3>团委场地信息 <span style="font-size:12px;font-weight:400;color:#94a3b8">师生在场地详情页可查看以下内容</span></h3>
+      <div class="form-grid">
+        <div class="field full">
+          <label>位置说明</label>
+          <input type="text" id="twLocation" placeholder="如：三五食堂四楼，可在地图上搜索「校本部风味餐厅」，从正门左侧楼梯上楼">
+        </div>
+        <div class="field full">
+          <label>设备信息</label>
+          <table class="equip-table">
+            <thead><tr><th style="width:55%">设备名称</th><th>数量 / 规格</th><th style="width:56px">操作</th></tr></thead>
+            <tbody id="equipBody"></tbody>
+          </table>
+          <div class="equip-tools">
+            <button type="button" class="add-period" id="equipAdd">+ 添加设备</button>
+            <button type="button" class="add-period" id="equipPasteToggle">粘贴批量导入</button>
+          </div>
+          <div class="paste-box" id="pasteBox">
+            <textarea id="pasteText" placeholder="每行一个设备，名称与数量用空格或 Tab 分隔，可直接从 Word/Excel 表格复制：&#10;手持话筒	6&#10;LED 大屏	575cm*240cm×1"></textarea>
+            <div class="equip-tools"><button type="button" class="btn btn-primary" id="pasteApply" style="padding:6px 14px;font-size:12.5px">导入到列表</button></div>
+          </div>
+        </div>
+        <div class="field full">
+          <label>场地图片</label>
+          <div class="img-groups">
+            <div class="img-group"><div class="ig-t">场地全景</div><div class="upload-area"><div class="upload-item"></div><div class="upload-add"><span class="plus">+</span></div></div></div>
+            <div class="img-group"><div class="ig-t">舞台效果</div><div class="upload-area"><div class="upload-item"></div><div class="upload-item"></div><div class="upload-add"><span class="plus">+</span></div></div></div>
+            <div class="img-group"><div class="ig-t">场地平面图</div><div class="upload-area"><div class="upload-add"><span class="plus">+</span></div></div></div>
+          </div>
+          <div class="upload-hint">每组可上传多张，支持 JPG/PNG，每张不超过 5MB</div>
+        </div>
+        <div class="field full">
+          <label>场地注意事项</label>
+          <textarea id="twNotice" style="min-height:150px">1、校团委活动中心会根据申请安排学生助理进行值班，工作内容包括场地开门，打开并协助调整场地设备，活动过程中的设备控制。
+2、活动方可外接设备，需要自备笔记本电脑。为确保活动顺利进行，还需自备话筒电池（5 号电池）。
+3、场地内不允许吃饭、带奶茶饮料进入。
+4、在场地内粘贴标语、引导信息时，严禁使用难以清理的双面胶。
+5、活动结束后，活动方需对场地进行复原，更改的线路进行复原，并且按照要求打扫场地卫生方可离开。</textarea>
+          <div class="hint">四个团委场地默认使用同一份注意事项，可按场地单独修改</div>
         </div>
       </div>
     </div>
@@ -327,6 +395,8 @@ a{text-decoration:none;color:inherit}
 
   // ===== 场地类型：系统内预约 / 外部链接跳转 =====
   var typeOuter=document.getElementById('typeOuter');
+  var typeTuanwei=document.getElementById('typeTuanwei');
+  var tuanweiOnly=['tuanweiSection'];
   var innerOnly=['advanceDaysField','guideField','openDayField','openPeriodField','noticeSection'];
   var outerOnly=['externalUrlField','externalTargetField'];
   var nextBtn=document.getElementById('nextBtn');
@@ -338,6 +408,11 @@ a{text-decoration:none;color:inherit}
     outerOnly.forEach(function(id){show(id,outer);});
     document.getElementById('tipInner').style.display=outer?'none':'';
     document.getElementById('tipOuter').style.display=outer?'':'none';
+    var tw=typeTuanwei.checked;
+    tuanweiOnly.forEach(function(id){show(id,tw);});
+    document.getElementById('tipTuanwei').style.display=tw?'':'none';
+    if(tw){document.getElementById('tipInner').style.display='none';}
+    capHint.style.display=tw?'':'none';
     skipTabs.forEach(function(t){
       t.classList.toggle('skip',outer);
       t.textContent=t.textContent.replace(/（不适用）$/,'')+(outer?'（不适用）':'');
@@ -348,13 +423,22 @@ a{text-decoration:none;color:inherit}
       nextBtn.style.background='#059669';
     }else{
       nextBtn.textContent='下一步：时段配置 →';
-      nextBtn.setAttribute('href','06-venue-add-timeslot.html');
+      nextBtn.dataset.origHref=tw?'40-timeslot-halfday.html':'06-venue-add-timeslot.html';
+      nextBtn.setAttribute('href',nextBtn.dataset.origHref);
       nextBtn.style.background='';
       toggleNotice();
     }
+    if(window.TuanweiFlow){TuanweiFlow.apply(tw);}
   }
   document.querySelectorAll('input[name="venueType"]').forEach(function(r){r.addEventListener('change',toggleVenueType);});
-  toggleVenueType();
+  // 切换为团委场地时预填默认值（与和声堂现有配置一致），管理员可修改
+  typeTuanwei.addEventListener('change',function(){
+    if(!typeTuanwei.checked){return;}
+    var dept=document.querySelector('input[list="deptDict"]');if(!dept.value){dept.value='校团委';}
+    sel.value='all';applyActive(presets.all);updateHint();
+    while(periodList.firstChild){periodList.removeChild(periodList.firstChild);}
+    addPeriod('8:00','22:00');
+  });
 
   // ===== 每日开放时段：支持多个时段 =====
   var TIME_OPTIONS=(function(){var a=[];for(var h=7;h<=23;h++){a.push(h+':00');if(h<23)a.push(h+':30');}return a;})();
@@ -405,8 +489,40 @@ a{text-decoration:none;color:inherit}
   // 初始化：默认展示「上午 + 下午」两个时段
   addPeriod('8:00','12:00');
   addPeriod('14:00','18:00');
+
+  // ===== 校团委活动场地：设备信息 =====
+  var equipBody=document.getElementById('equipBody');
+  function esc(v){return String(v).replace(/"/g,'&quot;');}
+  function addEquip(name,qty){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="text" placeholder="设备名称" value="'+esc(name||'')+'"></td>'+
+      '<td><input type="text" placeholder="如：6 或 575cm*240cm×1" value="'+esc(qty||'')+'"></td>'+
+      '<td><button type="button" class="e-del">删除</button></td>';
+    tr.querySelector('.e-del').addEventListener('click',function(){tr.remove();});
+    equipBody.appendChild(tr);
+  }
+  document.getElementById('equipAdd').addEventListener('click',function(){addEquip('','');});
+  document.getElementById('equipPasteToggle').addEventListener('click',function(){
+    var box=document.getElementById('pasteBox');box.style.display=box.style.display==='block'?'none':'block';
+  });
+  document.getElementById('pasteApply').addEventListener('click',function(){
+    var lines=document.getElementById('pasteText').value.split(/\n/),n=0;
+    lines.forEach(function(l){
+      l=l.trim();if(!l){return;}
+      var m=l.split(/\t|\s{2,}|\s+(?=\S+$)/);
+      addEquip(m[0].trim(),(m.slice(1).join(' ')||'').trim());n++;
+    });
+    document.getElementById('pasteText').value='';
+    document.getElementById('pasteBox').style.display='none';
+    if(n){alert('已导入 '+n+' 项设备');}
+  });
+  [['手持话筒','6'],['耳麦（领夹麦）','4'],['LED 大屏','575cm*240cm×1，1920*1080']].forEach(function(e){addEquip(e[0],e[1]);});
+  var capHint=document.getElementById('capHint');
+  toggleVenueType();
 })();
 </script>
 
+<script src="multi-pick.js"></script>
+<script src="tuanwei-flow.js"></script>
 </body>
 </html>

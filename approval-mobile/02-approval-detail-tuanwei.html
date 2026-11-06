@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>团委场地 · 任务详情 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1e293b;max-width:375px;margin:0 auto;min-height:100vh;padding-bottom:70px}
+a{text-decoration:none;color:inherit}
+
+/* 顶部固定区域 */
+.header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:50}
+.header .back{font-size:18px;color:#64748b}
+.header h1{font-size:16px;font-weight:600;flex:1;text-align:center}
+.top-info{background:#fff;padding:14px 16px;position:relative}
+.flow-title{font-size:16px;font-weight:700;padding-right:60px;line-height:1.4}
+.flow-meta{font-size:12.5px;color:#64748b;margin-top:6px}
+.flow-admin{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#64748b;margin-top:6px}
+.flow-admin .admin-icon{width:20px;height:20px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600}
+.flow-stamp{position:absolute;top:12px;right:16px;width:48px;height:48px;border-radius:50%;border:2px solid #d97706;display:flex;align-items:center;justify-content:center;font-size:10px;color:#d97706;font-weight:600;transform:rotate(-15deg);opacity:0.7}
+
+/* Tab 切换 */
+.detail-tabs{background:#fff;display:flex;border-bottom:1px solid #f0f0f0;position:sticky;top:44px;z-index:40}
+.detail-tab{flex:1;text-align:center;padding:12px 0;font-size:14px;color:#94a3b8;font-weight:500;border-bottom:2px solid transparent}
+.detail-tab.active{color:#d97706;font-weight:600;border-bottom-color:#d97706}
+
+/* 表单内容 */
+.form-section{background:#fff;margin:8px 0;padding:14px 16px}
+.form-section-title{font-size:14px;font-weight:600;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f1f5f9}
+.form-row{display:flex;justify-content:space-between;padding:10px 0;font-size:13.5px;border-bottom:1px solid #f8fafc}
+.form-row:last-child{border-bottom:none}
+.form-label{color:#94a3b8;flex-shrink:0;min-width:80px}
+.form-value{font-weight:500;text-align:right;flex:1;margin-left:12px;word-break:break-all}
+.form-star{color:#dc2626;margin-right:2px;font-size:12px}
+
+/* 抄送设置 */
+.cc-section{background:#fff;margin:8px 0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-radius:0}
+.cc-title{font-size:14px;font-weight:500}
+.cc-add{width:24px;height:24px;border-radius:50%;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:16px;color:#94a3b8}
+
+/* 底部按钮 */
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:375px;background:#fff;border-top:1px solid #e5e7eb;padding:10px 16px env(safe-area-inset-bottom,10px);z-index:50}
+.btn-agree{width:100%;padding:14px;border-radius:10px;text-align:center;font-size:16px;font-weight:600;background:#d97706;color:#fff;display:block}
+.steps{display:flex;flex-wrap:wrap;gap:4px;padding:10px 16px;background:#fff;margin-top:8px;font-size:11.5px}
+.steps .st{padding:3px 8px;border-radius:10px;background:#f1f5f9;color:#64748b}
+.steps .st.done{background:#ecfdf5;color:#047857}
+.steps .st.cur{background:#d97706;color:#fff}
+.m-card{background:#fff;margin-top:8px;padding:12px 16px}
+.m-card .mt{font-size:14px;font-weight:600;margin-bottom:8px}
+.agree-scroll{max-height:150px;overflow:auto;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#fafafa;font-size:12.5px;line-height:1.8;color:#334155;white-space:pre-line}
+.agree-check{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px}
+.agree-check input{width:18px;height:18px;accent-color:#d97706}
+.seg{display:flex;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin-bottom:8px}
+.seg label{flex:1;text-align:center;padding:8px 0;font-size:13px;color:#64748b}
+.seg input{display:none}
+.seg label.on{background:#fff7ed;color:#d97706;font-weight:600}
+.m-select{width:100%;padding:9px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;background:#fff;margin-bottom:8px}
+.cand{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px}
+.cand:last-child{border-bottom:none}
+.cand input{width:18px;height:18px;accent-color:#d97706}
+.cand small{display:block;color:#94a3b8;font-size:12px}
+.btn-agree.disabled{background:#e5e7eb;color:#94a3b8;pointer-events:none}
+.hint-line{font-size:12px;color:#94a3b8;text-align:center;margin-bottom:6px}
+.done-card{display:none;background:#ecfdf5;color:#047857;margin:8px 16px;padding:12px;border-radius:8px;font-size:13px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="01-pending-list.html">←</a>
+  <h1>任务详情</h1>
+</div>
+
+<div class="top-info">
+  <div class="flow-title">毓秀楼和声堂的申请审核</div>
+  <div class="flow-meta" id="nodeTag">当前任务：02 活动负责老师审批</div>
+  <div class="flow-admin" id="whoLine"><div class="admin-icon" id="whoIcon">王</div><span id="whoName">王老师</span></div>
+  <div class="flow-stamp">审批中</div>
+</div>
+
+<div class="steps" id="steps"></div>
+
+<div class="form-section">
+  <div class="form-section-title">校园文化活动场地申请表</div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>活动名称</span><span class="form-value">"青春之声"校园歌手大赛决赛</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>活动性质</span><span class="form-value">哲学社科理论类讲座</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>审核截图</span><span class="form-value"><span style="display:inline-block;width:72px;height:44px;border-radius:4px;background:linear-gradient(135deg,#bfdbfe,#3b82f6)"></span></span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>申借场地</span><span class="form-value">毓秀楼和声堂</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>使用时间</span><span class="form-value">2026-05-20 晚上</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>外接设备</span><span class="form-value">是</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>进场承诺书</span><span class="form-value">承诺书（已填写）.docx</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>进场清单</span><span class="form-value">进场清单（已填写）.docx</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>主办单位</span><span class="form-value">党委学生工作部（学生工作处）</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>承办单位</span><span class="form-value">校学生会</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>预估人数</span><span class="form-value">500人（需保卫部审批）</span></div>
+  <div class="form-row"><span class="form-label">拟邀请嘉宾</span><span class="form-value">校党委副书记、各学院团委书记</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>负责老师</span><span class="form-value">王老师 138****5678</span></div>
+  <div class="form-row"><span class="form-label"><span class="form-star">*</span>联络人</span><span class="form-value">李思远 139****1234</span></div>
+  <div class="form-row"><span class="form-label">备注</span><span class="form-value">需提前一天下午彩排</span></div>
+</div>
+
+<div id="actArea">
+<div class="m-card">
+  <div class="mt">安全责任状</div>
+  <div class="agree-scroll">中南大学学生活动中心场地申请安全责任状（待校团委提供修订版后替换）
+为保证活动安全顺利进行，请活动主办方严格遵循以下消防安全事宜：
+一、在场地内开展活动须由申请单位领导签字批准，并按照流程进行审批。
+二、由活动主办方或承办方作为活动安全责任人，并安排至少1名消防安全协管员。
+三、活动举办过程中在工作人员的指导下使用有关设备。
+四、活动期间严格遵守安全管理规定和消防安全责任制，禁止吸烟和使用明火。
+五、严禁私拉乱接，以及在电器设备上堆放杂物和悬挂装饰物品。
+六、在活动期间因不遵守该协议导致的安全事故，一概由活动主办方负责。</div>
+  <label class="agree-check"><input type="checkbox" id="agreeChk"> 我已阅读并同意《安全责任状》</label>
+</div>
+
+<div class="m-card">
+  <div class="mt">指定二级单位审批人 <span style="color:#dc2626">*</span></div>
+  <div class="seg" id="seg">
+    <label class="on"><input type="radio" name="unitType" value="org" checked>机关及直附属</label>
+    <label><input type="radio" name="unitType" value="college">二级学院</label>
+  </div>
+  <select class="m-select" id="unitSel"></select>
+  <div id="candList"></div>
+</div>
+</div>
+
+<div class="done-card" id="doneCard"></div>
+
+<div class="bottom-bar" id="bottomBar">
+  <div class="hint-line" id="hintLine">请先同意安全责任状，并指定二级单位审批人</div>
+  <a class="btn-agree disabled" id="passBtn" href="javascript:;">同意</a>
+</div>
+
+<script>
+(function(){
+  var UNITS={
+    org:[{n:'党委学生工作部（学生工作处）',p:[['陈建国','部长（正处）'],['刘晓梅','副部长（副处）'],['周海涛','副部长（副处）']]},{n:'校团委',p:[['王强','书记（正处）'],['聂天成','副书记（副处）']]}],
+    college:[{n:'文学院',p:[['赵立新','院长'],['孙蕾','副院长'],['钱文','党委书记'],['李卫','党委副书记']]},{n:'计算机学院',p:[['郑平','院长'],['吴越','党委书记'],['冯敏','党委副书记']]}]
+  };
+  var chosen=null,unitSel=document.getElementById('unitSel'),list=document.getElementById('candList'),agree=document.getElementById('agreeChk'),btn=document.getElementById('passBtn');
+  function type(){return document.querySelector('input[name="unitType"]:checked').value;}
+  function units(){unitSel.innerHTML=UNITS[type()].map(function(u,i){return '<option value="'+i+'">'+u.n+(i===0&&type()==='org'?'（主办单位）':'')+'</option>';}).join('');cands();}
+  function cands(){
+    chosen=null;var u=UNITS[type()][+unitSel.value];
+    list.innerHTML=u.p.map(function(p,i){return '<label class="cand"><input type="radio" name="cand" value="'+i+'"><span>'+p[0]+'<small>'+p[1]+'</small></span></label>';}).join('');
+    Array.prototype.forEach.call(list.querySelectorAll('input'),function(inp){inp.onchange=function(){var p=u.p[+inp.value];chosen={name:p[0],title:p[1],unit:u.n};check();};});
+    check();
+  }
+  function check(){
+    var ok=agree.checked&&chosen;
+    btn.classList.toggle('disabled',!ok);
+    document.getElementById('hintLine').textContent=!agree.checked?'请先同意安全责任状':(!chosen?'请指定二级单位审批人':'将流转至：'+chosen.name+'（'+chosen.title+'）');
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#seg label'),function(l){
+    l.onclick=function(e){e.preventDefault();Array.prototype.forEach.call(document.querySelectorAll('#seg label'),function(x){x.classList.remove('on');});l.classList.add('on');l.querySelector('input').checked=true;units();};
+  });
+  unitSel.onchange=cands;agree.onchange=check;
+  function steps(cur){
+    var S=['01 提交','02 负责老师','03 二级单位','04 保卫部','05 场地主管','06 值班知会'];
+    document.getElementById('steps').innerHTML=S.map(function(s,i){return '<span class="st '+(i<cur?'done':(i===cur?'cur':''))+'">'+s+'</span>';}).join('');
+  }
+  var role=new URLSearchParams(location.search).get('role')||'teacher';
+  var ROLE={
+    unit:{who:'钱',name:'钱文 · 文学院党委书记',node:'当前任务：03 二级单位审批',step:2,done:'已通过。<br>已流转至 04 保卫部审批（刘诚）。'},
+    security:{who:'刘',name:'刘诚 · 保卫部',node:'当前任务：04 保卫部审批',step:3,done:'已通过。<br>已流转至 05 场地主管审批（或签）。'},
+    manager:{who:'聂',name:'聂天成 · 场地主管',node:'当前任务：05 场地主管审批（或签）',step:4,done:'已通过，预约生效。<br>已知会值班安排：余扬帆、郑裕凯、李紫晴。'},
+    duty:{who:'余',name:'余扬帆 · 值班安排',node:'知会 · 仅查看',step:5}
+  };
+  btn.onclick=function(){
+    document.getElementById('actArea').style.display='none';
+    document.getElementById('bottomBar').style.display='none';
+    var d=document.getElementById('doneCard');d.style.display='block';
+    if(ROLE[role]){
+      d.innerHTML=ROLE[role].done;
+      document.getElementById('nodeTag').textContent='本节点已通过';
+      steps(ROLE[role].step+1);
+      return;
+    }
+    d.innerHTML='已同意《安全责任状》并通过审批。<br>已流转至 03 二级单位审批：'+chosen.name+'（'+chosen.unit+' · '+chosen.title+'）';
+    document.getElementById('nodeTag').textContent='当前任务：03 二级单位审批';
+    steps(2);
+  };
+  units();
+  if(ROLE[role]){
+    document.getElementById('whoIcon').textContent=ROLE[role].who;
+    document.getElementById('whoName').textContent=ROLE[role].name;
+    document.getElementById('nodeTag').textContent=ROLE[role].node;
+    document.getElementById('actArea').style.display='none';
+    if(role==='duty'){
+      document.getElementById('bottomBar').style.display='none';
+      document.querySelector('.flow-stamp').textContent='已通过';
+    }else{
+      document.getElementById('hintLine').textContent='任一人通过即可（或签）';
+      btn.classList.remove('disabled');
+      btn.textContent='同意';
+    }
+    steps(ROLE[role].step);
+  }else{steps(1);}
+})();
+</script>
+
+</body>
+</html>

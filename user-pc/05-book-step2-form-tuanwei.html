@@ -52,6 +52,33 @@ a{text-decoration:none;color:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 28px;border-radius:8px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
 .btn-primary{background:#4f46e5;color:#fff}
 .btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.picker{position:relative}
+.pk-input{display:flex;align-items:center;flex-wrap:wrap;gap:4px;min-height:38px;padding:4px 30px 4px 8px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;cursor:text;position:relative}
+.pk-input input{flex:1;min-width:120px;border:none!important;padding:4px!important;outline:none;font-size:13.5px}
+.pk-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;color:#94a3b8}
+.pk-chips{display:contents}
+.pk-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:#eef2ff;color:#4338ca;font-size:12.5px}
+.pk-chip small{color:#64748b;font-size:11px}
+.pk-chip b{cursor:pointer;color:#94a3b8;font-weight:400}
+.pk-drop{display:none;position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 8px 24px rgba(15,23,42,.08);max-height:220px;overflow:auto;z-index:20}
+.pk-drop.show{display:block}
+.pk-opt{padding:8px 12px;font-size:13px;cursor:pointer}
+.pk-opt:hover{background:#f8fafc}
+.pk-opt small{margin-left:8px;color:#94a3b8;font-size:11.5px}
+.pk-empty{padding:10px 12px;font-size:12px;color:#94a3b8}
+.shot-box{display:flex;align-items:center;gap:10px}
+.shot-add{padding:12px 16px;border:1px dashed #cbd5e1;border-radius:8px;font-size:13px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px}
+.shot-add span{font-size:18px;color:#4f46e5}
+.shot-add:hover{border-color:#4f46e5}
+.shot-img{width:120px;height:72px;border-radius:6px;background:linear-gradient(135deg,#bfdbfe,#3b82f6)}
+.shot-name{font-size:12.5px;color:#64748b}
+.field input.bad{border-color:#fca5a5;background:#fef2f2}
+.err-box{display:none;padding:10px 14px;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:13px}
+.tpl-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc}
+.tpl-name{font-size:13px;font-weight:500}
+.tpl-dl,.tpl-up{font-size:12.5px;padding:4px 10px;border-radius:6px;border:1px solid #c7d2fe;background:#fff;color:#4f46e5;cursor:pointer;font-family:inherit;text-decoration:none}
+.tpl-up{border-color:#e2e8f0;color:#0f172a}
+.tpl-done{font-size:12px;color:#059669}
 </style>
 </head>
 <body>
@@ -63,7 +90,7 @@ a{text-decoration:none;color:inherit}
 </nav>
 
 <div class="container">
-  <div class="page-title">发起预约 — 新校区毓秀楼和声堂</div>
+  <div class="page-title">发起预约 — 毓秀楼和声堂</div>
   <div class="steps">
     <div class="step done"><div class="snum">✓</div><br>选择场地<div class="step-line"></div></div>
     <div class="step active"><div class="snum">2</div><br>填写信息<div class="step-line"></div></div>
@@ -80,35 +107,56 @@ a{text-decoration:none;color:inherit}
       </div>
       <div class="field full">
         <label>活动性质<span class="req">*</span></label>
-        <div class="radio-inline">
-          <label class="checked"><input type="radio" name="nature" checked> 文艺演出或晚会</label>
-          <label><input type="radio" name="nature"> 会议</label>
-          <label><input type="radio" name="nature"> 交流分享会</label>
-          <label><input type="radio" name="nature"> 竞赛</label>
-          <label><input type="radio" name="nature"> 其他</label>
+        <div class="radio-inline" id="natureGroup">
+          <label class="checked"><input type="radio" name="nature" value="文艺演出或晚会" checked> 文艺演出或晚会</label>
+          <label><input type="radio" name="nature" value="会议"> 会议</label>
+          <label><input type="radio" name="nature" value="竞赛"> 竞赛</label>
+          <label><input type="radio" name="nature" value="哲学社科理论类讲座"> 哲学社科理论类讲座</label>
+          <label><input type="radio" name="nature" value="其他"> 其他</label>
+        </div>
+      </div>
+      <div class="field full" id="shotField" style="display:none">
+        <label>审核通过界面截图<span class="req">*</span></label>
+        <div class="shot-box">
+          <div class="shot-add" id="shotAdd"><span>+</span>上传「哲学社科理论类论坛申请」审核通过界面截图</div>
+        </div>
+        <div class="hint">选择「哲学社科理论类讲座」时必填，支持 JPG/PNG</div>
+      </div>
+      <div class="field full">
+        <label>是否需要外接设备<span class="req">*</span></label>
+        <div class="radio-inline" id="extGroup">
+          <label><input type="radio" name="ext" value="是"> 是</label>
+          <label class="checked"><input type="radio" name="ext" value="否" checked> 否</label>
+        </div>
+      </div>
+      <div class="field full" id="extFiles" style="display:none">
+        <label>外接设备附件<span class="req">*</span></label>
+        <div class="hint">请先下载模板，按实际情况修改后再上传，两份都要上传。</div>
+        <div class="tpl-row" data-file="承诺书">
+          <div class="tpl-name">附件1 租赁设备进场安全管理承诺书.docx</div>
+          <a class="tpl-dl" href="../templates/附件1 租赁设备进场安全管理承诺书.docx" download>下载模板</a>
+          <button type="button" class="tpl-up">上传</button>
+          <span class="tpl-done"></span>
+        </div>
+        <div class="tpl-row" data-file="清单">
+          <div class="tpl-name">附件2 租赁设备进场清单.docx</div>
+          <a class="tpl-dl" href="../templates/附件2 租赁设备进场清单.docx" download>下载模板</a>
+          <button type="button" class="tpl-up">上传</button>
+          <span class="tpl-done"></span>
         </div>
       </div>
       <div class="field">
         <label>主办单位<span class="req">*</span></label>
-        <input type="text" value="校团委">
+        <div class="picker" data-picker="dept" data-init="党委学生工作部（学生工作处）"></div>
       </div>
       <div class="field">
         <label>承办单位<span class="req">*</span></label>
-        <input type="text" value="校学生会文艺部">
+        <div class="picker" data-picker="dept" data-init="校学生会"></div>
       </div>
       <div class="field">
         <label>预估人数<span class="req">*</span></label>
-        <input type="number" value="600">
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>参与人员信息</h3>
-    <div class="form-grid">
-      <div class="field full">
-        <label>校外参加人员</label>
-        <textarea placeholder="如有校外人员参加请说明人员单位及人数">特邀评委：湖南卫视音乐总监李某 1人</textarea>
+        <input type="number" id="headcount" value="600">
+        <div class="hint" id="capHint">本场地容纳人数 512 人</div>
       </div>
       <div class="field full">
         <label>拟邀请嘉宾</label>
@@ -118,71 +166,129 @@ a{text-decoration:none;color:inherit}
   </div>
 
   <div class="section">
-    <h3>拟使用设备</h3>
-    <div class="equip-section">
-      <div class="equip-grid">
-        <div class="equip-item checked">
-          <input type="checkbox" checked> 照明灯
-        </div>
-        <div class="equip-item checked">
-          <input type="checkbox" checked> 舞台灯
-        </div>
-        <div class="equip-item checked">
-          <input type="checkbox" checked> 音响
-        </div>
-        <div class="equip-item checked">
-          <input type="checkbox" checked> 话筒
-          <input class="qty-input" type="number" value="4" min="1">
-        </div>
-        <div class="equip-item checked">
-          <input type="checkbox" checked> 耳麦
-          <input class="qty-input" type="number" value="2" min="1">
-        </div>
-        <div class="equip-item checked">
-          <input type="checkbox" checked> LED屏
-        </div>
-        <div class="equip-item">
-          <input type="checkbox"> 投影仪
-        </div>
-        <div class="equip-item">
-          <input type="checkbox"> 钢琴
-        </div>
-        <div class="equip-item">
-          <input type="checkbox"> 外租设备
-        </div>
-      </div>
-      <div class="equip-hint">勾选所需设备，部分设备需填写使用数量</div>
-    </div>
-  </div>
-
-  <div class="section">
     <h3>负责人信息</h3>
     <div class="form-grid">
       <div class="field">
         <label>活动负责老师<span class="req">*</span></label>
-        <input type="text" value="王老师">
-        <div class="hint">活动当天现场负责人</div>
+        <div class="picker" data-picker="user" data-phone="teacherPhone" placeholder="点击搜索用户"></div>
+        <div class="hint">活动当天现场负责人；同时为审批第一步的审批人</div>
       </div>
       <div class="field">
-        <label>负责老师联系方式<span class="req">*</span></label>
-        <input type="tel" value="138****5678">
+        <label>负责老师联系电话<span class="req">*</span></label>
+        <input type="tel" id="teacherPhone" placeholder="请输入活动负责老师联系电话">
       </div>
       <div class="field">
-        <label>活动学生负责人（消防协管）<span class="req">*</span></label>
-        <input type="text" value="张三">
+        <label>联络人<span class="req">*</span></label>
+        <div class="picker" data-picker="user" data-phone="contactPhone" data-init-user="张三"></div>
       </div>
       <div class="field">
-        <label>学生负责人联系方式<span class="req">*</span></label>
-        <input type="tel" value="159****1234">
+        <label>联络人联系电话<span class="req">*</span></label>
+        <input type="tel" id="contactPhone" value="159****1234">
+      </div>
+      <div class="field full">
+        <label>备注信息</label>
+        <textarea placeholder="请输入备注信息"></textarea>
       </div>
     </div>
   </div>
 
+  <div class="err-box" id="errBox"></div>
+
   <div class="btn-row">
     <a class="btn btn-secondary" href="03-book-step1-select.html">← 上一步</a>
-    <a class="btn btn-primary" href="07-book-step3-slot-hour.html">下一步：选择时段 →</a>
+    <a class="btn btn-primary" id="nextBtn" href="07-book-step3-slot-halfday.html">下一步：选择时段 →</a>
   </div>
 </div>
+
+<script>
+(function(){
+  var CAP=512;
+  var DEPTS=['党委学生工作部（学生工作处）','校团委','党委宣传部','保卫部','校学生会','校研究生会','文学院','计算机学院','商学院','法学院','马克思主义学院','机电工程学院'];
+  var USERS=[['王老师','T20080112','校团委','138****5678'],['王强','T20050021','校团委','137****0021'],['陈建国','T20010007','学生工作部','139****0007'],['刘晓梅','T20090033','学生工作部','135****0033'],['张三','S20230101','计算机学院','159****1234'],['李思远','S20230211','文学院','139****1234']];
+
+  // 单选样式
+  Array.prototype.forEach.call(document.querySelectorAll('.radio-inline'),function(g){
+    g.addEventListener('change',function(){
+      Array.prototype.forEach.call(g.querySelectorAll('label'),function(l){l.classList.toggle('checked',l.querySelector('input').checked);});
+      syncShot();syncExt();
+    });
+  });
+  function nature(){return document.querySelector('input[name="nature"]:checked').value;}
+  function syncShot(){document.getElementById('shotField').style.display=nature()==='哲学社科理论类讲座'?'':'none';}
+  function extYes(){var el=document.querySelector('input[name="ext"]:checked');return el&&el.value==='是';}
+  function syncExt(){document.getElementById('extFiles').style.display=extYes()?'':'none';}
+  var extDone={};
+  Array.prototype.forEach.call(document.querySelectorAll('.tpl-up'),function(btn){
+    btn.addEventListener('click',function(){
+      var row=btn.closest('.tpl-row');
+      extDone[row.dataset.file]=true;
+      row.querySelector('.tpl-done').textContent='已上传：附件'+row.dataset.file+'（已填写）.docx';
+      btn.textContent='重新上传';
+    });
+  });
+  var shotDone=false;
+  document.getElementById('shotAdd').addEventListener('click',function(){
+    shotDone=true;this.outerHTML='<div class="shot-img"></div><span class="shot-name">审核通过截图.png</span>';
+  });
+
+  // 部门选择 / 人员搜索
+  Array.prototype.forEach.call(document.querySelectorAll('.picker'),function(box){
+    var isUser=box.dataset.picker==='user',values=[];
+    box.innerHTML='<div class="pk-input"><span class="pk-chips"></span><input type="text" placeholder="'+(isUser?'点击搜索用户（姓名/工号）':'搜索并选择部门，可多选')+'"><span class="pk-icon">'+(isUser?'🔍':'▾')+'</span></div><div class="pk-drop"></div>';
+    var input=box.querySelector('input'),drop=box.querySelector('.pk-drop'),chips=box.querySelector('.pk-chips');
+    function render(){
+      chips.innerHTML=values.map(function(v,i){return '<span class="pk-chip">'+(isUser?v[0]+' <small>'+v[2]+'</small>':v)+'<b data-i="'+i+'">×</b></span>';}).join('');
+      Array.prototype.forEach.call(chips.querySelectorAll('b'),function(b){b.onclick=function(e){e.stopPropagation();values.splice(+b.dataset.i,1);render();};});
+      input.style.display=isUser&&values.length?'none':'';
+    }
+    function list(){
+      var q=input.value.trim();
+      var src=isUser?USERS.filter(function(u){return !q||u[0].indexOf(q)>-1||u[1].indexOf(q)>-1;}):DEPTS.filter(function(d){return (!q||d.indexOf(q)>-1)&&values.indexOf(d)<0;});
+      drop.innerHTML=src.length?src.map(function(x,i){return '<div class="pk-opt" data-i="'+i+'">'+(isUser?x[0]+'<small>'+x[1]+' · '+x[2]+'</small>':x)+'</div>';}).join(''):'<div class="pk-empty">无匹配结果</div>';
+      Array.prototype.forEach.call(drop.querySelectorAll('.pk-opt'),function(o){
+        o.onmousedown=function(e){
+          e.preventDefault();var x=src[+o.dataset.i];
+          if(isUser){values=[x];var ph=document.getElementById(box.dataset.phone);if(ph){ph.value=x[3];}drop.classList.remove('show');}
+          else{values.push(x);}
+          input.value='';render();if(!isUser){list();}
+        };
+      });
+      drop.classList.add('show');
+    }
+    input.addEventListener('focus',list);input.addEventListener('input',list);
+    input.addEventListener('blur',function(){drop.classList.remove('show');});
+    box.querySelector('.pk-input').addEventListener('click',function(){if(input.style.display==='none'){values=[];render();}input.focus();});
+    if(box.dataset.init){values=[box.dataset.init];}
+    if(box.dataset.initUser){values=USERS.filter(function(u){return u[0]===box.dataset.initUser;});}
+    box._values=function(){return values;};
+    render();
+  });
+
+  // 预估人数校验
+  var hc=document.getElementById('headcount'),capHint=document.getElementById('capHint');
+  function checkCap(){
+    var over=+hc.value>CAP;
+    hc.classList.toggle('bad',over);
+    capHint.textContent=over?'超过场地容纳人数（'+CAP+'人），请调整预估人数或更换场地':'本场地容纳人数 '+CAP+' 人'+(+hc.value>=500?'；预估人数 ≥500 人将增加保卫部审批':'');
+    capHint.style.color=over?'#dc2626':'';
+    return !over;
+  }
+  hc.addEventListener('input',checkCap);checkCap();
+
+  document.getElementById('nextBtn').addEventListener('click',function(e){
+    var errs=[];
+    if(!checkCap()){errs.push('预估人数超过场地容纳人数（'+CAP+'人）');}
+    if(nature()==='哲学社科理论类讲座'&&!shotDone){errs.push('请上传审核通过界面截图');}
+    if(extYes()&&(!extDone['承诺书']||!extDone['清单'])){errs.push('请下载模板修改后，上传两份外接设备附件');}
+    var pk=document.querySelectorAll('.picker');
+    if(!pk[2]._values().length){errs.push('请选择活动负责老师');}
+    if(!document.getElementById('teacherPhone').value){errs.push('请填写活动负责老师联系电话');}
+    var box=document.getElementById('errBox');
+    if(errs.length){e.preventDefault();box.innerHTML='请先完善：'+errs.join('；');box.style.display='block';window.scrollTo(0,document.body.scrollHeight);}
+    else{box.style.display='none';}
+  });
+})();
+</script>
 
 </body>
 </html>

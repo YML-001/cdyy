@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>调整预约时段 - 206会议室 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:20px 16px;font-size:15px;font-weight:700;border-bottom:1px solid #e2e8f0}
+.sidebar-logo .logo-icon{width:32px;height:32px;background:#4f46e5;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700}
+.sidebar-nav{flex:1;padding:8px 0}
+.sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#64748b;text-decoration:none}
+.sidebar-nav a:hover{color:#0f172a;background:#f8fafc}
+.sidebar-nav a.active{color:#4f46e5;background:#eef2ff;font-weight:600}
+.sidebar-nav a .icon{font-size:16px;width:22px;text-align:center}
+.sidebar-bottom{padding:16px;border-top:1px solid #e2e8f0}
+.sidebar-bottom a{font-size:13px;color:#64748b;text-decoration:none}
+.main{margin-left:220px;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.breadcrumb{font-size:13px;color:#64748b}
+.breadcrumb a{color:#4f46e5}
+.breadcrumb b{color:#0f172a;font-weight:600}
+.content{padding:24px 32px 48px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit;background:#fff}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-primary:hover{background:#4338ca}
+.btn-secondary{color:#0f172a;border-color:#e2e8f0}
+.btn-warn{background:#fffbeb;color:#92400e;border-color:#fde68a}
+.btn-ghost{background:#fff;color:#059669;border-color:#a7f3d0}
+.layout{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px 22px;margin-bottom:16px}
+.card h3{font-size:15px;font-weight:600;margin-bottom:6px}
+.desc{font-size:12.5px;color:#64748b;line-height:1.6;margin-bottom:14px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:12px;padding:3px 10px;border-radius:6px;background:#f1f5f9;color:#475569}
+.chip.on{background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe}
+.week{display:flex;gap:8px;margin-bottom:16px}
+.day{flex:1;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;background:#fff}
+.day:hover{border-color:#c7d2fe}
+.day.active{background:#4f46e5;border-color:#4f46e5;color:#fff}
+.day .dw{font-size:11px;color:#94a3b8}
+.day .dd{font-size:16px;font-weight:700;margin:2px 0}
+.day .dn{font-size:10px;color:#d97706}
+.day.active .dw,.day.active .dn{color:rgba(255,255,255,.75)}
+.group-label{font-size:13px;font-weight:600;color:#334155;margin:14px 0 8px}
+.group-label span{font-weight:400;color:#94a3b8;font-size:12px;margin-left:6px}
+.closed-band{margin:10px 0;padding:8px 12px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#94a3b8;font-size:12px;text-align:center}
+.slot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.slot{border:1px solid #e2e8f0;border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;background:#fff;font-size:13px;font-weight:600}
+.slot .ss{display:block;margin-top:3px;font-size:11px;font-weight:400;color:#94a3b8}
+.slot:hover{border-color:#4f46e5}
+.slot.picked{outline:2px solid #4f46e5;outline-offset:1px}
+.slot.booked{background:#fef2f2;border-color:#fecaca}
+.slot.booked .ss{color:#f87171}
+.slot.closed{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.slot.closed .ss{color:#b45309}
+.legend{display:flex;gap:14px;margin-top:12px;font-size:12px;color:#64748b;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;border:1px solid #e2e8f0;margin-right:4px;vertical-align:-1px}
+.legend i.b{background:#fef2f2;border-color:#fecaca}
+.legend i.c{background:#fffbeb;border-color:#fde68a}
+.panel{border:1px solid #e2e8f0;border-radius:8px;padding:14px;background:#f8fafc;margin-top:14px}
+.panel .pt{font-size:13px;font-weight:600;margin-bottom:8px}
+.panel label{font-size:12px;color:#64748b;display:block;margin:8px 0 4px}
+.panel select,.panel input{width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;background:#fff}
+.warn{margin-top:8px;padding:8px 10px;border-radius:6px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12px;line-height:1.6}
+.panel-actions{display:flex;gap:8px;margin-top:12px}
+.batch-grid{display:grid;grid-template-columns:140px 140px 1fr;gap:12px;align-items:end}
+.field label{font-size:12px;font-weight:500;display:block;margin-bottom:4px}
+.field input,.field select{width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:flex;align-items:center;gap:4px;font-size:12px;padding:4px 8px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;cursor:pointer}
+.checks input{accent-color:#4f46e5}
+.side h3{font-size:14px}
+.close-item{border:1px solid #fde68a;background:#fffef5;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.close-item .ci-t{font-size:13px;font-weight:600;color:#92400e}
+.close-item .ci-d{font-size:12px;color:#a16207;margin-top:2px;line-height:1.5}
+.close-item button{margin-top:6px;border:none;background:none;color:#4f46e5;font-size:12px;cursor:pointer;font-family:inherit;padding:0}
+.empty{font-size:12.5px;color:#94a3b8;padding:12px 0}
+.rule-preview{margin-top:12px;font-size:12.5px;color:#475569;background:#f8fafc;border:1px dashed #e2e8f0;border-radius:8px;padding:8px 12px}
+.side-sub{font-size:12px;font-weight:600;color:#64748b;margin:12px 0 6px}
+.close-item.rule{border-color:#c7d2fe;background:#f8faff}
+.close-item.rule .ci-t{color:#3730a3}
+.close-item.rule .ci-d{color:#4f46e5}
+.close-item button + button{margin-left:12px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:13px;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:200}
+.toast.show{opacity:.94}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo"><span class="logo-icon">学</span> 智慧学工 · 后台</div>
+  <nav class="sidebar-nav">
+    <a href="01-dashboard.html"><span class="icon">📊</span> 数据概览</a>
+    <a href="02-venue-list.html" class="active"><span class="icon">📍</span> 场地管理</a>
+    <a href="17-form-template-list.html"><span class="icon">📋</span> 表单模板</a>
+    <a href="20-booking-list.html"><span class="icon">📅</span> 预约记录</a>
+  </nav>
+  <div class="sidebar-bottom"><a href="../index.html">← 返回首页</a></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="breadcrumb"><a href="02-venue-list.html">场地管理</a> &gt; <b>调整预约时段 · 206会议室</b></div>
+    <a class="btn btn-secondary" href="02-venue-list.html">返回列表</a>
+  </div>
+  <div class="content">
+    <div class="layout">
+      <div>
+        <div class="card">
+          <h3>临时关闭时段</h3>
+          <div class="desc">场地按时段策略配置完成后，可在不改开放规则的前提下，临时关闭某些日期的某些时段。关闭后师生端不可再选；恢复开放后立即重新可约。这与「暂时闭馆」（整馆停用）不同。</div>
+          <div class="meta">
+            <span class="chip on">206会议室</span>
+            <span class="chip">整点制 · 1小时</span>
+            <span class="chip">开放 8:00-12:00 / 14:00-18:00</span>
+            <span class="chip">点击时段即可关闭或恢复</span>
+          </div>
+          <div class="week" id="week"></div>
+          <div id="grid"></div>
+          <div class="legend">
+            <span><i></i>可预约</span>
+            <span><i class="b"></i>已有预约</span>
+            <span><i class="c"></i>临时关闭</span>
+          </div>
+          <div class="panel" id="panel">
+            <div class="pt" id="panelTitle">请点击上方时段</div>
+            <div class="desc" id="panelDesc" style="margin:0">选中后可设置关闭原因，或把已关闭的时段恢复开放。</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>按周期批量关闭</h3>
+          <div class="desc">在一段日期内，按每周固定的星期几关闭指定时段，例如「本学期每周三下午内部例会」。保存为一条规则，到期自动失效。</div>
+          <div class="batch-grid">
+            <div class="field"><label>开始日期</label><input type="date" id="rangeStart" value="2026-04-13"></div>
+            <div class="field"><label>结束日期</label><input type="date" id="rangeEnd" value="2026-06-30"></div>
+            <div class="field">
+              <label>关闭原因</label>
+              <select id="rangeReason">
+                <option>设备维护</option>
+                <option>内部占用</option>
+                <option>临时活动</option>
+                <option>场地整理</option>
+                <option>其他</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <div class="field"><label>重复方式</label></div>
+            <div class="checks">
+              <label><input type="radio" name="repeat" value="daily"> 每天</label>
+              <label><input type="radio" name="repeat" value="weekly" checked> 每周指定星期</label>
+            </div>
+          </div>
+          <div style="margin-top:10px" id="weekdayBox">
+            <div class="field"><label>选择星期（可多选）</label></div>
+            <div class="checks" id="weekdayChecks"></div>
+          </div>
+          <div style="margin-top:12px">
+            <div class="field"><label>选择要关闭的时段（可多选）</label></div>
+            <div class="checks" id="rangeChecks"></div>
+          </div>
+          <div class="rule-preview" id="rulePreview"></div>
+          <div class="panel-actions">
+            <button type="button" class="btn btn-warn" id="batchBtn">添加关闭规则</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card side">
+          <h3>当前临时关闭</h3>
+          <div class="desc" id="sideCount" style="margin-bottom:10px"></div>
+          <div id="sideList"></div>
+          <button type="button" class="btn btn-primary" id="saveBtn" style="width:100%;margin-top:8px">保存调整</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var SLOTS=[
+    {t:'08:00-09:00',g:'am'},{t:'09:00-10:00',g:'am'},{t:'10:00-11:00',g:'am'},{t:'11:00-12:00',g:'am'},
+    {t:'14:00-15:00',g:'pm'},{t:'15:00-16:00',g:'pm'},{t:'16:00-17:00',g:'pm'},{t:'17:00-18:00',g:'pm'}
+  ];
+  var WEEKDAYS=['周日','周一','周二','周三','周四','周五','周六'];
+  var WEEK_ORDER=[1,2,3,4,5,6,0];
+  var REASONS=['设备维护','内部占用','临时活动','场地整理','其他'];
+
+  // 单日关闭：key = 日期|时段
+  var closures={
+    '2026-04-15|15:00-16:00':{reason:'设备维护',notify:false}
+  };
+  // 周期规则：日期范围内，按星期重复关闭指定时段；except 为单独恢复的「日期|时段」
+  var rules=[
+    {id:1,start:'2026-04-01',end:'2026-06-30',weekdays:[5],slots:['08:00-09:00','09:00-10:00'],reason:'内部占用',except:[]}
+  ];
+  var nextRuleId=2;
+  var booked={
+    '2026-04-15|10:00-11:00':'张三 · 待审批',
+    '2026-04-15|16:00-17:00':'李思远 · 已通过',
+    '2026-04-16|14:00-15:00':'王老师 · 待审批'
+  };
+
+  function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function parse(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+  function fmt(s){var d=parse(s);return (d.getMonth()+1)+'月'+d.getDate()+'日（'+WEEKDAYS[d.getDay()]+'）';}
+  function fmtShort(s){var d=parse(s);return (d.getMonth()+1)+'月'+d.getDate()+'日';}
+  function key(date,slot){return date+'|'+slot;}
+
+  var days=[];
+  for(var i=0;i<7;i++){var d=new Date(2026,3,13+i);days.push({iso:iso(d),w:WEEKDAYS[d.getDay()],n:d.getDate()});}
+  var current='2026-04-15';
+  var picked=null;
+
+  var weekEl=document.getElementById('week');
+  var gridEl=document.getElementById('grid');
+  var panel=document.getElementById('panel');
+  var toastEl=document.getElementById('toast');
+
+  function toast(msg){
+    toastEl.textContent=msg;toastEl.classList.add('show');
+    clearTimeout(toast._t);toast._t=setTimeout(function(){toastEl.classList.remove('show');},2200);
+  }
+  function ruleHits(rule,date,slot){
+    if(date<rule.start||date>rule.end){return false;}
+    if(rule.slots.indexOf(slot)<0||rule.except.indexOf(key(date,slot))>-1){return false;}
+    return rule.weekdays.indexOf(parse(date).getDay())>-1;
+  }
+  // 返回该时段的关闭来源：单日关闭优先，其次周期规则
+  function closedBy(date,slot){
+    var c=closures[key(date,slot)];
+    if(c){return {type:'single',reason:c.reason,notify:c.notify};}
+    for(var i=0;i<rules.length;i++){
+      if(ruleHits(rules[i],date,slot)){return {type:'rule',reason:rules[i].reason,rule:rules[i]};}
+    }
+    return null;
+  }
+  function countOn(date){return SLOTS.filter(function(s){return closedBy(date,s.t);}).length;}
+  function weekdayText(ws){
+    if(ws.length===7){return '每天';}
+    return '每'+WEEK_ORDER.filter(function(w){return ws.indexOf(w)>-1;}).map(function(w){return WEEKDAYS[w];}).join('、');
+  }
+  function ruleText(r){return fmtShort(r.start)+' – '+fmtShort(r.end)+'　'+weekdayText(r.weekdays);}
+
+  function renderWeek(){
+    weekEl.innerHTML=days.map(function(d){
+      var n=countOn(d.iso);
+      return '<div class="day'+(d.iso===current?' active':'')+'" data-date="'+d.iso+'">'+
+        '<div class="dw">'+d.w+'</div><div class="dd">'+d.n+'</div><div class="dn">'+(n?n+'个关闭':'')+'</div></div>';
+    }).join('');
+    Array.prototype.forEach.call(weekEl.querySelectorAll('.day'),function(el){
+      el.addEventListener('click',function(){current=el.dataset.date;picked=null;render();});
+    });
+  }
+
+  function slotHtml(s){
+    var c=closedBy(current,s.t),b=booked[key(current,s.t)];
+    var cls='slot'+(c?' closed':(b?' booked':''))+(picked===s.t?' picked':'');
+    var sub=c?((c.type==='rule'?'周期关闭 · ':'已关闭 · ')+c.reason):(b?'已有预约':'点击关闭');
+    return '<div class="'+cls+'" data-slot="'+s.t+'"><div>'+s.t+'</div><span class="ss">'+sub+'</span></div>';
+  }
+
+  function renderGrid(){
+    var am=SLOTS.filter(function(s){return s.g==='am';}),pm=SLOTS.filter(function(s){return s.g==='pm';});
+    gridEl.innerHTML=
+      '<div class="group-label">上午开放<span>08:00 – 12:00</span></div><div class="slot-grid">'+am.map(slotHtml).join('')+'</div>'+
+      '<div class="closed-band">12:00 – 14:00 为常规不开放时段，不在此处调整</div>'+
+      '<div class="group-label">下午开放<span>14:00 – 18:00</span></div><div class="slot-grid">'+pm.map(slotHtml).join('')+'</div>';
+    Array.prototype.forEach.call(gridEl.querySelectorAll('.slot'),function(el){
+      el.addEventListener('click',function(){picked=el.dataset.slot;renderGrid();renderPanel();});
+    });
+  }
+
+  function renderPanel(){
+    if(!picked){
+      panel.innerHTML='<div class="pt">请点击上方时段</div><div class="desc" style="margin:0">选中后可设置关闭原因，或把已关闭的时段恢复开放。</div>';
+      return;
+    }
+    var k=key(current,picked),c=closedBy(current,picked),b=booked[k];
+    var title=fmt(current)+'　'+picked;
+    if(c&&c.type==='rule'){
+      panel.innerHTML='<div class="pt">'+title+'</div>'+
+        '<div class="desc" style="margin:0 0 8px">该时段由周期规则关闭：'+ruleText(c.rule)+'（'+c.reason+'）。</div>'+
+        '<div class="panel-actions"><button type="button" class="btn btn-ghost" id="exceptBtn">仅恢复本日该时段</button>'+
+        '<button type="button" class="btn btn-secondary" id="delRuleBtn">删除整条规则</button></div>';
+      document.getElementById('exceptBtn').onclick=function(){c.rule.except.push(key(current,picked));toast('已恢复 '+fmt(current)+' '+picked+'，规则其余日期不变');render();};
+      document.getElementById('delRuleBtn').onclick=function(){rules=rules.filter(function(r){return r!==c.rule;});toast('已删除该周期规则');render();};
+      return;
+    }
+    if(c){
+      panel.innerHTML='<div class="pt">'+title+'</div>'+
+        '<div class="desc" style="margin:0 0 8px">当前已临时关闭，原因：'+c.reason+'。恢复后师生可重新预约。</div>'+
+        (b?'<div class="warn">该时段原有预约：'+b+'。恢复开放不会自动恢复已取消的申请。</div>':'')+
+        '<div class="panel-actions"><button type="button" class="btn btn-ghost" id="reopenBtn">恢复开放</button></div>';
+      document.getElementById('reopenBtn').onclick=function(){delete closures[k];toast('已恢复 '+fmt(current)+' '+picked);render();};
+      return;
+    }
+    var opts=REASONS.map(function(r){return '<option>'+r+'</option>';}).join('');
+    panel.innerHTML='<div class="pt">关闭 '+title+'</div>'+
+      '<label>关闭原因</label><select id="reasonSel">'+opts+'</select>'+
+      (b?'<div class="warn">该时段已有预约：'+b+'。关闭后新申请不可选。请选择如何处理已有预约。</div>'+
+        '<label>已有预约</label><select id="bookedSel"><option value="notify">关闭并通知申请人取消</option><option value="keep">仅禁止新预约，已有预约保留</option></select>':'')+
+      '<div class="panel-actions"><button type="button" class="btn btn-warn" id="closeBtn">确认关闭</button></div>';
+    document.getElementById('closeBtn').onclick=function(){
+      var notify=!!b&&document.getElementById('bookedSel').value==='notify';
+      closures[k]={reason:document.getElementById('reasonSel').value,notify:notify};
+      toast(notify?'已关闭，并会通知申请人取消该预约':'已临时关闭 '+picked);
+      render();
+    };
+  }
+
+  function renderSide(){
+    var keys=Object.keys(closures).sort();
+    var total=rules.length+keys.length;
+    document.getElementById('sideCount').textContent=total?('周期规则 '+rules.length+' 条，单日关闭 '+keys.length+' 个时段'):'暂无临时关闭的时段';
+    var box=document.getElementById('sideList');
+    if(!total){box.innerHTML='<div class="empty">关闭的时段会列在这里，可逐条恢复。</div>';return;}
+    var html='';
+    if(rules.length){
+      html+='<div class="side-sub">周期规则</div>'+rules.map(function(r){
+        var ex=r.except.length?('<br>例外恢复：'+r.except.map(function(k){var p=k.split('|');return fmtShort(p[0])+' '+p[1];}).join('、')):'';
+        return '<div class="close-item rule"><div class="ci-t">'+ruleText(r)+'</div>'+
+          '<div class="ci-d">'+r.slots.join('、')+' · '+r.reason+ex+'</div>'+
+          '<button type="button" data-rule="'+r.id+'">删除规则</button></div>';
+      }).join('');
+    }
+    if(keys.length){
+      html+='<div class="side-sub">单日关闭</div>'+keys.map(function(k){
+        var p=k.split('|'),c=closures[k];
+        var extra=booked[k]?(c.notify?' · 已有预约将通知取消':' · 已有预约保留'):'';
+        return '<div class="close-item"><div class="ci-t">'+fmt(p[0])+' '+p[1]+'</div>'+
+          '<div class="ci-d">'+c.reason+extra+'</div><button type="button" data-k="'+k+'">恢复开放</button></div>';
+      }).join('');
+    }
+    box.innerHTML=html;
+    Array.prototype.forEach.call(box.querySelectorAll('button[data-k]'),function(btn){
+      btn.addEventListener('click',function(){delete closures[btn.dataset.k];toast('已恢复开放');render();});
+    });
+    Array.prototype.forEach.call(box.querySelectorAll('button[data-rule]'),function(btn){
+      btn.addEventListener('click',function(){
+        var id=+btn.dataset.rule;
+        rules=rules.filter(function(r){return r.id!==id;});
+        toast('已删除该周期规则');render();
+      });
+    });
+  }
+
+  function render(){renderWeek();renderGrid();renderPanel();renderSide();}
+
+  // ===== 按周期批量关闭 =====
+  document.getElementById('rangeChecks').innerHTML=SLOTS.map(function(s){
+    return '<label><input type="checkbox" value="'+s.t+'">'+s.t+'</label>';
+  }).join('');
+  document.getElementById('weekdayChecks').innerHTML=WEEK_ORDER.map(function(w){
+    return '<label><input type="checkbox" value="'+w+'"'+(w===3?' checked':'')+'>'+WEEKDAYS[w]+'</label>';
+  }).join('');
+  document.querySelector('#rangeChecks input[value="14:00-15:00"]').checked=true;
+  document.querySelector('#rangeChecks input[value="15:00-16:00"]').checked=true;
+
+  function readBatch(){
+    var repeat=document.querySelector('input[name="repeat"]:checked').value;
+    var weekdays=repeat==='daily'?[0,1,2,3,4,5,6]:Array.prototype.map.call(document.querySelectorAll('#weekdayChecks input:checked'),function(i){return +i.value;});
+    return {
+      start:document.getElementById('rangeStart').value,
+      end:document.getElementById('rangeEnd').value,
+      reason:document.getElementById('rangeReason').value,
+      repeat:repeat,
+      weekdays:weekdays,
+      slots:Array.prototype.map.call(document.querySelectorAll('#rangeChecks input:checked'),function(i){return i.value;})
+    };
+  }
+  function countDays(start,end,weekdays){
+    var n=0,d=parse(start),last=parse(end);
+    while(d<=last){if(weekdays.indexOf(d.getDay())>-1){n++;}d.setDate(d.getDate()+1);}
+    return n;
+  }
+  function updatePreview(){
+    var r=readBatch(),el=document.getElementById('rulePreview');
+    document.getElementById('weekdayBox').style.display=r.repeat==='weekly'?'':'none';
+    if(!r.start||!r.end||r.end<r.start){el.textContent='请选择有效的日期范围';return;}
+    if(!r.weekdays.length){el.textContent='请至少选择一个星期';return;}
+    if(!r.slots.length){el.textContent='请至少选择一个时段';return;}
+    var n=countDays(r.start,r.end,r.weekdays);
+    el.textContent='将在 '+fmtShort(r.start)+' – '+fmtShort(r.end)+' '+weekdayText(r.weekdays)+'，关闭 '+r.slots.join('、')+'，共涉及 '+n+' 天 × '+r.slots.length+' 个时段。';
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#rangeStart,#rangeEnd,#rangeReason,input[name="repeat"],#weekdayChecks input,#rangeChecks input'),function(el){
+    el.addEventListener('change',updatePreview);
+  });
+
+  document.getElementById('batchBtn').addEventListener('click',function(){
+    var r=readBatch();
+    if(!r.start||!r.end||r.end<r.start){toast('请选择有效的日期范围');return;}
+    if(!r.weekdays.length){toast('请至少选择一个星期');return;}
+    if(!r.slots.length){toast('请至少选择一个时段');return;}
+    var n=countDays(r.start,r.end,r.weekdays);
+    if(!n){toast('所选日期范围内没有符合的星期');return;}
+    rules.push({id:nextRuleId++,start:r.start,end:r.end,weekdays:r.weekdays,slots:r.slots,reason:r.reason,except:[]});
+    toast('已添加规则：'+weekdayText(r.weekdays)+'，共 '+n+' 天生效');
+    render();
+  });
+
+  document.getElementById('saveBtn').addEventListener('click',function(){
+    toast('已保存。周期规则 '+rules.length+' 条、单日关闭 '+Object.keys(closures).length+' 个时段，预约端对应时段不可选');
+  });
+
+  updatePreview();
+  render();
+})();
+</script>
+</body>
+</html>

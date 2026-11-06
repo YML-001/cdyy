@@ -94,5 +94,17 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<script>
+(function(){
+  if(new URLSearchParams(location.search).get('type')!=='tuanwei'){return;}
+  var V={'所属科室':'校团委','场地类型':'校团委活动场地','时段策略':'半天制（上午/下午/晚上）','表单模板':'校园文化活动场地申请表（11个字段）',
+    '审批对象':'表单字段 / 上级指定 / 角色','审批人管理权限':'场地主管自动获得','审批流程':'负责老师 → 二级单位 → 保卫部（≥500人）→ 场地主管 → 值班知会'};
+  Array.prototype.forEach.call(document.querySelectorAll('.summary-cell.label'),function(l){
+    var v=V[l.textContent.trim()];if(!v){return;}
+    var t=l.nextElementSibling;if(t){t.textContent=v;}
+  });
+})();
+</script>
+<script src="tuanwei-flow.js"></script>
 </body>
 </html>

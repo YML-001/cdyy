@@ -36,6 +36,9 @@ a{text-decoration:none;color:inherit}
 .slot-chip:hover{border-color:#4f46e5;color:#4f46e5}
 .slot-chip.selected{background:#4f46e5;color:#fff;border-color:#4f46e5}
 .slot-chip.disabled{opacity:.4;cursor:not-allowed;background:#f1f5f9;color:#94a3b8}
+.slot-chip.temp{background:#fffbeb;border-color:#fde68a;color:#92400e;cursor:not-allowed;opacity:1}
+.slot-chip.temp:hover{border-color:#fde68a;color:#92400e}
+.legend .dot.tmp{background:#fffbeb;border-color:#fde68a}
 .group-label{font-size:13px;font-weight:600;color:#334155;margin:16px 0 8px}
 .group-label:first-of-type{margin-top:0}
 .group-label .gl-time{font-weight:400;color:#94a3b8;font-size:12px;margin-left:6px}
@@ -74,7 +77,7 @@ a{text-decoration:none;color:inherit}
       <label>预约日期</label>
       <input type="date" value="2026-04-15">
     </div>
-    <div class="slot-hint">以 1 小时为标准单位，可同时选择多个时段。本场地分上午、下午两个开放时段，12:00–14:00 不开放</div>
+    <div class="slot-hint">以 1 小时为标准单位，可同时选择多个时段。本场地分上午、下午两个开放时段，12:00–14:00 不开放。管理员临时关闭的时段不可选。</div>
     <div class="group-label">上午开放<span class="gl-time">08:00 – 12:00</span></div>
     <div class="slot-grid">
       <div class="slot-chip">08:00-09:00</div>
@@ -86,7 +89,7 @@ a{text-decoration:none;color:inherit}
     <div class="group-label">下午开放<span class="gl-time">14:00 – 18:00</span></div>
     <div class="slot-grid">
       <div class="slot-chip selected">14:00-15:00</div>
-      <div class="slot-chip">15:00-16:00</div>
+      <div class="slot-chip temp">15:00-16:00 临时关闭</div>
       <div class="slot-chip disabled">16:00-17:00 已占用</div>
       <div class="slot-chip">17:00-18:00</div>
     </div>
@@ -94,6 +97,7 @@ a{text-decoration:none;color:inherit}
       <span><span class="dot"></span> 可选</span>
       <span><span class="dot sel"></span> 已选</span>
       <span><span class="dot dis"></span> 已占用</span>
+      <span><span class="dot tmp"></span> 临时关闭</span>
       <span style="margin-left:auto;color:#94a3b8">开放 8:00-12:00 / 14:00-18:00</span>
     </div>
   </div>

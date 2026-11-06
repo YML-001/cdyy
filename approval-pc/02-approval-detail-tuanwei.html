@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>团委场地 · 审批详情 - 表单信息 - 智慧学工</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.topnav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.topnav-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.topnav-brand .logo{width:28px;height:28px;border-radius:7px;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.topnav-links{display:flex;gap:4px}
+.topnav-links a{padding:8px 16px;border-radius:6px;font-size:13.5px;color:#64748b;font-weight:500}
+.topnav-links a.active{background:#fffbeb;color:#d97706}
+.topnav-user{font-size:13px;color:#64748b}
+
+/* 固定顶部区域：tabs + 流程标题 + 操作按钮 */
+.detail-header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:56px;z-index:40}
+.detail-header-inner{max-width:960px;margin:0 auto;padding:0 32px}
+.tab-row{display:flex;align-items:center;gap:0;border-bottom:1px solid #f1f5f9;padding-top:8px}
+.tab-item{padding:10px 20px;font-size:13.5px;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;font-weight:500;position:relative;top:1px}
+.tab-item.active{color:#d97706;border-bottom-color:#d97706;font-weight:600}
+.tab-item:hover{color:#d97706}
+.close-btn{margin-left:auto;width:28px;height:28px;border-radius:50%;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:16px;color:#94a3b8;cursor:pointer;background:#fff;align-self:center}
+.close-btn:hover{background:#f8fafc;color:#0f172a}
+.title-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0 14px}
+.title-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.title-name{font-size:16px;font-weight:700}
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:11.5px;font-weight:500}
+.tag-node{background:#e0f2fe;color:#0369a1}
+.tag-user{background:#fef3c7;color:#92400e}
+.tag-status{font-size:12px;color:#d97706;font-weight:500;margin-left:4px}
+.action-btns{display:flex;gap:8px}
+.btn{padding:8px 24px;border-radius:6px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:inherit;color:#fff}
+.btn-pass{background:#059669}
+.btn-pass:hover{background:#047857}
+.btn-fail{background:#dc2626}
+.btn-fail:hover{background:#b91c1c}
+.btn-return{background:#f59e0b}
+.btn-return:hover{background:#d97706}
+
+/* 内容区 */
+.container{max-width:960px;margin:0 auto;padding:20px 32px 48px}
+.section{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px 24px;margin-bottom:16px}
+.section-title{font-size:14px;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #f1f5f9;color:#0f172a}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.form-item{padding:10px 0;border-bottom:1px solid #f8fafc;display:flex;flex-direction:column;gap:3px}
+.form-label{font-size:12px;color:#94a3b8}
+.form-value{font-size:13.5px;font-weight:500;color:#0f172a}
+.form-item.full{grid-column:1/-1}
+.form-item.half{grid-column:span 2}
+.img-preview{width:100px;height:75px;border-radius:6px;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;margin-top:4px;overflow:hidden;position:relative}
+.img-preview::after{content:"证明文件";position:absolute;font-size:10px;color:#94a3b8}
+.remark-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-top:12px}
+.remark-box textarea{width:100%;border:none;background:transparent;font-size:13px;font-family:inherit;resize:vertical;height:60px;color:#0f172a}
+.remark-box textarea:focus{outline:none}
+.remark-hint{font-size:11px;color:#94a3b8;margin-top:4px}
+.apply-table{width:100%;border-collapse:collapse;font-size:13px}
+.apply-table th{width:150px;background:#f8fafc;color:#475569;font-weight:500;text-align:center;padding:10px 12px;border:1px solid #e2e8f0}
+.apply-table td{padding:10px 12px;border:1px solid #e2e8f0;color:#0f172a}
+.apply-table .shot{display:inline-block;width:120px;height:72px;border-radius:6px;background:linear-gradient(135deg,#bfdbfe,#3b82f6);vertical-align:middle}
+.steps{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:12.5px}
+.steps .st{padding:5px 10px;border-radius:14px;background:#f1f5f9;color:#64748b}
+.steps .st.done{background:#ecfdf5;color:#047857}
+.steps .st.cur{background:#4f46e5;color:#fff;font-weight:600}
+.steps .st.skip{background:#fff;border:1px dashed #cbd5e1;color:#94a3b8}
+.steps .ar{color:#cbd5e1}
+.agree-scroll{max-height:180px;overflow:auto;padding:12px 14px;border:1px solid #e2e8f0;border-radius:8px;background:#fafafa;font-size:13px;line-height:1.9;color:#334155;white-space:pre-line}
+.agree-check{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13.5px;font-weight:500;cursor:pointer}
+.agree-check input{width:17px;height:17px;accent-color:#4f46e5}
+.agree-state{margin-left:8px;font-size:12px;color:#dc2626;font-weight:400}
+.agree-state.ok{color:#059669}
+.assign-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:13px;margin-bottom:12px}
+.assign-row select{padding:7px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;min-width:260px}
+.assign-row label{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.cand-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cand{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:13px}
+.cand:hover{border-color:#a5b4fc}
+.cand.on{border-color:#4f46e5;background:#eef2ff}
+.cand input{accent-color:#4f46e5}
+.cand small{display:block;color:#64748b;font-size:11.5px}
+.req-tip{font-size:12px;color:#94a3b8;margin-top:8px}
+.btn.disabled{opacity:.45;pointer-events:none}
+.duty-banner{margin-bottom:16px;padding:12px 16px;border-radius:8px;background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;font-size:13px}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:200}
+.modal-mask.show{display:flex}
+.modal{width:420px;background:#fff;border-radius:12px;padding:24px}
+.modal h4{font-size:16px;margin-bottom:10px}
+.modal p{font-size:13px;color:#475569;line-height:1.8}
+.modal .mb{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.modal .mb button{padding:7px 16px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;font-size:13px;cursor:pointer;font-family:inherit}
+.modal .mb .ok{background:#4f46e5;border-color:#4f46e5;color:#fff}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand"><div class="logo">审</div>智慧学工 · 审批管理</div>
+  <div class="topnav-links"><a class="active" href="01-pending-list.html">待审批</a><a href="05-history.html">已审批</a></div>
+  <span class="topnav-user" id="userName">王老师 · 活动负责老师</span>
+</nav>
+
+<div class="detail-header">
+  <div class="detail-header-inner">
+    <div class="tab-row">
+      <a class="tab-item active" href="02-approval-detail-tuanwei.html">表单信息</a>
+      <a class="tab-item" href="02-detail-flow.html">流程图</a>
+      <a class="tab-item" href="02-detail-record.html">审批记录</a>
+      <a class="close-btn" href="01-pending-list.html" title="关闭">✕</a>
+    </div>
+    <div class="title-row">
+      <div class="title-left">
+        <span class="title-name">毓秀楼和声堂的申请审核</span>
+        <span class="tag tag-node" id="nodeTag">当前节点：02 活动负责老师审批</span>
+        <span class="tag tag-user">发起人：李思远</span>
+        <span class="tag-status" id="statusTag">审批中</span>
+      </div>
+      <div class="action-btns" id="actionBtns">
+        <a class="btn btn-pass disabled" id="passBtn" href="javascript:;">通过</a>
+        <a class="btn btn-fail" href="04-reject-confirm.html">不通过</a>
+        <a class="btn btn-return" href="04-reject-confirm.html">驳回</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="duty-banner" id="dutyBanner" style="display:none">你是「值班安排」角色，本申请已由场地主管审批通过，以下信息仅供查看，便于安排学生助理值班。</div>
+
+  <div class="section">
+    <div class="section-title">审批进度</div>
+    <div class="steps" id="steps"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">中南大学校园文化活动场地申请表</div>
+    <table class="apply-table">
+      <tr><th>活动名称</th><td colspan="3">"青春之声"校园歌手大赛决赛</td></tr>
+      <tr><th>活动性质</th><td colspan="3">哲学社科理论类讲座</td></tr>
+      <tr><th>审核通过界面截图</th><td colspan="3"><span class="shot"></span>　<span style="color:#64748b;font-size:12px">「哲学社科理论类论坛申请」审核通过截图</span></td></tr>
+      <tr><th>申借场地</th><td colspan="3">毓秀楼和声堂（容纳 512 人）</td></tr>
+      <tr><th>使用时间</th><td colspan="3">2026-05-20 晚上（19:00-22:00）</td></tr>
+      <tr><th>是否需要外接设备</th><td colspan="3">是</td></tr>
+      <tr><th>租赁设备进场安全管理承诺书</th><td colspan="3">附件1 租赁设备进场安全管理承诺书（已填写）.docx</td></tr>
+      <tr><th>租赁设备进场清单</th><td colspan="3">附件2 租赁设备进场清单（已填写）.docx</td></tr>
+      <tr><th>主办单位</th><td>党委学生工作部（学生工作处）</td><th>承办单位</th><td>校学生会</td></tr>
+      <tr><th>预估人数</th><td colspan="3">500 人<span style="color:#92400e;font-size:12px;margin-left:8px">≥500 人，将增加保卫部审批</span></td></tr>
+      <tr><th>拟邀请嘉宾</th><td colspan="3">校党委副书记、各学院团委书记</td></tr>
+      <tr><th>活动负责老师</th><td>王老师　138****5678</td><th>联络人</th><td>李思远　139****1234</td></tr>
+      <tr><th>备注信息</th><td colspan="3">需提前一天下午彩排</td></tr>
+    </table>
+  </div>
+
+  <div class="section" id="agreeSection">
+    <div class="section-title">安全责任状</div>
+    <div class="agree-scroll">中南大学学生活动中心场地申请安全责任状（待校团委提供修订版后替换）
+为保证活动安全顺利进行，在申请学生活动中心场地及使用场地期间过程中，请活动主办方严格遵循以下消防安全事宜：
+一、在场地内开展活动须由申请单位领导签字批准，并按照流程进行审批。
+二、由活动主办方或承办方作为活动安全责任人，并安排至少1名消防安全协管员。
+三、活动举办过程中在工作人员的指导下使用有关设备。
+四、活动期间严格遵守安全管理规定和消防安全责任制，禁止吸烟和使用明火。
+五、严禁私拉乱接，以及在电器设备上堆放杂物和悬挂装饰物品。
+六、在活动期间因不遵守该协议导致的安全事故，一概由活动主办方负责。</div>
+    <label class="agree-check"><input type="checkbox" id="agreeChk"> 我已阅读并同意《安全责任状》<span class="agree-state" id="agreeState">未同意，无法通过</span></label>
+  </div>
+
+  <div class="section" id="assignSection">
+    <div class="section-title">指定二级单位审批人 <span style="color:#dc2626">*</span></div>
+    <div class="assign-row">
+      <span>单位类型</span>
+      <label><input type="radio" name="unitType" value="org" checked> 机关及直附属单位</label>
+      <label><input type="radio" name="unitType" value="college"> 二级学院</label>
+      <select id="unitSel"></select>
+    </div>
+    <div class="cand-list" id="candList"></div>
+    <div class="req-tip" id="candTip">候选人限定为：机关正处、副处；学院院长、副院长、书记、副书记。默认显示主办单位下的人员。</div>
+  </div>
+
+  <div class="section" id="remarkSection">
+    <div class="section-title">审批意见</div>
+    <div class="remark-box">
+      <textarea placeholder="请输入审批意见（可选）…"></textarea>
+      <div class="remark-hint">驳回时必须填写驳回原因</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-mask" id="modal">
+  <div class="modal">
+    <h4>确认通过</h4>
+    <p id="modalText"></p>
+    <div class="mb"><button type="button" id="modalCancel">取消</button><button type="button" class="ok" id="modalOk">确认通过</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var UNITS={
+    org:[{n:'党委学生工作部（学生工作处）',p:[['陈建国','部长（正处）'],['刘晓梅','副部长（副处）'],['周海涛','副部长（副处）']]},
+         {n:'校团委',p:[['王强','书记（正处）'],['聂天成','副书记（副处）']]}],
+    college:[{n:'文学院',p:[['赵立新','院长'],['孙蕾','副院长'],['钱文','党委书记'],['李卫','党委副书记']]},
+             {n:'计算机学院',p:[['郑平','院长'],['吴越','党委书记'],['冯敏','党委副书记']]}]
+  };
+  var role=new URLSearchParams(location.search).get('role')||'teacher';
+  var ROLE={
+    unit:{user:'钱文 · 文学院党委书记',node:'当前节点：03 二级单位审批',step:2,next:'通过后流转至 04 保卫部审批（预估人数 500 人）。'},
+    security:{user:'刘诚 · 保卫部',node:'当前节点：04 保卫部审批',step:3,next:'通过后流转至 05 场地主管审批（聂天成、胡新亮，或签）。'},
+    manager:{user:'聂天成 · 场地主管',node:'当前节点：05 场地主管审批（或签）',step:4,next:'通过后预约生效，并知会值班安排（余扬帆、郑裕凯、李紫晴）。'},
+    duty:{user:'余扬帆 · 值班安排',node:'知会 · 仅查看',step:5}
+  };
+  var chosen=null;
+  var unitSel=document.getElementById('unitSel'),candList=document.getElementById('candList');
+  function type(){return document.querySelector('input[name="unitType"]:checked').value;}
+  function fillUnits(){
+    unitSel.innerHTML=UNITS[type()].map(function(u,i){return '<option value="'+i+'">'+u.n+(i===0&&type()==='org'?'（主办单位）':'')+'</option>';}).join('');
+    fillCands();
+  }
+  function fillCands(){
+    chosen=null;
+    var u=UNITS[type()][+unitSel.value];
+    candList.innerHTML=u.p.map(function(p,i){
+      return '<label class="cand"><input type="radio" name="cand" value="'+i+'"><span>'+p[0]+'<small>'+u.n+' · '+p[1]+'</small></span></label>';
+    }).join('');
+    Array.prototype.forEach.call(candList.querySelectorAll('.cand'),function(el,i){
+      el.querySelector('input').addEventListener('change',function(){
+        Array.prototype.forEach.call(candList.querySelectorAll('.cand'),function(c){c.classList.remove('on');});
+        el.classList.add('on');chosen={name:u.p[i][0],title:u.p[i][1],unit:u.n};check();
+      });
+    });
+    check();
+  }
+  var agreeChk=document.getElementById('agreeChk'),passBtn=document.getElementById('passBtn');
+  function check(){
+    var st=document.getElementById('agreeState');
+    st.textContent=agreeChk.checked?'已同意':'未同意，无法通过';
+    st.classList.toggle('ok',agreeChk.checked);
+    passBtn.classList.toggle('disabled',!(agreeChk.checked&&chosen));
+    passBtn.title=!agreeChk.checked?'请先同意安全责任状':(!chosen?'请指定二级单位审批人':'');
+  }
+  agreeChk.addEventListener('change',check);
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="unitType"]'),function(r){r.addEventListener('change',fillUnits);});
+  unitSel.addEventListener('change',fillCands);
+  var modal=document.getElementById('modal');
+  passBtn.addEventListener('click',function(){
+    if(ROLE[role]){
+      document.getElementById('modalText').textContent=ROLE[role].next;
+    }else{
+      document.getElementById('modalText').innerHTML='你已同意《安全责任状》。通过后，申请将流转至 <b>03 二级单位审批</b>：<b>'+chosen.name+'</b>（'+chosen.unit+' · '+chosen.title+'）。';
+    }
+    modal.classList.add('show');
+  });
+  document.getElementById('modalCancel').onclick=function(){modal.classList.remove('show');};
+  document.getElementById('modalOk').onclick=function(){
+    modal.classList.remove('show');
+    ['agreeSection','assignSection','remarkSection','actionBtns'].forEach(function(id){document.getElementById(id).style.display='none';});
+    if(ROLE[role]){
+      document.getElementById('nodeTag').textContent='本节点已通过';
+      document.getElementById('statusTag').textContent=role==='manager'?'已通过':'审批中';
+      renderSteps(ROLE[role].step+1);
+      return;
+    }
+    document.getElementById('nodeTag').textContent='当前节点：03 二级单位审批（'+chosen.name+'）';
+    renderSteps(2);
+  };
+  function renderSteps(cur){
+    var S=['01 申请提交','02 活动负责老师','03 二级单位','04 保卫部（≥500人）','05 场地主管','06 值班安排（知会）'];
+    document.getElementById('steps').innerHTML=S.map(function(s,i){
+      var c=i<cur?'done':(i===cur?'cur':'');
+      return (i?'<span class="ar">→</span>':'')+'<span class="st '+c+'">'+s+'</span>';
+    }).join('');
+  }
+  fillUnits();
+  if(role==='duty'){
+    document.getElementById('userName').textContent=ROLE.duty.user;
+    document.getElementById('dutyBanner').style.display='';
+    ['agreeSection','assignSection','remarkSection','actionBtns'].forEach(function(id){document.getElementById(id).style.display='none';});
+    document.getElementById('nodeTag').textContent=ROLE.duty.node;
+    document.getElementById('statusTag').textContent='已通过';
+    renderSteps(ROLE.duty.step);
+  }else if(ROLE[role]){
+    document.getElementById('userName').textContent=ROLE[role].user;
+    document.getElementById('nodeTag').textContent=ROLE[role].node;
+    ['agreeSection','assignSection'].forEach(function(id){document.getElementById(id).style.display='none';});
+    passBtn.classList.remove('disabled');
+    renderSteps(ROLE[role].step);
+  }else{renderSteps(1);}
+})();
+</script>
+
+</body>
+</html>

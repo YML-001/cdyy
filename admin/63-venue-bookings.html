@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>查询预约情况 - 场地预约后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column}
+.sidebar-brand{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:15px}
+.sidebar-brand .logo{width:28px;height:28px;border-radius:7px;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#64748b;margin-bottom:2px}
+.nav-item:hover{background:#f1f5f9;color:#0f172a}
+.nav-item.active{background:#eef2ff;color:#4f46e5;font-weight:500}
+.nav-icon{width:20px;text-align:center;font-size:15px}
+.sidebar-footer{padding:12px 20px;border-top:1px solid #e2e8f0}
+.sidebar-footer a{color:#64748b;font-size:12px}
+.main{margin-left:220px;flex:1}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:15px;font-weight:600}
+.content{padding:24px 28px 48px}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-bar input{padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;width:200px}
+.filter-bar select{padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;background:#fff}
+.status-tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid #e2e8f0}
+.st-tab{padding:8px 16px;font-size:13px;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;cursor:pointer}
+.st-tab.active{color:#4f46e5;border-bottom-color:#4f46e5}
+.st-tab .count{font-size:11px;background:#f1f5f9;padding:1px 6px;border-radius:8px;margin-left:4px}
+.st-tab.active .count{background:#eef2ff;color:#4f46e5}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th{font-weight:500;color:#64748b;font-size:12px;background:#f8fafc}
+.badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:10px;font-weight:500}
+.badge-success{background:#ecfdf5;color:#059669}
+.badge-warning{background:#fffbeb;color:#d97706}
+.badge-danger{background:#fef2f2;color:#dc2626}
+.action-link{color:#4f46e5;font-size:12.5px}
+.action-link:hover{text-decoration:underline}
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:13px;color:#64748b}
+.page-btns{display:flex;gap:4px}
+.page-btn{padding:6px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:12.5px;background:#fff;cursor:pointer}
+.page-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-family:inherit;color:#0f172a}
+.btn-primary{background:#4f46e5;color:#fff;border-color:#4f46e5}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.summary{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.sum{padding:8px 12px;border-radius:8px;background:#fff;border:1px solid #e2e8f0;font-size:12.5px;color:#64748b}
+.sum b{color:#0f172a;margin-left:4px}
+.empty{padding:36px;text-align:center;color:#94a3b8;background:#fff;border:1px solid #e2e8f0;border-radius:10px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s}
+.toast.show{opacity:1}
+.crumb{font-size:13px;color:#64748b}
+.crumb a{color:#4f46e5}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">学</div>智慧学工</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="01-dashboard.html"><span class="nav-icon">📊</span>数据概览</a>
+    <a class="nav-item active" href="02-venue-list.html"><span class="nav-icon">📍</span>场地管理</a>
+    <a class="nav-item" href="17-form-template-list.html"><span class="nav-icon">📋</span>表单模板</a>
+    <a class="nav-item" href="20-booking-list.html"><span class="nav-icon">📅</span>预约记录</a>
+  </nav>
+  <div class="sidebar-footer"><a href="../index.html">← 返回首页</a></div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <div class="crumb"><a href="02-venue-list.html">场地管理</a> &gt; <span id="crumbName">查询预约情况</span></div>
+    <button type="button" class="btn btn-primary" id="exportBtn">导出 Excel</button>
+  </header>
+  <div class="content">
+    <div style="font-size:18px;font-weight:700;margin-bottom:4px" id="title">预约情况</div>
+    <div style="font-size:12.5px;color:#64748b;margin-bottom:14px" id="sub">按申请人、活动、状态和日期查询该场地的预约记录。</div>
+    <div class="filter-bar">
+      <input type="search" id="kw" placeholder="搜索申请人、学号或活动名称">
+      <select id="status">
+        <option value="">全部状态</option>
+        <option>待审批</option>
+        <option>已通过</option>
+        <option>已驳回</option>
+        <option>已撤销</option>
+      </select>
+      <input type="date" id="from">
+      <span style="color:#64748b;font-size:12px">至</span>
+      <input type="date" id="to">
+      <button type="button" class="btn" id="resetBtn">重置</button>
+    </div>
+    <div class="summary" id="summary"></div>
+    <div id="tableBox"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var DATA=[
+    {id:'B20260415001',user:'张三',no:'T20180023',act:'2026年春季学工例会',venue:'206会议室',date:'2026-04-15',slot:'14:00-15:00',n:'30',status:'待审批',time:'2026-04-09 16:30'},
+    {id:'B20260416011',user:'李思远',no:'S20230211',act:'部门例会',venue:'206会议室',date:'2026-04-16',slot:'10:00-11:00',n:'12',status:'已通过',time:'2026-04-08 09:12'},
+    {id:'B20260418012',user:'王老师',no:'T20080112',act:'团委工作会',venue:'206会议室',date:'2026-04-18',slot:'15:00-16:00',n:'20',status:'待审批',time:'2026-04-10 11:20'},
+    {id:'B20260420013',user:'赵六',no:'S20240089',act:'班会',venue:'206会议室',date:'2026-04-20',slot:'09:00-10:00',n:'40',status:'已驳回',time:'2026-04-11 14:02'},
+    {id:'B20260506014',user:'周可',no:'S20220417',act:'读书分享会',venue:'206会议室',date:'2026-05-06',slot:'14:00-16:00',n:'25',status:'已通过',time:'2026-04-12 08:40'},
+    {id:'B20260328015',user:'陈八',no:'S20210033',act:'师生座谈',venue:'206会议室',date:'2026-03-28',slot:'16:00-17:00',n:'15',status:'已撤销',time:'2026-03-20 10:00'},
+    {id:'B20260520003',user:'李思远',no:'S20230211',act:'青春之声校园歌手大赛决赛',venue:'毓秀楼和声堂',date:'2026-05-20',slot:'晚上 19:00-22:00',n:'500',status:'待审批',time:'2026-04-10 09:12'},
+    {id:'B20260422016',user:'周可',no:'S20220417',act:'合唱排练',venue:'毓秀楼和声堂',date:'2026-04-22',slot:'下午',n:'80',status:'已通过',time:'2026-04-06 15:40'},
+    {id:'B20260408017',user:'周可',no:'S20220417',act:'迎新汇演彩排',venue:'校本部立功厅',date:'2026-04-08',slot:'晚上',n:'260',status:'已通过',time:'2026-04-01 15:40'},
+    {id:'B20260413004',user:'王五',no:'S20230156',act:'民族团结主题班会',venue:'117民族团结进步之家',date:'2026-04-13',slot:'14:00-15:30',n:'28',status:'已驳回',time:'2026-04-09 11:05'}
+  ];
+  var COLORS={'待审批':'badge-warning','已通过':'badge-success','已驳回':'badge-danger','已撤销':'badge'};
+  var venue=new URLSearchParams(location.search).get('name')||'';
+  document.getElementById('title').textContent=venue?('预约情况 · '+venue):'预约情况';
+  document.getElementById('crumbName').textContent=venue?('查询预约情况 · '+venue):'查询预约情况';
+  document.title=(venue||'全部场地')+' · 查询预约情况';
+  var base=DATA.filter(function(r){return !venue||r.venue===venue;});
+  function toast(msg){
+    var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+    clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove('show');},1800);
+  }
+  function filtered(){
+    var kw=document.getElementById('kw').value.trim();
+    var st=document.getElementById('status').value;
+    var from=document.getElementById('from').value,to=document.getElementById('to').value;
+    return base.filter(function(r){
+      if(st&&r.status!==st){return false;}
+      if(from&&r.date<from){return false;}
+      if(to&&r.date>to){return false;}
+      if(kw&&(r.user+r.no+r.act+r.id).indexOf(kw)<0){return false;}
+      return true;
+    });
+  }
+  function render(){
+    var rows=filtered();
+    var count={};
+    rows.forEach(function(r){count[r.status]=(count[r.status]||0)+1;});
+    document.getElementById('summary').innerHTML=
+      '<span class="sum">查询结果<b>'+rows.length+'</b> 条</span>'+
+      '<span class="sum">待审批<b>'+(count['待审批']||0)+'</b></span>'+
+      '<span class="sum">已通过<b>'+(count['已通过']||0)+'</b></span>'+
+      '<span class="sum">已驳回<b>'+(count['已驳回']||0)+'</b></span>'+
+      '<span class="sum">已撤销<b>'+(count['已撤销']||0)+'</b></span>';
+    document.getElementById('exportBtn').disabled=!rows.length;
+    if(!rows.length){
+      document.getElementById('tableBox').innerHTML='<div class="empty">'+(base.length?'当前筛选条件下没有预约记录':'该场地暂无预约记录')+'</div>';
+      return;
+    }
+    var body=rows.map(function(r){
+      return '<tr><td>'+r.id+'</td><td>'+r.user+'<div style="color:#94a3b8;font-size:12px">'+r.no+'</div></td><td>'+r.act+'</td><td>'+r.date+'</td><td>'+r.slot+'</td><td>'+r.n+'人</td><td><span class="badge '+(COLORS[r.status]||'')+'">'+r.status+'</span></td><td>'+r.time+'</td><td><a class="action-link" href="21-booking-detail.html">详情</a></td></tr>';
+    }).join('');
+    document.getElementById('tableBox').innerHTML='<table><thead><tr><th>预约编号</th><th>申请人</th><th>活动名称</th><th>日期</th><th>时段</th><th>人数</th><th>状态</th><th>提交时间</th><th>操作</th></tr></thead><tbody>'+body+'</tbody></table>';
+  }
+  function esc(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  document.getElementById('exportBtn').onclick=function(){
+    var rows=filtered();
+    var cols=['预约编号','申请人','学号/工号','活动名称','场地','日期','时段','人数','状态','提交时间'];
+    var keys=['id','user','no','act','venue','date','slot','n','status','time'];
+    var html='<html><head><meta charset="UTF-8"></head><body><table><tr>'+cols.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr>'+
+      rows.map(function(r){return '<tr>'+keys.map(function(k){return '<td>'+esc(r[k])+'</td>';}).join('')+'</tr>';}).join('')+
+      '</table></body></html>';
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel'}));
+    a.download=(venue||'全部场地')+'-预约记录.xls';
+    a.click();
+    toast('已导出 '+rows.length+' 条预约记录');
+  };
+  ['kw','status','from','to'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',render);
+    document.getElementById(id).addEventListener('change',render);
+  });
+  document.getElementById('resetBtn').onclick=function(){
+    document.getElementById('kw').value='';
+    document.getElementById('status').value='';
+    document.getElementById('from').value='';
+    document.getElementById('to').value='';
+    render();
+  };
+  render();
+})();
+</script>
+</body>
+</html>

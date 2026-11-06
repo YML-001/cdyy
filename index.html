@@ -99,6 +99,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .ic-admin{background:#eef2ff;color:#4f46e5}
 .ic-user{background:#ecfdf5;color:#059669}
 .ic-approval{background:#fffbeb;color:#d97706}
+.card.c-approval{grid-column:1/-1}
+.role-entries{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.role-entry{border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;background:#f8fafc}
+.role-entry .re-t{font-size:13.5px;font-weight:600;color:#0f172a}
+.role-entry .re-t span{font-weight:400;color:#64748b;margin-left:6px;font-size:12px}
+.role-entry .re-d{font-size:12px;color:#64748b;margin:4px 0 8px;line-height:1.5}
+.role-entry .re-links{display:flex;gap:6px}
+.role-entry .re-links a{font-size:12px;color:#b45309;text-decoration:none;padding:3px 10px;border:1px solid #fde68a;border-radius:6px;background:#fff}
+.role-entry .re-links a:hover{background:#fffbeb}
 
 .footer{margin-top:48px;text-align:center;font-size:12px;color:#94a3b8}
 
@@ -128,11 +137,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   <!-- 本次新增 -->
   <div class="whatsnew">
     <h3>本次新增能力（请老师重点确认）</h3>
-    <div class="wn-sub">以下 3 项为本轮补充的配置能力，建议测试时按链接逐项验证是否符合实际管理方式。</div>
+    <div class="wn-sub">以下为本轮补充的配置能力，建议测试时按链接逐项验证是否符合实际管理方式。</div>
     <div class="wn-grid">
       <div class="wn-item">
         <div class="wn-t">① 审批人支持按「角色」设置</div>
-        <div class="wn-d">每级审批可选「指定人员」或「指定角色」（如所属科室管理员、院系领导、校保卫处）；角色下多人时可选或签/会签。审批人同时自动获得所审批场地的管理权限。</div>
+        <div class="wn-d">场地管理员、每一级审核人都可多选。多名审核人，以及角色下有多人时，一律或签：任一人通过即进入下一步。审核人同时自动获得所审批场地的管理权限。</div>
         <a href="admin/08-venue-add-approval.html">新增场地 · 审批流程</a>
         <a href="admin/13-venue-edit-approval.html">编辑场地 · 审批流程</a>
       </div>
@@ -148,6 +157,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <a href="admin/05-venue-add-basic.html">切换「外部链接跳转」体验</a>
         <a href="admin/04-venue-detail-external.html">外链场地详情</a>
         <a href="user-pc/01-venue-list.html">师生端跳转效果</a>
+      </div>
+      <div class="wn-item">
+        <div class="wn-t">④ 临时关闭预约时段</div>
+        <div class="wn-d">场地配置完成后，可在管理列表点「调整预约时段」，按日期关闭某些时段或按日期范围批量关闭。关闭后师生端显示「临时关闭」且不可选，也可再恢复开放。</div>
+        <a href="admin/02-venue-list.html">场地列表入口</a>
+        <a href="admin/61-slot-adjust.html">调整预约时段</a>
+        <a href="user-pc/07-book-step3-slot-hour.html">师生端不可选效果</a>
+      </div>
+      <div class="wn-item">
+        <div class="wn-t">⑤ 校团委活动场地</div>
+        <div class="wn-d">新增场地类型「校团委活动场地」（礼堂、立功厅、和声堂、演播室）：补充设备信息、图片、注意事项；自动套用校园文化活动场地申请表与 6 步审批流（负责老师同意责任状并指定二级单位审批人、≥500 人加保卫部、场地主管终审、值班知会）。预约入口不变。</div>
+        <a href="admin/05-venue-add-basic.html">切换「校团委活动场地」体验</a>
+        <a href="admin/57-venue-add-form-tuanwei.html">团委申请表配置</a>
+        <a href="admin/62-venue-add-approval-tuanwei.html">团委审批流程配置</a>
+        <a href="admin/04-venue-detail-tuanwei.html">团委场地详情</a>
+        <a href="user-pc/05-book-step2-form-tuanwei.html">师生端申请表</a>
+        <a href="approval-pc/02-approval-detail-tuanwei.html">负责老师审批</a>
+        <a href="approval-pc/02-approval-detail-tuanwei.html?role=duty">值班安排查看</a>
       </div>
     </div>
   </div>
@@ -229,7 +256,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="role-tags">
         <span class="role-tag">指定人员</span>
         <span class="role-tag">指定角色</span>
-        <span class="role-tag">或签/会签</span>
+        <span class="role-tag">或签</span>
         <span class="role-tag">可管理所审场地</span>
       </div>
       <div class="role-portal">入口：<strong>审批端</strong>（PC / 移动）</div>
@@ -265,7 +292,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <div class="fs-num">1</div>
         <div class="fs-title">配置场地</div>
         <div class="fs-actor">👤 系统管理员 / 场地负责人</div>
-        <div class="fs-detail">基础信息（含负责人、场地类型）→ 时段策略 → 表单模板 → 审批流程 → 权限范围；外链场地填完基础信息即可保存</div>
+        <div class="fs-detail">基础信息（含负责人、场地类型）→ 时段策略 → 表单模板 → 审批流程 → 权限范围；外链场地填完基础信息即可保存；校团委活动场地自动套用团委申请表与审批流</div>
       </div>
       <div class="flow-arrow">→</div>
       <div class="flow-stage s-apply">
@@ -359,6 +386,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
             <br><span class="label-sub">仪表盘 → 场地管理 → 表单模板 → 预约记录</span>
           </span>
         </a>
+        <a href="admin/63-venue-bookings.html?name=206%E4%BC%9A%E8%AE%AE%E5%AE%A4">
+          <span class="icon ic-admin">📅</span>
+          <span>
+            查询预约情况<span class="tag tag-pc">PC</span>
+            <br><span class="label-sub">按场地筛选预约记录，并导出 Excel</span>
+          </span>
+        </a>
         <a href="admin/59-venue-list-owner.html">
           <span class="icon ic-admin">🔑</span>
           <span>
@@ -391,29 +425,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     </div>
 
     <div class="card c-approval">
-      <h2>③ 审批端 <span class="ch-tag">审批人</span></h2>
-      <p>低代码审批样式：待办列表、表单查看、流程追踪、操作通过/驳回，支持多节点流转。</p>
-      <div class="card-links">
-        <a href="approval-pc/01-pending-list.html">
-          <span class="icon ic-approval">🖥</span>
-          <span>
-            PC 端审批<span class="tag tag-pc">PC</span>
-            <br><span class="label-sub">待审批 → 审批详情 → 审批历史</span>
-          </span>
-        </a>
-        <a href="approval-mobile/01-pending-list.html">
-          <span class="icon ic-approval">📱</span>
-          <span>
-            移动端审批<span class="tag tag-mobile">移动端</span>
-            <br><span class="label-sub">待审批 → 审批详情 → 审批历史</span>
-          </span>
-        </a>
+      <h2>③ 审批端 <span class="ch-tag">按角色进入</span></h2>
+      <p>同一条团委场地申请，点不同角色看到对应节点。多名审核人为或签，任一人通过即可。</p>
+      <div class="role-entries">
+        <div class="role-entry">
+          <div class="re-t">通用审核人<span>孙瀚 · 或签</span></div>
+          <div class="re-d">206会议室，与李明或签。待办列表里也能看到团委场地的单。</div>
+          <div class="re-links"><a href="approval-pc/01-pending-list.html">PC</a><a href="approval-mobile/01-pending-list.html">移动</a></div>
+        </div>
+        <div class="role-entry">
+          <div class="re-t">活动负责老师<span>王老师</span></div>
+          <div class="re-d">先同意《安全责任状》，再指定二级单位审批人。</div>
+          <div class="re-links"><a href="approval-pc/02-approval-detail-tuanwei.html">PC</a><a href="approval-mobile/02-approval-detail-tuanwei.html">移动</a></div>
+        </div>
+        <div class="role-entry">
+          <div class="re-t">二级单位领导<span>钱文 · 文学院书记</span></div>
+          <div class="re-d">由负责老师指定。本单 500 人，通过后到保卫部。</div>
+          <div class="re-links"><a href="approval-pc/02-approval-detail-tuanwei.html?role=unit">PC</a><a href="approval-mobile/02-approval-detail-tuanwei.html?role=unit">移动</a></div>
+        </div>
+        <div class="role-entry">
+          <div class="re-t">保卫部<span>刘诚</span></div>
+          <div class="re-d">预估人数达到 500 人时才有这一步。</div>
+          <div class="re-links"><a href="approval-pc/02-approval-detail-tuanwei.html?role=security">PC</a><a href="approval-mobile/02-approval-detail-tuanwei.html?role=security">移动</a></div>
+        </div>
+        <div class="role-entry">
+          <div class="re-t">场地主管<span>聂天成 · 或签</span></div>
+          <div class="re-d">与胡新亮或签。通过后预约生效，并知会值班安排。</div>
+          <div class="re-links"><a href="approval-pc/02-approval-detail-tuanwei.html?role=manager">PC</a><a href="approval-mobile/02-approval-detail-tuanwei.html?role=manager">移动</a></div>
+        </div>
+        <div class="role-entry">
+          <div class="re-t">值班安排<span>余扬帆</span></div>
+          <div class="re-d">只查看预约信息，不审批。用于安排学生助理值班。</div>
+          <div class="re-links"><a href="approval-pc/02-approval-detail-tuanwei.html?role=duty">PC</a><a href="approval-mobile/02-approval-detail-tuanwei.html?role=duty">移动</a></div>
+        </div>
+        <div class="role-entry">
+          <div class="re-t">抄送人<span>仅查看</span></div>
+          <div class="re-d">审批详情里的抄送页，不参与通过或驳回。</div>
+          <div class="re-links"><a href="approval-pc/02-detail-cc.html">PC</a></div>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <p class="footer">智慧学工 · 场地预约系统原型 v1.1 · 共含 36 个场地配置（含 5 个团委活动场地、1 个外链场地） · 8 种时段策略 · 9 种表单字段类型 · 审批人支持人员/角色</p>
+  <p class="footer">智慧学工 · 场地预约系统原型 v1.1 · 共含 36 个场地配置（含 4 个校团委活动场地、1 个外链场地） · 8 种时段策略 · 9 种表单字段类型 · 审批人支持人员/角色</p>
 
 </div>
 

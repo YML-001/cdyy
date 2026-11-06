@@ -27,6 +27,14 @@ a{text-decoration:none;color:inherit}
 .btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-size:15px;font-weight:600}
 .btn-primary{background:#4f46e5;color:#fff}
 .btn-outline{background:#fff;color:#4f46e5;border:1px solid #4f46e5}
+.eq-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.eq{display:flex;justify-content:space-between;gap:6px;padding:6px 8px;border-radius:6px;background:#f8fafc;font-size:12px}
+.eq span{color:#64748b}
+.eq b{font-weight:500;text-align:right}
+.img-cap{font-size:12px;color:#64748b;margin:6px 0 4px}
+.thumbs{display:flex;gap:6px}
+.thumb{width:96px;height:64px;border-radius:6px;display:inline-block}
+.notice-list{padding-left:18px;font-size:13px;line-height:1.8;color:#475569}
 </style>
 </head>
 <body>
@@ -39,68 +47,51 @@ a{text-decoration:none;color:inherit}
 <div class="cover">🏛</div>
 
 <div class="section">
-  <div class="venue-title">新校区毓秀楼和声堂</div>
+  <div class="venue-title">毓秀楼和声堂</div>
   <div class="venue-dept">校团委</div>
-  <div class="info-row"><span class="ir-label">地址</span><span class="ir-val">新校区毓秀楼1楼</span></div>
-  <div class="info-row"><span class="ir-label">容纳人数</span><span class="ir-val">500人</span></div>
+  <div class="info-row"><span class="ir-label">地址</span><span class="ir-val">新校区毓秀楼235</span></div>
+  <div class="info-row"><span class="ir-label">容纳人数</span><span class="ir-val">512人</span></div>
   <div class="info-row"><span class="ir-label">开放日</span><span class="ir-val">周一到周日（全周）</span></div>
   <div class="info-row"><span class="ir-label">开放时段</span><span class="ir-val">8:00 - 22:00</span></div>
-  <div class="info-row"><span class="ir-label">提前预约</span><span class="ir-val">15天</span></div>
+  <div class="info-row"><span class="ir-label">提前预约</span><span class="ir-val">30天</span></div>
   <div class="info-row"><span class="ir-label">时段方式</span><span class="ir-val">半天制（上午/下午/晚上）</span></div>
   <div class="info-row"><span class="ir-label">状态</span><span class="ir-val" style="color:#059669">正常使用</span></div>
 </div>
 
 <div class="section">
-  <h3>使用须知</h3>
-  <div style="font-size:13px;color:#64748b;line-height:1.8">
-    中南大学学生活动中心场地申请安全责任状<br><br>
-    为保证活动安全顺利进行，在申请学生活动中心场地及使用场地期间过程中，请活动主办方严格遵循以下消防安全事宜：<br><br>
-    一、在场地内开展活动须由申请单位领导签字批准，并按照流程进行审批。<br>
-    二、由活动主办方或承办方作为活动安全责任人，并安排至少1名消防安全协管员。<br>
-    三、活动申请单位应履行好以下职责：申请学生活动中心场地前核实活动详情，并签署安全责任状。<br>
-    四、活动举办过程中在工作人员的指导下使用有关设备。<br>
-    五、活动期间严格遵守安全管理规定和消防安全责任制，禁止吸烟和使用明火。<br>
-    六、严禁私拉乱接，以及在电器设备上堆放杂物和悬挂装饰物品。<br>
-    七、使用场地期间需遵循工作人员的安排，未经允许严禁出入消防安全重点防范区域。<br>
-    八、在活动期间因不遵守该协议导致的安全事故，一概由活动主办方负责。
-  </div>
+  <h3>设备信息</h3>
+  <div class="eq-grid"><div class="eq"><span>手持话筒</span><b>6</b></div><div class="eq"><span>耳麦（领夹麦）</span><b>2</b></div><div class="eq"><span>电容麦</span><b>4</b></div><div class="eq"><span>会议话筒</span><b>3</b></div><div class="eq"><span>话筒支架</span><b>6</b></div><div class="eq"><span>地插线</span><b>6</b></div><div class="eq"><span>追光灯</span><b>1</b></div><div class="eq"><span>场灯</span><b>64</b></div><div class="eq"><span>面光</span><b>若干</b></div><div class="eq"><span>会议灯</span><b>18</b></div><div class="eq"><span>调光台</span><b>1</b></div><div class="eq"><span>调音台</span><b>1</b></div><div class="eq"><span>无线投屏</span><b>1</b></div><div class="eq"><span>钢琴</span><b>1</b></div><div class="eq"><span>横幅</span><b>1380cm*369cm×1</b></div><div class="eq"><span>LED</span><b>575cm*240cm×1</b></div><div class="eq"><span>座位数</span><b>512</b></div></div>
+</div>
+
+<div class="section">
+  <h3>场地图片</h3>
+  <div class="img-cap">场地全景</div><div class="thumbs"><span class="thumb" style="background:linear-gradient(135deg,#fdba74,#f97316)"></span><span class="thumb" style="background:linear-gradient(135deg,#fcd34d,#f59e0b)"></span></div>
+  <div class="img-cap">舞台效果</div><div class="thumbs"><span class="thumb" style="background:linear-gradient(135deg,#a5b4fc,#6366f1)"></span><span class="thumb" style="background:linear-gradient(135deg,#f9a8d4,#ec4899)"></span></div>
+  <div class="img-cap">场地平面图</div><div class="thumbs"><span class="thumb" style="background:linear-gradient(135deg,#cbd5e1,#64748b)"></span></div>
+</div>
+
+<div class="section">
+  <h3>场地注意事项</h3>
+  <ol class="notice-list">
+    <li>校团委活动中心会根据申请安排学生助理进行值班，负责场地开门、协助调整设备及活动过程中的设备控制。</li>
+    <li>活动方可外接设备，需自备笔记本电脑和话筒电池（5 号电池）。</li>
+    <li>场地内不允许吃饭、带奶茶饮料进入。</li>
+    <li>粘贴标语、引导信息时，严禁使用难以清理的双面胶。</li>
+    <li>活动结束后需复原场地和线路，并打扫卫生方可离开。</li>
+  </ol>
 </div>
 
 <div class="section">
   <h3>审批流程</h3>
-  <div style="font-size:11.5px;color:#94a3b8;margin-bottom:6px">主流程：</div>
-  <div class="flow-steps">
-    <span class="fs">提交申请</span>
-    <span class="fs-arrow">→</span>
-    <span class="fs">二级学院党委</span>
-    <span class="fs-arrow">→</span>
-    <span class="fs">团委管理员</span>
-    <span class="fs-arrow">→</span>
+  <div class="flow-steps" style="flex-wrap:wrap;row-gap:6px">
+    <span class="fs">提交申请</span><span class="fs-arrow">→</span>
+    <span class="fs">活动负责老师</span><span class="fs-arrow">→</span>
+    <span class="fs">二级单位</span><span class="fs-arrow">→</span>
+    <span style="padding:3px 8px;border:1px dashed #f59e0b;border-radius:4px;font-size:11px;color:#92400e;background:#fffbeb">保卫部（≥500人）</span><span class="fs-arrow">→</span>
+    <span class="fs">场地主管</span><span class="fs-arrow">→</span>
     <span class="fs">完成</span>
   </div>
-  <div style="border:2px dashed #fde68a;border-radius:8px;padding:10px;margin-top:10px;background:#fffef5">
-    <div style="font-size:11px;color:#92400e;font-weight:600;margin-bottom:6px">条件审批节点：</div>
-    <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px;margin-bottom:6px">
-      <span style="color:#64748b">当</span>
-      <span style="padding:2px 6px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:4px;color:#4f46e5;font-weight:500">预估人数</span>
-      <span style="padding:2px 4px;background:#f1f5f9;border-radius:4px;color:#64748b">>=</span>
-      <span style="padding:2px 6px;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;color:#92400e;font-weight:500">500</span>
-      <span style="color:#64748b">→ 增加</span>
-      <span style="padding:2px 6px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;color:#059669;font-weight:500">校保卫处审批</span>
-    </div>
-    <div class="flow-steps" style="padding:0">
-      <span class="fs" style="padding:3px 8px;font-size:11px">申请人</span>
-      <span class="fs-arrow">→</span>
-      <span class="fs" style="padding:3px 8px;font-size:11px">二级学院党委</span>
-      <span class="fs-arrow">→</span>
-      <span style="padding:3px 8px;border:2px dashed #f59e0b;border-radius:4px;font-size:11px;color:#92400e;background:#fffbeb;font-weight:500">校保卫处</span>
-      <span class="fs-arrow">→</span>
-      <span class="fs" style="padding:3px 8px;font-size:11px">团委管理员</span>
-      <span class="fs-arrow">→</span>
-      <span class="fs" style="padding:3px 8px;font-size:11px">完成</span>
-    </div>
-  </div>
-  <div style="font-size:11.5px;color:#94a3b8;margin-top:8px">发起权限：<span style="padding:2px 6px;border-radius:4px;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:500">全校师生</span></div>
+  <div style="font-size:11.5px;color:#94a3b8;margin-top:8px;line-height:1.7">活动负责老师审批时会指定二级单位审批人；预估人数不能超过容纳人数（512人）。</div>
 </div>
 
 <div class="bottom-bar">

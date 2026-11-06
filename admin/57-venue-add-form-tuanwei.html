@@ -53,6 +53,34 @@ a{text-decoration:none;color:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:500;border:1px solid transparent;cursor:pointer;font-family:inherit}
 .btn-primary{background:#4f46e5;color:#fff}
 .btn-secondary{background:#fff;color:#0f172a;border-color:#e2e8f0}
+.field-row{grid-template-columns:32px 150px 90px 50px 1fr 90px}
+.field-row .rule{color:#64748b;font-size:12px;line-height:1.5}
+.field-row.cond-row{background:#fffbeb}
+.type-badge.dept{background:#eff6ff;color:#2563eb}
+.type-badge.user{background:#f5f3ff;color:#7c3aed}
+.type-badge.file{background:#fef3c7;color:#b45309}
+.rule-chip{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11.5px;margin-right:4px}
+.rule-chip.cond{background:#fef3c7;color:#92400e}
+.rule-chip.limit{background:#ecfdf5;color:#047857}
+.rule-chip.flow{background:#eef2ff;color:#4338ca}
+.sys-fields{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px dashed #e2e8f0;border-radius:8px;margin-bottom:12px;font-size:12.5px}
+.sys-t{color:#64748b;font-weight:500}
+.sys-chip{padding:2px 10px;border-radius:6px;background:#f1f5f9;color:#475569}
+.sys-note{color:#94a3b8;font-size:12px}
+.type-legend{margin-top:14px;display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:#64748b;align-items:center}
+.type-legend b{color:#0f172a;font-weight:500}
+.rule-card{border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.rc-t{font-size:13px;font-weight:600;margin-bottom:10px}
+.cond-item{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;margin-bottom:8px;padding:8px 10px;background:#f8fafc;border-radius:6px}
+.cond-item select{padding:5px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12.5px;font-family:inherit;background:#fff}
+.cond-item .c-del{margin-left:auto;color:#94a3b8;cursor:pointer;font-size:12px;border:none;background:none}
+.cond-item .c-del:hover{color:#dc2626}
+.add-cond{padding:6px 12px;border:1px dashed #cbd5e1;border-radius:6px;background:#fff;color:#4f46e5;font-size:12.5px;cursor:pointer;font-family:inherit}
+.chk{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer}
+.chk input{accent-color:#4f46e5}
+.cap-row{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;color:#64748b}
+.cap-row input{flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12.5px;font-family:inherit}
+.cap-preview{margin-top:8px;font-size:12px;color:#dc2626}
 </style>
 </head>
 <body>
@@ -79,13 +107,13 @@ a{text-decoration:none;color:inherit}
       <a class="tab done" href="05-venue-add-basic.html">✓ 基础信息</a>
       <a class="tab done" href="06-venue-add-timeslot.html">✓ 时段配置</a>
       <a class="tab active" href="07-venue-add-form.html">表单模板</a>
-      <a class="tab disabled">审批流程</a>
-      <a class="tab disabled">权限配置</a>
+      <a class="tab disabled" href="08-venue-add-approval.html">审批流程</a>
+      <a class="tab disabled" href="09-venue-add-permission.html">权限配置</a>
     </div>
 
     <div class="section">
       <h3>预约表单模板</h3>
-      <div class="desc">配置用户发起预约时需要填写的表单字段。可从已有模板快速复制，也可自定义字段。拖动字段左侧的 ⠿ 手柄可调整顺序（也可选中手柄后用 ↑ ↓ 键移动）。</div>
+      <div class="desc">校团委活动场地已自动套用《中南大学校园文化活动场地申请表》，可按需微调。可从已有模板快速复制，也可自定义字段。拖动字段左侧的 ⠿ 手柄可调整顺序（也可选中手柄后用 ↑ ↓ 键移动）。</div>
 
       <div style="margin-bottom:16px">
         <div style="font-size:12.5px;font-weight:500;margin-bottom:8px">快速复制已有模板：</div>
@@ -98,18 +126,23 @@ a{text-decoration:none;color:inherit}
           <a class="tpl-btn" href="07-venue-add-form.html">defense（国防教育）</a>
           <a class="tpl-btn" href="07-venue-add-form.html">psyGroup（心理团辅）</a>
           <a class="tpl-btn" href="07-venue-add-form.html">wenqu（问渠长廊）</a>
-          <span class="tpl-btn active">tuanwei（团委活动场地）</span>
+          <span class="tpl-btn active">tuanwei（校园文化活动场地申请表）</span>
           <a class="tpl-btn" href="07-venue-add-form.html">空白模板</a>
         </div>
       </div>
 
+      <div class="sys-fields">
+        <span class="sys-t">系统自动带出（不可编辑）</span>
+        <span class="sys-chip">申借场地</span><span class="sys-chip">使用时间</span>
+        <span class="sys-note">由师生在「选择场地」「选择时段」步骤中确定</span>
+      </div>
       <div class="field-list">
         <div class="field-row header">
           <span></span>
           <span>字段名称</span>
           <span>类型</span>
           <span>必填</span>
-          <span>整行</span>
+          <span>规则</span>
           <span>操作</span>
         </div>
         <div class="field-row">
@@ -117,99 +150,131 @@ a{text-decoration:none;color:inherit}
           <span class="fname">活动名称</span>
           <span><span class="type-badge">文本</span></span>
           <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule">—</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
           <span class="fname">活动性质</span>
           <span><span class="type-badge">单选</span></span>
           <span><span class="req-dot yes"></span></span>
-          <span>是</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule">选项：文艺演出或晚会 / 会议 / 竞赛 / 哲学社科理论类讲座 / 其他</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
+        </div>
+        <div class="field-row cond-row">
+          <span class="drag">⠿</span>
+          <span class="fname">审核通过界面截图</span>
+          <span><span class="type-badge file">图片上传</span></span>
+          <span><span class="req-dot yes"></span></span>
+          <span class="rule"><span class="rule-chip cond">仅当 活动性质 = 哲学社科理论类讲座 时显示</span></span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
+        </div>
+        <div class="field-row">
+          <span class="drag">⠿</span>
+          <span class="fname">是否需要外接设备</span>
+          <span><span class="type-badge">单选</span></span>
+          <span><span class="req-dot yes"></span></span>
+          <span class="rule">选项：是 / 否</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
+        </div>
+        <div class="field-row cond-row">
+          <span class="drag">⠿</span>
+          <span class="fname">租赁设备进场安全管理承诺书</span>
+          <span><span class="type-badge file">附件</span></span>
+          <span><span class="req-dot yes"></span></span>
+          <span class="rule"><span class="rule-chip cond">仅当 是否需要外接设备 = 是 时显示</span>先下载模板，修改后上传</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
+        </div>
+        <div class="field-row cond-row">
+          <span class="drag">⠿</span>
+          <span class="fname">租赁设备进场清单</span>
+          <span><span class="type-badge file">附件</span></span>
+          <span><span class="req-dot yes"></span></span>
+          <span class="rule"><span class="rule-chip cond">仅当 是否需要外接设备 = 是 时显示</span>先下载模板，修改后上传</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
           <span class="fname">主办单位</span>
-          <span><span class="type-badge">文本</span></span>
+          <span><span class="type-badge dept">部门选择</span></span>
           <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule">可多选，数据来自学工系统组织机构</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
           <span class="fname">承办单位</span>
-          <span><span class="type-badge">文本</span></span>
+          <span><span class="type-badge dept">部门选择</span></span>
           <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule">可多选，数据来自学工系统组织机构</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
           <span class="fname">预估人数</span>
           <span><span class="type-badge">数字</span></span>
           <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
-        </div>
-        <div class="field-row">
-          <span class="drag">⠿</span>
-          <span class="fname">校外参加人员</span>
-          <span><span class="type-badge">文本域</span></span>
-          <span><span class="req-dot no"></span></span>
-          <span>是</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule"><span class="rule-chip limit">不超过场地容纳人数</span></span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
           <span class="fname">拟邀请嘉宾</span>
           <span><span class="type-badge">文本域</span></span>
           <span><span class="req-dot no"></span></span>
-          <span>是</span>
-          <span><a class="action-link del">删除</a></span>
-        </div>
-        <div class="field-row">
-          <span class="drag">⠿</span>
-          <span class="fname">拟使用设备</span>
-          <span><span class="type-badge equip">设备选择</span></span>
-          <span><span class="req-dot no"></span></span>
-          <span>是</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule">—</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
           <span class="fname">活动负责老师</span>
-          <span><span class="type-badge">文本</span></span>
+          <span><span class="type-badge user">人员搜索</span></span>
           <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule"><span class="rule-chip flow">审批第 02 步取此人</span> 同时填写联系电话</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
-          <span class="fname">负责老师联系方式</span>
-          <span><span class="type-badge">电话</span></span>
+          <span class="fname">联络人</span>
+          <span><span class="type-badge user">人员搜索</span></span>
           <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="rule">同时填写联系电话</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
         <div class="field-row">
           <span class="drag">⠿</span>
-          <span class="fname">活动学生负责人（消防协管）</span>
-          <span><span class="type-badge">文本</span></span>
-          <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
-        </div>
-        <div class="field-row">
-          <span class="drag">⠿</span>
-          <span class="fname">学生负责人联系方式</span>
-          <span><span class="type-badge">电话</span></span>
-          <span><span class="req-dot yes"></span></span>
-          <span>否</span>
-          <span><a class="action-link del">删除</a></span>
+          <span class="fname">备注信息</span>
+          <span><span class="type-badge">文本域</span></span>
+          <span><span class="req-dot no"></span></span>
+          <span class="rule">—</span>
+          <span><a class="action-link">编辑</a> <a class="action-link del">删除</a></span>
         </div>
       </div>
       <a class="add-field-btn" href="28-venue-add-form-addfield.html">+ 添加字段</a>
+      <div class="type-legend">
+        <b>新增字段类型</b>
+        <span><span class="type-badge dept">部门选择</span> 从学工系统组织机构中选择学院 / 机关部门，可多选</span>
+        <span><span class="type-badge user">人员搜索</span> 按姓名或工号搜索校内人员，可附带联系电话</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>字段规则</h3>
+      <div class="desc">显示条件：满足条件时字段才出现在申请表中；不满足时隐藏，且不校验必填。</div>
+      <div class="rule-card">
+        <div class="rc-t">显示条件</div>
+        <div class="cond-list" id="condList"></div>
+        <button type="button" class="add-cond" id="addCond">+ 添加显示条件</button>
+      </div>
+      <div class="rule-card">
+        <div class="rc-t">人数校验</div>
+        <label class="chk"><input type="checkbox" id="capCheck" checked> 「预估人数」不能超过场地容纳人数</label>
+        <div class="cap-row" id="capRow">
+          <span>超出时提示</span>
+          <input type="text" id="capMsg" value="超过场地容纳人数（{容纳人数}人），请调整预估人数或更换场地">
+        </div>
+        <div class="cap-preview" id="capPreview"></div>
+      </div>
     </div>
 
     <div class="btn-row">
@@ -220,6 +285,43 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<script>
+(function(){
+  var FIELDS=['活动名称','活动性质','是否需要外接设备','租赁设备进场安全管理承诺书','租赁设备进场清单','主办单位','承办单位','预估人数','拟邀请嘉宾','活动负责老师','联络人','备注信息','审核通过界面截图'];
+  var OPTIONS={'活动性质':['文艺演出或晚会','会议','竞赛','哲学社科理论类讲座','其他'],'是否需要外接设备':['是','否']};
+  var conds=[
+    {target:'审核通过界面截图',src:'活动性质',val:'哲学社科理论类讲座'},
+    {target:'租赁设备进场安全管理承诺书',src:'是否需要外接设备',val:'是'},
+    {target:'租赁设备进场清单',src:'是否需要外接设备',val:'是'}
+  ];
+  var list=document.getElementById('condList');
+  function opts(arr,v){return arr.map(function(x){return '<option'+(x===v?' selected':'')+'>'+x+'</option>';}).join('');}
+  function render(){
+    list.innerHTML=conds.map(function(c,i){
+      return '<div class="cond-item" data-i="'+i+'">字段<select class="c-target">'+opts(FIELDS,c.target)+'</select>'+
+        '仅当<select class="c-src">'+opts(Object.keys(OPTIONS),c.src)+'</select>'+
+        '等于<select class="c-val">'+opts(OPTIONS[c.src],c.val)+'</select>时显示，显示时按字段设置校验必填'+
+        '<button type="button" class="c-del">删除</button></div>';
+    }).join('')||'<div style="font-size:12px;color:#94a3b8;margin-bottom:8px">暂无显示条件，所有字段始终显示</div>';
+    Array.prototype.forEach.call(list.querySelectorAll('.cond-item'),function(el){
+      var c=conds[+el.dataset.i];
+      el.querySelector('.c-target').onchange=function(e){c.target=e.target.value;};
+      el.querySelector('.c-src').onchange=function(e){c.src=e.target.value;c.val=OPTIONS[c.src][0];render();};
+      el.querySelector('.c-val').onchange=function(e){c.val=e.target.value;};
+      el.querySelector('.c-del').onclick=function(){conds.splice(+el.dataset.i,1);render();};
+    });
+  }
+  document.getElementById('addCond').onclick=function(){conds.push({target:'拟邀请嘉宾',src:'是否需要外接设备',val:'是'});render();};
+  render();
+  var capCheck=document.getElementById('capCheck'),capMsg=document.getElementById('capMsg');
+  function cap(){
+    document.getElementById('capRow').style.display=capCheck.checked?'':'none';
+    document.getElementById('capPreview').textContent=capCheck.checked?('示例（和声堂 512 人）：'+capMsg.value.replace('{容纳人数}','512')):'';
+  }
+  capCheck.onchange=cap;capMsg.oninput=cap;cap();
+})();
+</script>
 <script src="field-sort.js"></script>
+<script src="tuanwei-flow.js"></script>
 </body>
 </html>

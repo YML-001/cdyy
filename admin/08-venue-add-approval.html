@@ -97,7 +97,7 @@ a{text-decoration:none;color:inherit}
 
     <div class="section">
       <h3>审批人设置</h3>
-      <div class="desc">设置 1~3 级审批人，审批按顺序逐级进行。每一级既可指定具体人员，也可指定角色（由系统自动匹配该角色下的人员）。</div>
+      <div class="desc">设置 1~3 级审核人，审批按顺序逐级进行。每一级可指定一名或多名审核人，也可指定角色。多名审核人，或角色下有多人时，一律或签：任一人通过即进入下一步。</div>
 
       <div class="approver-box" data-step="1">
         <div class="ab-title"><span class="ab-step">1</span>第一步审批人</div>
@@ -110,18 +110,9 @@ a{text-decoration:none;color:inherit}
             </select>
           </div>
           <div class="field ap-user">
-            <label>选择人员</label>
-            <select class="ap-user-sel">
-              <option value="">请选择审批人</option>
-              <option selected>孙瀚（综合办）</option>
-              <option>李明（民族办）</option>
-              <option>张华（思政办）</option>
-              <option>王芳（就业指导中心）</option>
-              <option>赵丽（心理中心）</option>
-              <option>陈伟（学生事务办）</option>
-              <option>刘洋（武装部）</option>
-              <option>王强（校团委）</option>
-            </select>
+            <label>审核人（可多选）</label>
+            <div class="mp ap-users" data-selected="孙瀚（综合办）"></div>
+            <div class="hint ap-or" style="display:none">多人审核为或签：任一人通过即进入下一步</div>
           </div>
           <div class="field ap-role" style="display:none">
             <label>选择角色</label>
@@ -139,10 +130,7 @@ a{text-decoration:none;color:inherit}
           </div>
           <div class="field ap-rule" style="display:none">
             <label>多人处理规则</label>
-            <select class="ap-rule-sel">
-              <option selected>或签（任一人处理即通过）</option>
-              <option>会签（全部处理才通过）</option>
-            </select>
+            <div class="hint" style="color:#047857">或签（任一人处理即通过）</div>
           </div>
         </div>
       </div>
@@ -159,18 +147,9 @@ a{text-decoration:none;color:inherit}
             </select>
           </div>
           <div class="field ap-user" style="display:none">
-            <label>选择人员</label>
-            <select class="ap-user-sel">
-              <option value="">请选择审批人</option>
-              <option>孙瀚（综合办）</option>
-              <option>李明（民族办）</option>
-              <option>张华（思政办）</option>
-              <option>王芳（就业指导中心）</option>
-              <option>赵丽（心理中心）</option>
-              <option>陈伟（学生事务办）</option>
-              <option>刘洋（武装部）</option>
-              <option>王强（校团委）</option>
-            </select>
+            <label>审核人（可多选）</label>
+            <div class="mp ap-users" data-selected=""></div>
+            <div class="hint ap-or" style="display:none">多人审核为或签：任一人通过即进入下一步</div>
           </div>
           <div class="field ap-role" style="display:none">
             <label>选择角色</label>
@@ -188,10 +167,7 @@ a{text-decoration:none;color:inherit}
           </div>
           <div class="field ap-rule" style="display:none">
             <label>多人处理规则</label>
-            <select class="ap-rule-sel">
-              <option selected>或签（任一人处理即通过）</option>
-              <option>会签（全部处理才通过）</option>
-            </select>
+            <div class="hint" style="color:#047857">或签（任一人处理即通过）</div>
           </div>
         </div>
       </div>
@@ -208,18 +184,9 @@ a{text-decoration:none;color:inherit}
             </select>
           </div>
           <div class="field ap-user" style="display:none">
-            <label>选择人员</label>
-            <select class="ap-user-sel">
-              <option value="">请选择审批人</option>
-              <option>孙瀚（综合办）</option>
-              <option>李明（民族办）</option>
-              <option>张华（思政办）</option>
-              <option>王芳（就业指导中心）</option>
-              <option>赵丽（心理中心）</option>
-              <option>陈伟（学生事务办）</option>
-              <option>刘洋（武装部）</option>
-              <option>王强（校团委）</option>
-            </select>
+            <label>审核人（可多选）</label>
+            <div class="mp ap-users" data-selected=""></div>
+            <div class="hint ap-or" style="display:none">多人审核为或签：任一人通过即进入下一步</div>
           </div>
           <div class="field ap-role" style="display:none">
             <label>选择角色</label>
@@ -237,10 +204,7 @@ a{text-decoration:none;color:inherit}
           </div>
           <div class="field ap-rule" style="display:none">
             <label>多人处理规则</label>
-            <select class="ap-rule-sel">
-              <option selected>或签（任一人处理即通过）</option>
-              <option>会签（全部处理才通过）</option>
-            </select>
+            <div class="hint" style="color:#047857">或签（任一人处理即通过）</div>
           </div>
         </div>
       </div>
@@ -329,6 +293,7 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<script src="multi-pick.js"></script>
 <script>
 (function(){
   var boxes=Array.prototype.slice.call(document.querySelectorAll('.approver-box'));
@@ -339,17 +304,22 @@ a{text-decoration:none;color:inherit}
     var type=box.querySelector('.ap-type').value;
     if(type==='none'){return null;}
     if(type==='role'){
-      var rule=box.querySelector('.ap-rule-sel').value.indexOf('会签')===0?'会签':'或签';
-      return {type:'role',label:box.querySelector('.ap-role-sel').value,rule:rule};
+      return {type:'role',label:box.querySelector('.ap-role-sel').value,rule:'或签'};
     }
-    var name=box.querySelector('.ap-user-sel').value;
-    return name?{type:'user',label:name}:null;
+    var mp=box.querySelector('.ap-users');
+    var names=mp&&mp.getValue?mp.getValue():[];
+    return names.length?{type:'user',label:names.join('、'),names:names}:null;
   }
   function syncBox(box){
     var type=box.querySelector('.ap-type').value;
     box.querySelector('.ap-user').style.display=type==='user'?'':'none';
     box.querySelector('.ap-role').style.display=type==='role'?'':'none';
-    box.querySelector('.ap-rule').style.display=type==='role'?'':'none';
+    var rule=box.querySelector('.ap-rule');
+    if(rule){rule.style.display=type==='role'?'':'none';}
+    var or=box.querySelector('.ap-or');
+    var n=0;
+    if(type==='user'&&box.querySelector('.ap-users')&&box.querySelector('.ap-users').getValue){n=box.querySelector('.ap-users').getValue().length;}
+    if(or){or.style.display=n>1?'':'none';}
   }
   function render(){
     var steps=boxes.map(readBox).filter(function(s){return s;});
@@ -358,7 +328,7 @@ a{text-decoration:none;color:inherit}
       html+='<span class="flow-arrow">→</span><div class="flow-node" style="color:#94a3b8;background:#f8fafc;border-color:#e2e8f0">未设置审批人</div>';
     }
     steps.forEach(function(s){
-      var tail=s.type==='role'?'（角色·'+s.rule+'）':'';
+      var tail=s.type==='role'?'（角色·或签）':(s.names&&s.names.length>1?'（或签）':'');
       html+='<span class="flow-arrow">→</span><div class="flow-node'+(s.type==='role'?' role':'')+'">'+s.label+tail+'</div>';
     });
     html+='<span class="flow-arrow">→</span><div class="flow-node end">完成</div>';
@@ -379,6 +349,7 @@ a{text-decoration:none;color:inherit}
     box.querySelectorAll('select').forEach(function(sel){
       sel.addEventListener('change',function(){syncBox(box);render();});
     });
+    box.addEventListener('mp-change',function(){syncBox(box);render();});
     syncBox(box);
   });
   document.getElementById('grantManage').addEventListener('change',render);

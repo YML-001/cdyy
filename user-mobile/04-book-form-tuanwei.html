@@ -42,6 +42,32 @@ a{text-decoration:none;color:inherit}
 .btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-size:15px;font-weight:600}
 .btn-primary{background:#4f46e5;color:#fff}
 .btn-secondary{background:#f1f5f9;color:#64748b}
+.pick{display:flex;align-items:center;flex-wrap:wrap;gap:4px;min-height:42px;padding:6px 26px 6px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;position:relative}
+.pk-chip{padding:2px 8px;border-radius:6px;background:#eef2ff;color:#4338ca;font-size:13px}
+.pk-chip small{color:#64748b;font-size:11px}
+.pk-ph{color:#94a3b8;font-size:14px}
+.pk-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:18px}
+.shot-add{padding:12px;border:1px dashed #cbd5e1;border-radius:8px;font-size:13px;color:#475569;text-align:center}
+.tpl-row{margin-top:8px;padding:10px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc}
+.tpl-name{font-size:13px;line-height:1.5}
+.tpl-acts{display:flex;gap:8px;margin-top:8px}
+.tpl-dl,.tpl-up{font-size:12.5px;padding:4px 10px;border-radius:6px;border:1px solid #c7d2fe;background:#fff;color:#4f46e5;font-family:inherit}
+.tpl-done{margin-top:6px;font-size:12px;color:#059669}
+.shot-img{width:120px;height:72px;border-radius:6px;background:linear-gradient(135deg,#bfdbfe,#3b82f6)}
+.field input.bad{border-color:#fca5a5;background:#fef2f2}
+.err-box{display:none;margin:0 12px 12px;padding:10px 12px;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:13px}
+.sheet-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;z-index:100}
+.sheet-mask.show{display:block}
+.sheet{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:375px;max-height:70vh;background:#fff;border-radius:14px 14px 0 0;display:flex;flex-direction:column}
+.sheet-head{display:flex;justify-content:space-between;padding:14px 16px;font-size:15px;font-weight:600;border-bottom:1px solid #f1f5f9}
+.sheet-head b{color:#4f46e5;font-weight:500}
+.sheet-search{margin:10px 16px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px}
+.sheet-list{overflow:auto;padding-bottom:12px}
+.sheet-opt{display:flex;align-items:center;padding:12px 16px;font-size:14px;border-bottom:1px solid #f8fafc}
+.sheet-opt small{margin-left:8px;color:#94a3b8;font-size:12px}
+.sheet-opt i{margin-left:auto;color:#4f46e5;font-style:normal;visibility:hidden}
+.sheet-opt.on i{visibility:visible}
+.sheet-opt.on{color:#4f46e5}
 </style>
 </head>
 <body>
@@ -66,33 +92,51 @@ a{text-decoration:none;color:inherit}
   </div>
   <div class="field">
     <label>活动性质<span class="req">*</span></label>
-    <div class="nature-opts">
+    <div class="nature-opts" id="natureOpts">
       <span class="nature-opt checked">文艺演出或晚会</span>
       <span class="nature-opt">会议</span>
-      <span class="nature-opt">交流分享会</span>
       <span class="nature-opt">竞赛</span>
+      <span class="nature-opt">哲学社科理论类讲座</span>
       <span class="nature-opt">其他</span>
+    </div>
+  </div>
+  <div class="field" id="shotField" style="display:none">
+    <label>审核通过界面截图<span class="req">*</span></label>
+    <div class="shot-add" id="shotAdd">＋ 上传「哲学社科理论类论坛申请」审核通过截图</div>
+  </div>
+  <div class="field">
+    <label>是否需要外接设备<span class="req">*</span></label>
+    <div class="nature-opts" id="extOpts">
+      <span class="nature-opt">是</span>
+      <span class="nature-opt checked">否</span>
+    </div>
+  </div>
+  <div class="field" id="extFiles" style="display:none">
+    <label>外接设备附件<span class="req">*</span></label>
+    <div class="hint">请先下载模板，修改后再上传，两份都要上传。</div>
+    <div class="tpl-row" data-file="承诺书">
+      <div class="tpl-name">附件1 租赁设备进场安全管理承诺书.docx</div>
+      <div class="tpl-acts"><a class="tpl-dl" href="../templates/附件1 租赁设备进场安全管理承诺书.docx" download>下载模板</a><button type="button" class="tpl-up">上传</button></div>
+      <div class="tpl-done"></div>
+    </div>
+    <div class="tpl-row" data-file="清单">
+      <div class="tpl-name">附件2 租赁设备进场清单.docx</div>
+      <div class="tpl-acts"><a class="tpl-dl" href="../templates/附件2 租赁设备进场清单.docx" download>下载模板</a><button type="button" class="tpl-up">上传</button></div>
+      <div class="tpl-done"></div>
     </div>
   </div>
   <div class="field">
     <label>主办单位<span class="req">*</span></label>
-    <input type="text" value="校团委">
+    <div class="pick" data-kind="dept" data-multi="1" data-val="党委学生工作部（学生工作处）"></div>
   </div>
   <div class="field">
     <label>承办单位<span class="req">*</span></label>
-    <input type="text" value="校学生会文艺部">
+    <div class="pick" data-kind="dept" data-multi="1" data-val="校学生会"></div>
   </div>
   <div class="field">
     <label>预估人数<span class="req">*</span></label>
-    <input type="number" value="600">
-  </div>
-</div>
-
-<div class="section">
-  <h3>参与人员信息</h3>
-  <div class="field">
-    <label>校外参加人员</label>
-    <textarea>特邀评委：湖南卫视音乐总监李某 1人</textarea>
+    <input type="number" id="headcount" value="600">
+    <div class="hint" id="capHint"></div>
   </div>
   <div class="field">
     <label>拟邀请嘉宾</label>
@@ -101,66 +145,123 @@ a{text-decoration:none;color:inherit}
 </div>
 
 <div class="section">
-  <h3>拟使用设备</h3>
-  <div class="equip-list">
-    <div class="equip-card checked">
-      <input type="checkbox" checked> <span class="ename">照明灯</span>
-    </div>
-    <div class="equip-card checked">
-      <input type="checkbox" checked> <span class="ename">舞台灯</span>
-    </div>
-    <div class="equip-card checked">
-      <input type="checkbox" checked> <span class="ename">音响</span>
-    </div>
-    <div class="equip-card checked">
-      <input type="checkbox" checked> <span class="ename">话筒</span>
-      <div class="qty-wrap">数量 <input type="number" value="4" min="1"></div>
-    </div>
-    <div class="equip-card checked">
-      <input type="checkbox" checked> <span class="ename">耳麦</span>
-      <div class="qty-wrap">数量 <input type="number" value="2" min="1"></div>
-    </div>
-    <div class="equip-card checked">
-      <input type="checkbox" checked> <span class="ename">LED屏</span>
-    </div>
-    <div class="equip-card">
-      <input type="checkbox"> <span class="ename">投影仪</span>
-    </div>
-    <div class="equip-card">
-      <input type="checkbox"> <span class="ename">钢琴</span>
-    </div>
-    <div class="equip-card">
-      <input type="checkbox"> <span class="ename">外租设备</span>
-    </div>
-  </div>
-  <div class="equip-hint">勾选所需设备，部分设备需填写使用数量</div>
-</div>
-
-<div class="section">
   <h3>负责人信息</h3>
   <div class="field">
     <label>活动负责老师<span class="req">*</span></label>
-    <input type="text" value="王老师">
-    <div class="hint">活动当天现场负责人</div>
+    <div class="pick" data-kind="user" data-phone="teacherPhone"></div>
+    <div class="hint">活动当天现场负责人；同时为审批第一步的审批人</div>
   </div>
   <div class="field">
-    <label>负责老师联系方式<span class="req">*</span></label>
-    <input type="tel" value="138****5678">
+    <label>负责老师联系电话<span class="req">*</span></label>
+    <input type="tel" id="teacherPhone" placeholder="请输入联系电话">
   </div>
   <div class="field">
-    <label>活动学生负责人（消防协管）<span class="req">*</span></label>
-    <input type="text" value="张三">
+    <label>联络人<span class="req">*</span></label>
+    <div class="pick" data-kind="user" data-phone="contactPhone" data-val="张三"></div>
   </div>
   <div class="field">
-    <label>学生负责人联系方式<span class="req">*</span></label>
-    <input type="tel" value="159****1234">
+    <label>联络人联系电话<span class="req">*</span></label>
+    <input type="tel" id="contactPhone" value="159****1234">
+  </div>
+  <div class="field">
+    <label>备注信息</label>
+    <textarea placeholder="请输入备注信息"></textarea>
+  </div>
+</div>
+
+<div class="err-box" id="errBox"></div>
+
+<div class="sheet-mask" id="sheetMask">
+  <div class="sheet">
+    <div class="sheet-head"><span id="sheetTitle">选择</span><b id="sheetDone">完成</b></div>
+    <input class="sheet-search" id="sheetSearch" placeholder="搜索">
+    <div class="sheet-list" id="sheetList"></div>
   </div>
 </div>
 
 <div class="bottom-bar">
   <a class="btn btn-secondary" href="03-book-select-venue.html">上一步</a>
-  <a class="btn btn-primary" href="06-book-select-slot.html">下一步</a>
+  <a class="btn btn-primary" id="nextBtn" href="06-book-slot-halfday.html">下一步</a>
 </div>
+
+<script>
+(function(){
+  var CAP=512;
+  var DEPTS=['党委学生工作部（学生工作处）','校团委','党委宣传部','保卫部','校学生会','校研究生会','文学院','计算机学院','商学院','法学院'];
+  var USERS=[['王老师','T20080112','校团委','138****5678'],['王强','T20050021','校团委','137****0021'],['陈建国','T20010007','学生工作部','139****0007'],['张三','S20230101','计算机学院','159****1234'],['李思远','S20230211','文学院','139****1234']];
+  function single(group,cb){
+    Array.prototype.forEach.call(group.querySelectorAll('.nature-opt'),function(o){
+      o.onclick=function(){Array.prototype.forEach.call(group.querySelectorAll('.nature-opt'),function(x){x.classList.remove('checked');});o.classList.add('checked');if(cb){cb(o.textContent);}};
+    });
+  }
+  single(document.getElementById('natureOpts'),function(v){document.getElementById('shotField').style.display=v==='哲学社科理论类讲座'?'':'none';});
+  single(document.getElementById('extOpts'),function(){
+    var yes=document.querySelector('#extOpts .nature-opt.checked').textContent==='是';
+    document.getElementById('extFiles').style.display=yes?'':'none';
+  });
+  var extDone={};
+  Array.prototype.forEach.call(document.querySelectorAll('.tpl-up'),function(btn){
+    btn.onclick=function(){
+      var row=btn.closest('.tpl-row');
+      extDone[row.dataset.file]=true;
+      row.querySelector('.tpl-done').textContent='已上传：附件'+row.dataset.file+'（已填写）.docx';
+      btn.textContent='重新上传';
+    };
+  });
+  var shotDone=false;
+  document.getElementById('shotAdd').onclick=function(){shotDone=true;this.className='shot-img';this.textContent='';};
+
+  var mask=document.getElementById('sheetMask'),slist=document.getElementById('sheetList'),search=document.getElementById('sheetSearch'),cur=null;
+  function show(p){
+    p.el.innerHTML=p.vals.length?p.vals.map(function(v){return '<span class="pk-chip">'+(p.user?v[0]+' <small>'+v[2]+'</small>':v)+'</span>';}).join(''):'<span class="pk-ph">'+(p.user?'点击搜索用户':'点击选择部门（可多选）')+'</span>';
+    p.el.insertAdjacentHTML('beforeend','<span class="pk-arrow">›</span>');
+  }
+  function renderList(){
+    var q=search.value.trim(),p=cur;
+    var src=p.user?USERS.filter(function(u){return !q||u[0].indexOf(q)>-1||u[1].indexOf(q)>-1;}):DEPTS.filter(function(d){return !q||d.indexOf(q)>-1;});
+    slist.innerHTML=src.map(function(x,i){
+      var on=p.user?(p.vals[0]&&p.vals[0][0]===x[0]):p.vals.indexOf(x)>-1;
+      return '<div class="sheet-opt'+(on?' on':'')+'" data-i="'+i+'">'+(p.user?x[0]+'<small>'+x[1]+' · '+x[2]+'</small>':x)+'<i>✓</i></div>';
+    }).join('')||'<div class="pk-ph" style="padding:16px">无匹配结果</div>';
+    Array.prototype.forEach.call(slist.querySelectorAll('.sheet-opt'),function(o){
+      o.onclick=function(){
+        var x=src[+o.dataset.i];
+        if(p.user){p.vals=[x];var ph=document.getElementById(p.el.dataset.phone);if(ph){ph.value=x[3];}close();return;}
+        var k=p.vals.indexOf(x);if(k>-1){p.vals.splice(k,1);}else{p.vals.push(x);}renderList();
+      };
+    });
+  }
+  function close(){mask.classList.remove('show');show(cur);}
+  document.getElementById('sheetDone').onclick=close;
+  mask.onclick=function(e){if(e.target===mask){close();}};
+  search.oninput=renderList;
+  var picks=Array.prototype.map.call(document.querySelectorAll('.pick'),function(el){
+    var p={el:el,user:el.dataset.kind==='user',vals:[]};
+    if(el.dataset.val){p.vals=p.user?USERS.filter(function(u){return u[0]===el.dataset.val;}):[el.dataset.val];}
+    el.onclick=function(){cur=p;search.value='';document.getElementById('sheetTitle').textContent=p.user?'搜索用户':'选择部门';renderList();mask.classList.add('show');};
+    show(p);return p;
+  });
+
+  var hc=document.getElementById('headcount'),capHint=document.getElementById('capHint');
+  function checkCap(){
+    var over=+hc.value>CAP;
+    hc.classList.toggle('bad',over);
+    capHint.textContent=over?'超过场地容纳人数（'+CAP+'人），请调整':'本场地容纳 '+CAP+' 人'+(+hc.value>=500?'；≥500人将增加保卫部审批':'');
+    capHint.style.color=over?'#dc2626':'';
+    return !over;
+  }
+  hc.oninput=checkCap;checkCap();
+  document.getElementById('nextBtn').onclick=function(e){
+    var errs=[];
+    if(!checkCap()){errs.push('预估人数超过容纳人数');}
+    if(document.getElementById('shotField').style.display===''&&!shotDone){errs.push('请上传审核通过截图');}
+    if(document.getElementById('extFiles').style.display===''&&(!extDone['承诺书']||!extDone['清单'])){errs.push('请上传两份外接设备附件');}
+    if(!picks[2].vals.length){errs.push('请选择活动负责老师');}
+    var box=document.getElementById('errBox');
+    if(errs.length){e.preventDefault();box.textContent='请先完善：'+errs.join('；');box.style.display='block';}else{box.style.display='none';}
+  };
+})();
+</script>
 
 </body>
 </html>
